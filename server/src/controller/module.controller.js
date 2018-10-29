@@ -1,4 +1,4 @@
-const Module = require('../models/module.model');
+const Module = require('../model/module.model');
 
 exports.findAll = (req, res) => {
   Module.find()
