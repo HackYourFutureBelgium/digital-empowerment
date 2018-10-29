@@ -1,6 +1,18 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+
+require('dotenv').config();
+
+mongoose.Promise = global.Promise;
+mongoose
+  .connect(process.env.MONGODB_URL, { useNewUrlParser: true })
+  .then(() => { console.log('Database connection established'); })
+  .catch((err) => {
+    console.error(`Database error, exiting. Stack trace:\n${err}`);
+    process.exit();
+  });
 
 const app = express();
 
