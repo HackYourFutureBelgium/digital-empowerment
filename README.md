@@ -18,6 +18,26 @@ You will also receive some CV and LinkedIn training to get ready for the Belgian
 
 ## Getting started
 
+### Running the application
+
+You will have to install packages for both `client` and `server`.
+So in the both folders, run either
+```
+npm install
+```
+or
+```
+yarn
+```
+
+It's easiest to have 3 terminal sessions/windows open. One for running the client, one for the server and one for `Git`/`MongoDB` testing. You can start both the client and server by running
+```
+npm start
+```
+in their folders. They will run on port 3000 and 4000, respectively.
+
+### Structure
+
 This project will test your skill & knowledge on everything you've learned so far. It includes `React`, `Node` and `MongoDB`.
 
 The application has the following structure:
@@ -42,7 +62,11 @@ All of your components, I'd group these up per page as well.
 
 
 `server`  
-Folder for everything back-end related. Houses a decoupled, Node API
+Folder for everything back-end related. Houses a decoupled, Node API.  
+**Note that this folder should have a `.env` file that includes a `MONGODB_URL` variable.** It should point to your local instance of MongoDB.
+```
+MONGODB_URL=mongodb://localhost:27017/digital-empowerment
+```
 
 `server/src/controller`  
 `server/src/model`  
