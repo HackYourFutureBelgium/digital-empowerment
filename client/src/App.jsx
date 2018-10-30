@@ -1,5 +1,7 @@
 import React, { Component} from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { getModules } from './api/modules';
+import Modules from './components/Modules';
 
 class App extends Component {
   componentDidMount() {
@@ -10,7 +12,12 @@ class App extends Component {
 
   render() {
     return (
-      <h1>Digital Empowerment</h1>
+      <BrowserRouter>
+        <Switch>
+          <Route path=":path(modules|)" component={Modules} />
+          <Route render={() => <p>Page not found</p>} />
+        </Switch>
+      </BrowserRouter>
     );
   }
 }
