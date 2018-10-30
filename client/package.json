@@ -4,8 +4,10 @@
   "private": false,
   "dependencies": {
     "normalize.css": "^8.0.0",
+    "prop-types": "^15.6.2",
     "react": "^16.6.0",
     "react-dom": "^16.6.0",
+    "react-router-dom": "^4.3.1",
     "react-scripts": "2.0.5"
   },
   "scripts": {
