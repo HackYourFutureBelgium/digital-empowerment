@@ -4,7 +4,7 @@ We're developing a real-world application for Hobo. Hobo is a day center for hom
 
 ### Goals for the project
   - **Teach people without prior experience to use a computer for basic tasks**: this teaching will both be accompanied and unaccompanied. It’s important to have the least amount of text as possible present on the site, everything should be visual and interactive.
-  - Allow Hobo to manage the application without developer interference: Application administrators at hobo should be able to manage the application’s contents and users easily and without having to consult a developer. 
+  - **Allow Hobo to manage the application without developer interference**: Application administrators at hobo should be able to manage the application’s contents and users easily and without having to consult a developer. 
 
 ### Goals for the students
   - Learn to understand an existing codebase in a short period of time
