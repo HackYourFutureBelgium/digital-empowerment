@@ -48,7 +48,8 @@ Has all the permissions and functionality of a visitor.
   - copy a module to a different learning path
   - reorder modules within a learning path to show a clear or optimal sequence
   - reset my password
-  - As a user, I will:
+ 
+ **As a user, I will:**
   - receive an email when an account has been created for me by an administrator
 
 ### Administrator
