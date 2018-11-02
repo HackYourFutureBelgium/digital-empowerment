@@ -1,5 +1,5 @@
 # HackYourFuture Belgium
-# Hobo Project Analysis
+# Digital Empowerment Project Analysis
 
 ## Overview
 Hobo is a day center for homeless people in Brussels. They would like to have a learning tool that teaches basic computer skills and tasks.
