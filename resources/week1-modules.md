@@ -118,9 +118,9 @@ Let's use `fetch` to make a `POST` request. `POST` is what you use when your req
 export const createModule = (title) => {
   return fetch(`${API_URL}/module`, {
     method: 'POST',
-    body: {
+    body: JSON.stringify({
       title: title
-    }
+    })
   }).then(response => response.json());
 };
 ```
@@ -130,4 +130,56 @@ Note that the function accepts a title as an argument. You will have to retreive
 So:
 
 Enter title -> submit form -> make fetch request
+
+
+#### 3. The server needs to be able to receive requests to add modules
+
+Take a look at the fetch request you just created. It does a POST to `/module`.
+This simply means that in the server you need to make sure you module route accepts posts requests:
+
+`server/src/routes/module.route.js`:
+
+```
+const modules = require('../controller/module.controller.js');
+
+module.exports = (app) => {
+  app.get('/module', modules.findAll);
+  app.post('/module', modules.create);
+};
+```
+
+### 4. The server should add the module to the database + 5. The server should return the newly created module
+
+Again, look at what we just did. When the server receives a `POST` request at `/module`, it calls the `create` function in the controller, forwarding the `request` and `response` arguments.
+
+
+The function is responsible for adding the new module to the database and returning the newly created module to the client.
+
+```
+exports.create = (req, res) => {
+  const newModule = new Module(req.body);
+  newModule
+    .save()
+    .then((data) => { res.send(data); })
+    .catch((err) => {
+      res.status(500).send({ message: err.message });
+    });
+};
+```
+
+### 6. The client should add the new module to local state and display it
+
+So, we made the request and the newly created module is returned to us.
+Go back to where you made the fetch request. When you called `createModule`, a `Promise` was returned. This means you can call it the same way `getModules()` is called in `componentDidMount`.
+
+```
+createModule({ title: 'user provided module title' })
+  .then((newModule) => {
+    // Add the new module to the array in state
+  });
+```
+
+Because of the state changes, the `Modules` component will rerender and the newly created module will be displayed.
+
+Think about this: Why is the module added to state after the request is done, instead of before making the request in the first place?
 
