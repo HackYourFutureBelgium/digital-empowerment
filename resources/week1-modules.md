@@ -60,7 +60,7 @@ If we divide it into small bits, creating a module means:
 
 All this means is that a Module (that currently only has a title) should be shown on the page and styled correctly.
 
-Look at te following line of code:
+Look at the following line of code:
 ```
 {modules.map((module) => <div key={module._id}>{module.title}</div>)}
 ```
@@ -125,7 +125,7 @@ export const createModule = (title) => {
 };
 ```
 
-Note that the function accepts a title as an argument. You will have to retreive the title from user input and pass it to the function.
+Note that the function accepts a title as an argument. You will have to retrieve the title from user input and pass it to the function.
 
 So:
 
