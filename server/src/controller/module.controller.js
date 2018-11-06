@@ -22,7 +22,7 @@ exports.create = (req, res) => {
 
 exports.delete = (req, res) => {
   const { moduleId } = req.params;
-  Module.findByIdAndRemove(moduleId)
+  Module.findOneAndDelete(moduleId)
     .then((mod) => {
       if (!mod) {
         return res.status(404).send({
