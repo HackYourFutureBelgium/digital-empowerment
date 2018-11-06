@@ -33,7 +33,10 @@ class Modules extends Component {
 
   deleteModule = (module) => {
     api.deleteModule(module._id).then(() => {
-
+      this.setState((previousState) => {
+        const modules = [...previousState.modules].filter(mod => mod._id !== module._id);
+        return { modules };
+      });
     });
   }
 
