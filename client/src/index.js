@@ -5,6 +5,7 @@ import * as serviceWorker from './serviceWorker';
 
 import 'normalize.css';
 import './assets/css/index.css';
+import './assets/css/modal.css';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
