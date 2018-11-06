@@ -8,16 +8,7 @@ Modal.setAppElement('#root');
 
 class Modules extends Component {
   state = {
-    modules: [
-      {
-        _id: 1,
-        title: 'Home page'
-      },
-      {
-        _id: 2,
-        title: 'Google results'
-      }
-    ],
+    modules: [],
     inputModalShown: false,
     newTitle: ''
   };
