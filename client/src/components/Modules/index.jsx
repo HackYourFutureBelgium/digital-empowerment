@@ -31,15 +31,11 @@ class Modules extends Component {
   createModule = () => {
     const { newTitle } = this.state;
     api.createModule({ title: newTitle }).then((newModule) => {
-      this.setState((prevState) => {
-        const modules = [...prevState.modules];
-        modules.push(newModule);
-        return {
-          newTitle: '',
-          modules,
-          inputModalShown: false
-        };
-      });
+      this.setState(previousState => ({
+        newTitle: '',
+        modules: [...previousState.modules, newModule],
+        inputModalShown: false
+      }));
     });
   };
 
