@@ -8,13 +8,28 @@
   align-items: center;
 }
 
-.module {
+.modules .module {
   margin-bottom: 3rem;
   padding: 1.5rem 3rem;
   border: 1px solid #000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.module__title {
+.modules .module__title {
   font-size: 1.7rem;
   font-weight: 600;
+}
+
+.modules .module__actions {
+  min-width: 5rem;
+  font-size: 1.7rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.modules .module__actions i:hover {
+  color: #CC0000;
+  cursor: pointer;
 }
