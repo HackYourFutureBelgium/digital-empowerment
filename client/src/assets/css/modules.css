@@ -2,6 +2,12 @@
 
 }
 
+.module-container__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .module {
   margin-bottom: 3rem;
   padding: 1.5rem 3rem;

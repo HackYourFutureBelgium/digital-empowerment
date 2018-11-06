@@ -47,9 +47,11 @@ class Modules extends Component {
     const { modules, inputModalShown, newTitle } = this.state;
 
     return (
-      <div className="container modules-container">
-        <h2>Using a web browser</h2>
-        <button type="button" className="button" onClick={this.showInputModal}>Add module</button>
+      <div className="container module-container">
+        <header className="module-container__header">
+          <h2>Using a web browser</h2>
+          <button type="button" className="button" onClick={this.showInputModal}>Add module</button>
+        </header>
         <Modal
           isOpen={inputModalShown}
           onRequestClose={this.closeInputModal}
