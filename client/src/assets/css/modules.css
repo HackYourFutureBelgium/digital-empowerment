@@ -1,0 +1,14 @@
+.modules {
+
+}
+
+.module {
+  margin-bottom: 3rem;
+  padding: 1.5rem 3rem;
+  border: 1px solid #000;
+}
+
+.module__title {
+  font-size: 1.7rem;
+  font-weight: 600;
+}
