@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700|Roboto:400,500,700');
+
 html {
   box-sizing: border-box;
   font-size: 62.5%;
@@ -9,6 +11,7 @@ html {
 
 body {
   font-size: 1.6rem;
+  font-family: Montserrat, Arial, Helvetica, sans-serif;
 }
 
 p {
@@ -17,10 +20,12 @@ p {
 
 h1 {
   font-size: 3.2rem;
+  font-family: Roboto, Arial, Helvetica, sans-serif;
 }
 
 h2 {
   font-size: 2.4rem;
+  font-family: Roboto, Arial, Helvetica, sans-serif;
 }
 
 h3 {
