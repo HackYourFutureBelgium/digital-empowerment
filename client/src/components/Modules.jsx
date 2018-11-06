@@ -1,4 +1,4 @@
-import React, { Component} from 'react';
+import React, { Component } from 'react';
 import { getModules } from '../api/modules';
 
 class Modules extends Component {
@@ -8,7 +8,7 @@ class Modules extends Component {
 
   componentDidMount() {
     getModules().then((modules) => {
-      this.setState({ modules: modules });
+      this.setState({ modules });
     });
   }
 
@@ -18,14 +18,14 @@ class Modules extends Component {
     if (modules.length > 0) {
       return (
         <ul>
-          {modules.map((module) => <li key={module._id}>{module.title}</li>)}
+          {modules.map(module => <li key={module._id}>{module.title}</li>)}
         </ul>
-      )
-    } else {
-      return (
-        <p>There are no modules yet</p>
-      )
+      );
     }
+
+    return (
+      <p>There are no modules yet</p>
+    );
   }
 }
 
