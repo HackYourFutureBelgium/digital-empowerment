@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Modal from 'react-modal';
+import Module from './Module';
 import * as api from '../../api/modules';
 
 import '../../assets/css/modules.css';
@@ -64,11 +65,7 @@ class Modules extends Component {
         </Modal>
         <div className="modules">
           { modules.length > 0
-            ? modules.map(module => (
-              <article className="module" key={module._id}>
-                <h3 className="module__title">{module.title}</h3>
-              </article>
-            ))
+            ? modules.map(module => <Module key={module._id} module={module} />)
             : <p>There are no modules yet</p>
           }
         </div>
