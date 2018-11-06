@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Modal from 'react-modal';
-import { getModules } from '../../api/modules';
+import * as api from '../../api/modules';
 
 import '../../assets/css/modules.css';
 
@@ -23,10 +23,25 @@ class Modules extends Component {
   };
 
   componentDidMount() {
-    getModules().then((modules) => {
-      // this.setState({ modules });
+    api.getModules().then((modules) => {
+      this.setState({ modules });
     });
   }
+
+  createModule = () => {
+    const { newTitle } = this.state;
+    api.createModule({ title: newTitle }).then((newModule) => {
+      this.setState((prevState) => {
+        const modules = [...prevState.modules];
+        modules.push(newModule);
+        return {
+          newTitle: '',
+          modules,
+          inputModalShown: false
+        };
+      });
+    });
+  };
 
   showInputModal = () => {
     this.setState({ inputModalShown: true });
@@ -58,6 +73,7 @@ class Modules extends Component {
             Title:
             <input type="text" id="module-title" value={newTitle} onChange={this.setTitle} />
           </label>
+          <button type="button" className="button" onClick={this.createModule}>Add module</button>
         </Modal>
         <div className="modules">
           { modules.length > 0
