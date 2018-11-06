@@ -8,12 +8,9 @@
   z-index: 10;
   outline: none;
   border-radius: 0.3rem;
-  font-family: OpenSans;
   font-size: 1.6rem;
   line-height: 1.6;
-  color: $text-color;
   background-color: #fff;
-  font-family: flanders-sans;
 }
 
 .modal-overlay {
@@ -29,4 +26,11 @@
 .modal__title {
   margin-top: 0.5rem;
   margin-bottom: 1.5rem;
+}
+
+.modal--confirmation__actions {
+  width: 40%;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
 }
