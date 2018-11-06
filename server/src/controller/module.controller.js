@@ -9,3 +9,13 @@ exports.findAll = (req, res) => {
       });
     });
 };
+
+exports.create = (req, res) => {
+  const newModule = new Module(req.body);
+  newModule
+    .save()
+    .then((data) => { res.send(data); })
+    .catch((err) => {
+      res.status(500).send({ message: err.message });
+    });
+};
