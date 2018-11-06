@@ -36,3 +36,10 @@ h3 {
   width: 70%;
   margin: 10rem auto;
 }
+
+.button {
+  height: 3.5rem;
+  padding: 0 1.5rem;
+  outline: 0;
+  cursor: pointer;
+}
