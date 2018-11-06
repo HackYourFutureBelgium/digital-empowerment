@@ -21,7 +21,8 @@ class Module extends Component {
   };
 
   deleteModule = () => {
-    this.setState({ confirmingDeletion: false });
+    const { deleteModule, module } = this.props;
+    deleteModule(module);
   }
 
   render() {
@@ -51,7 +52,8 @@ Module.propTypes = {
   module: PropTypes.shape({
     _id: PropTypes.string,
     title: PropTypes.string
-  }).isRequired
+  }).isRequired,
+  deleteModule: PropTypes.func.isRequired
 };
 
 export default Module;

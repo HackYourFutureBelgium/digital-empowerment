@@ -31,6 +31,12 @@ class Modules extends Component {
     });
   };
 
+  deleteModule = (module) => {
+    api.deleteModule(module._id).then(() => {
+
+    });
+  }
+
   showInputModal = () => {
     this.setState({ inputModalShown: true });
   }
@@ -67,7 +73,9 @@ class Modules extends Component {
         </Modal>
         <div className="modules">
           { modules.length > 0
-            ? modules.map(module => <Module key={module._id} module={module} />)
+            ? modules.map(module => (
+              <Module key={module._id} module={module} deleteModule={this.deleteModule} />
+            ))
             : <p>There are no modules yet</p>
           }
         </div>
