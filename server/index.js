@@ -5,6 +5,7 @@ const cors = require('cors');
 
 require('dotenv').config();
 
+mongoose.set('useFindAndModify', false);
 mongoose.Promise = global.Promise;
 mongoose
   .connect(process.env.MONGODB_URL, { useNewUrlParser: true })
