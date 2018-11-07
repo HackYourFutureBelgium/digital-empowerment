@@ -43,3 +43,10 @@ h3 {
   outline: 0;
   cursor: pointer;
 }
+
+.input {
+  height: 3.5rem;
+  padding: 0 1.5rem;
+  outline: 0;
+  cursor: pointer;
+}

@@ -33,3 +33,13 @@
   color: #CC0000;
   cursor: pointer;
 }
+
+.module-form .input {
+  display: block;
+  width: 100%;
+}
+
+.module-form__actions {
+  text-align: center;
+  margin: 2rem 0 1rem;
+}

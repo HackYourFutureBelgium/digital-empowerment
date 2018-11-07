@@ -32,7 +32,7 @@ class ModuleForm extends Component {
       <Modal
         isOpen={isShown}
         onRequestClose={onClose}
-        className="modal modal--confirmation"
+        className="modal module-form"
         overlayClassName="modal-overlay"
       >
         { module
@@ -42,9 +42,11 @@ class ModuleForm extends Component {
         <form onSubmit={this.onSubmit}>
           <label htmlFor="module-title">
             Title:
-            <input type="text" id="module-title" value={title} onChange={this.setTitle} />
+            <input type="text" className="input" id="module-title" value={title} onChange={this.setTitle} />
           </label>
-          <input type="submit" className="button" value={module ? 'Update module' : 'Add module'} />
+          <div className="module-form__actions">
+            <input type="submit" className="button" value={module ? 'Update module' : 'Add module'} />
+          </div>
         </form>
       </Modal>
     );
