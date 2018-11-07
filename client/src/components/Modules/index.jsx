@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
-import Modal from 'react-modal';
 import Module from './Module';
+import ModuleForm from './ModuleForm';
 import * as api from '../../api/modules';
 
 import '../../assets/css/modules.css';
 
-Modal.setAppElement('#root');
-
 class Modules extends Component {
   state = {
     modules: [],
-    inputModalShown: false,
+    moduleFormShown: false,
     newTitle: ''
   };
 
@@ -20,13 +18,12 @@ class Modules extends Component {
     });
   }
 
-  createModule = () => {
-    const { newTitle } = this.state;
-    api.createModule({ title: newTitle }).then((newModule) => {
+  createModule = (module) => {
+    api.createModule(module).then((newModule) => {
       this.setState(previousState => ({
         newTitle: '',
         modules: [...previousState.modules, newModule],
-        inputModalShown: false
+        moduleFormShown: false
       }));
     });
   };
@@ -52,12 +49,12 @@ class Modules extends Component {
     });
   }
 
-  showInputModal = () => {
-    this.setState({ inputModalShown: true });
+  showModuleFrom = () => {
+    this.setState({ moduleFormShown: true });
   }
 
-  closeInputModal = () => {
-    this.setState({ inputModalShown: false });
+  hideModuleForm = () => {
+    this.setState({ moduleFormShown: false });
   }
 
   setTitle = (e) => {
@@ -65,31 +62,27 @@ class Modules extends Component {
   }
 
   render() {
-    const { modules, inputModalShown, newTitle } = this.state;
+    const { modules, moduleFormShown } = this.state;
 
     return (
       <div className="container module-container">
         <header className="module-container__header">
           <h2>Using a web browser</h2>
-          <button type="button" className="button" onClick={this.showInputModal}>Add module</button>
+          <button type="button" className="button" onClick={this.showModuleFrom}>Add module</button>
         </header>
-        <Modal
-          isOpen={inputModalShown}
-          onRequestClose={this.closeInputModal}
-          className="modal modal--new-module"
-          overlayClassName="modal-overlay"
-        >
-          <h2 className="modal__title">Add a new module</h2>
-          <label htmlFor="module-title">
-            Title:
-            <input type="text" id="module-title" value={newTitle} onChange={this.setTitle} />
-          </label>
-          <button type="button" className="button" onClick={this.createModule}>Add module</button>
-        </Modal>
+        <ModuleForm
+          isShown={moduleFormShown}
+          onClose={this.hideModuleForm}
+          submit={this.createModule}
+        />
         <div className="modules">
           { modules.length > 0
             ? modules.map(module => (
-              <Module key={module._id} module={module} deleteModule={this.deleteModule} />
+              <Module
+                key={module._id}
+                module={module}
+                deleteModule={this.deleteModule}
+              />
             ))
             : <p>There are no modules yet</p>
           }
