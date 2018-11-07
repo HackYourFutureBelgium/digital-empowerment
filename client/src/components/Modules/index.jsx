@@ -8,8 +8,7 @@ import '../../assets/css/modules.css';
 class Modules extends Component {
   state = {
     modules: [],
-    moduleFormShown: false,
-    newTitle: ''
+    moduleFormShown: false
   };
 
   componentDidMount() {
@@ -29,8 +28,7 @@ class Modules extends Component {
   };
 
   updateModule = (module) => {
-    const { newTitle } = this.state;
-    api.updateModule(module._id, { title: newTitle }).then((updatedModule) => {
+    api.updateModule(module).then((updatedModule) => {
       this.setState((previousState) => {
         const modules = [...previousState.modules];
         const index = modules.findIndex(mod => mod._id === module._id);
@@ -57,10 +55,6 @@ class Modules extends Component {
     this.setState({ moduleFormShown: false });
   }
 
-  setTitle = (e) => {
-    this.setState({ newTitle: e.currentTarget.value });
-  }
-
   render() {
     const { modules, moduleFormShown } = this.state;
 
@@ -82,6 +76,7 @@ class Modules extends Component {
                 key={module._id}
                 module={module}
                 deleteModule={this.deleteModule}
+                updateModule={this.updateModule}
               />
             ))
             : <p>There are no modules yet</p>

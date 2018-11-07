@@ -14,11 +14,11 @@ export const createModule = body => (
   }).then(response => response.json())
 );
 
-export const updateModule = (id, body) => (
-  fetch(`${API_URL}/module/${id}`, {
-    method: 'PUT',
+export const updateModule = module => (
+  fetch(`${API_URL}/module/${module._id}`, {
+    method: 'PATCH',
     headers,
-    body: JSON.stringify(body)
+    body: JSON.stringify(module)
   }).then(response => response.json())
 );
 

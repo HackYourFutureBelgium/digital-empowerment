@@ -5,9 +5,12 @@ import Modal from 'react-modal';
 Modal.setAppElement('#root');
 
 class ModuleForm extends Component {
-  state = {
-    title: ''
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      title: props.module ? props.module.title : ''
+    };
+  }
 
   setTitle = (e) => {
     this.setState({ title: e.currentTarget.value });
@@ -17,8 +20,8 @@ class ModuleForm extends Component {
     e.preventDefault();
 
     const { title } = this.state;
-    const { submit } = this.props;
-    submit({ title });
+    const { submit, module } = this.props;
+    module ? submit({ ...module, title }) : submit({ title });
   }
 
   render() {
