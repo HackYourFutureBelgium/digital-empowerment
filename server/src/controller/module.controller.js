@@ -20,6 +20,27 @@ exports.create = (req, res) => {
     });
 };
 
+exports.update = (req, res) => {
+  const { moduleId } = req.params;
+  Module.findOneAndUpdate(moduleId, req.body, { new: true })
+    .then((mod) => {
+      if (!mod) {
+        return res.status(404).send({
+          message: `Module with id "${moduleId}" not found`
+        });
+      }
+      return res.send(mod);
+    })
+    .catch((err) => {
+      if (err.kind === 'ObjectId') {
+        return res.status(404).send({
+          message: `Module with id "${moduleId}" not found`
+        });
+      }
+      return res.status(500).send({ message: err.message });
+    });
+};
+
 exports.delete = (req, res) => {
   const { moduleId } = req.params;
   Module.findOneAndDelete(moduleId)
