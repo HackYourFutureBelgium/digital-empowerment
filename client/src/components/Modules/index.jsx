@@ -71,14 +71,16 @@ class Modules extends Component {
         />
         <div className="modules">
           { modules.length > 0
-            ? modules.map(module => (
-              <Module
-                key={module._id}
-                module={module}
-                deleteModule={this.deleteModule}
-                updateModule={this.updateModule}
-              />
-            ))
+            ? modules
+              .sort((m1, m2) => m2.createdAt - m1.createdAt)
+              .map(module => (
+                <Module
+                  key={module._id}
+                  module={module}
+                  deleteModule={this.deleteModule}
+                  updateModule={this.updateModule}
+                />
+              ))
             : <p>There are no modules yet</p>
           }
         </div>
