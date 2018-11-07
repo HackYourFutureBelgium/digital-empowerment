@@ -31,6 +31,18 @@ class Modules extends Component {
     });
   };
 
+  updateModule = (module) => {
+    const { newTitle } = this.state;
+    api.updateModule(module._id, { title: newTitle }).then((updatedModule) => {
+      this.setState((previousState) => {
+        const modules = [...previousState.modules];
+        const index = modules.findIndex(mod => mod._id === module._id);
+        modules[index] = updatedModule;
+        return { modules };
+      });
+    });
+  };
+
   deleteModule = (module) => {
     api.deleteModule(module._id).then(() => {
       this.setState((previousState) => {

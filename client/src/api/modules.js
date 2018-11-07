@@ -14,4 +14,12 @@ export const createModule = body => (
   }).then(response => response.json())
 );
 
+export const updateModule = (id, body) => (
+  fetch(`${API_URL}/module/${id}`, {
+    method: 'PUT',
+    headers,
+    body: JSON.stringify(body)
+  }).then(response => response.json())
+);
+
 export const deleteModule = id => fetch(`${API_URL}/module/${id}`, { method: 'DELETE', headers });
