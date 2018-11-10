@@ -20,9 +20,9 @@ class ModuleForm extends Component {
     this.state = {
       title: props.module ? props.module.title : '',
       contents: {
-        [EXPLANATION]: props.module ? props.module[EXPLANATION] : '',
-        [EXERCISE]: props.module ? props.module[EXERCISE] : '',
-        [EVALUATION]: props.module ? props.module[EVALUATION] : ''
+        [EXPLANATION]: props.module ? (props.module[EXPLANATION] || '') : '',
+        [EXERCISE]: props.module ? (props.module[EXERCISE] || '') : '',
+        [EVALUATION]: props.module ? (props.module[EVALUATION] || '') : ''
       },
       currentlyEditing: EXPLANATION
     };
@@ -40,6 +40,10 @@ class ModuleForm extends Component {
         [currentlyEditing]: contents
       }
     }));
+  }
+
+  handleContentSelection = (type) => {
+    this.setState({ currentlyEditing: this.CONTENT_TYPES[type] });
   }
 
   onSubmit = (e) => {
@@ -71,8 +75,20 @@ class ModuleForm extends Component {
             <input type="text" className="input" id="module-title" value={title} onChange={this.setTitle} />
           </label>
           <div className="module-form__field module-form__contents">
-            Contents:
+            Contents for the {currentlyEditing} step:
             <ReactQuill value={contents[currentlyEditing]} onChange={this.handleContentChange} />
+            <div className="module-form__contents__selection">
+              { Object.keys(this.CONTENT_TYPES).map(type => (
+                <button
+                  onClick={() => this.handleContentSelection(type)}
+                  key={type}
+                  type="button"
+                  className={`link${this.CONTENT_TYPES[type] === currentlyEditing ? ' active' : ''}`}
+                >
+                  {type}
+                </button>
+              ))}
+            </div>
           </div>
           <div className="module-form__actions">
             <input type="submit" className="button" value={module ? 'Update module' : 'Add module'} />

@@ -48,3 +48,14 @@
   text-align: center;
   margin: 2rem 0 1rem;
 }
+
+.module-form__contents__selection {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.module-form__contents__selection .link {
+  margin-right: 1rem;
+}

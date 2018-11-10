@@ -50,3 +50,15 @@ h3 {
   outline: 0;
   cursor: pointer;
 }
+
+.link {
+  outline: 0;
+  background: inherit;
+  text-decoration: underline;
+  border: 0;
+  cursor: pointer;
+}
+
+.link.active {
+  color: purple;
+}
