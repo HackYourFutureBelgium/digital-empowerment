@@ -66,11 +66,11 @@ class ModuleForm extends Component {
           : <h2 className="modal__title">Add a new module</h2>
         }
         <form onSubmit={this.onSubmit}>
-          <label htmlFor="module-title">
+          <label htmlFor="module-title" className="module-form__field">
             Title:
             <input type="text" className="input" id="module-title" value={title} onChange={this.setTitle} />
           </label>
-          <div className="module-form__contents">
+          <div className="module-form__field module-form__contents">
             Contents:
             <ReactQuill value={contents[currentlyEditing]} onChange={this.handleContentChange} />
           </div>

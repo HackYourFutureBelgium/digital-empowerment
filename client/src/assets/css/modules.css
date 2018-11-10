@@ -37,7 +37,12 @@
 .module-form .input {
   display: block;
   width: 100%;
+  margin-bottom: 1.5rem;
 }
+
+.module-form__field {
+  margin-bottom: 1.5rem;
+};
 
 .module-form__actions {
   text-align: center;
