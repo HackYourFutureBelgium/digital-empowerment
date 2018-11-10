@@ -8,12 +8,13 @@ import '../../assets/css/modules.css';
 class Modules extends Component {
   state = {
     modules: [],
-    moduleFormShown: false
+    moduleFormShown: false,
+    activeModuleId: null
   };
 
   componentDidMount() {
     api.getModules().then((modules) => {
-      this.setState({ modules });
+      this.setState({ modules, activeModuleId: modules[0]._id });
     });
   }
 
@@ -31,7 +32,7 @@ class Modules extends Component {
     api.updateModule(id, module).then((updatedModule) => {
       this.setState((previousState) => {
         const modules = [...previousState.modules];
-        const index = modules.findIndex(mod => mod._id === module._id);
+        const index = modules.findIndex(mod => mod._id === id);
         modules[index] = updatedModule;
         return { modules };
       });
@@ -47,6 +48,12 @@ class Modules extends Component {
     });
   }
 
+  openModule = (id) => {
+    const { activeModuleId } = this.state;
+    if (id === activeModuleId) return;
+    this.setState({ activeModuleId: id });
+  }
+
   showModuleFrom = () => {
     this.setState({ moduleFormShown: true });
   }
@@ -56,7 +63,7 @@ class Modules extends Component {
   }
 
   render() {
-    const { modules, moduleFormShown } = this.state;
+    const { modules, moduleFormShown, activeModuleId } = this.state;
 
     return (
       <div className="container module-container">
@@ -77,6 +84,8 @@ class Modules extends Component {
                 <Module
                   key={module._id}
                   module={module}
+                  openModule={() => this.openModule(module._id)}
+                  isOpen={activeModuleId === module._id}
                   deleteModule={this.deleteModule}
                   updateModule={this.updateModule}
                 />

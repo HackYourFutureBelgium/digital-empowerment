@@ -39,9 +39,9 @@ class Module extends Component {
 
   render() {
     const { confirmingDeletion, updatingModule } = this.state;
-    const { module } = this.props;
+    const { module, isOpen, openModule } = this.props;
     return (
-      <article className="module">
+      <article className={`module${isOpen ? ' open' : ''}`} onClick={openModule}>
         <ConfirmationDialog
           isOpen={confirmingDeletion}
           onClose={this.cancelDeletion}
@@ -57,6 +57,24 @@ class Module extends Component {
           module={module}
         />
         <h3 className="module__title">{module.title}</h3>
+        { isOpen && (
+          <div className="module__contents">
+            <div className="module__contents__stage">
+              Explanation:
+              <div dangerouslySetInnerHTML={{ __html: module.explanation }} />
+            </div>
+
+            <div className="module__contents__stage">
+              Exercise:
+              <div dangerouslySetInnerHTML={{ __html: module.exercise }} />
+            </div>
+
+            <div className="module__contents__stage">
+              Evaluation:
+              <div dangerouslySetInnerHTML={{ __html: module.evaluation }} />
+            </div>
+          </div>
+        )}
         <div className="module__actions">
           <i><FontAwesomeIcon icon={faEdit} onClick={this.showModuleForm} /></i>
           <i><FontAwesomeIcon icon={faTrash} onClick={this.confirmDeletion} /></i>
@@ -71,6 +89,8 @@ Module.propTypes = {
     _id: PropTypes.string,
     title: PropTypes.string
   }).isRequired,
+  openModule: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
   deleteModule: PropTypes.func.isRequired,
   updateModule: PropTypes.func.isRequired
 };
