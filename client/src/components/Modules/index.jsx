@@ -27,8 +27,8 @@ class Modules extends Component {
     });
   };
 
-  updateModule = (module) => {
-    api.updateModule(module).then((updatedModule) => {
+  updateModule = (id, module) => {
+    api.updateModule(id, module).then((updatedModule) => {
       this.setState((previousState) => {
         const modules = [...previousState.modules];
         const index = modules.findIndex(mod => mod._id === module._id);

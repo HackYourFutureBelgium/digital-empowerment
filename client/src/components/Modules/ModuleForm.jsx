@@ -51,7 +51,7 @@ class ModuleForm extends Component {
 
     const { title, contents } = this.state;
     const { submit, module } = this.props;
-    module ? submit({ ...module, title, ...contents }) : submit({ title, ...contents });
+    module ? submit(module._id, { title, ...contents }) : submit({ title, ...contents });
   }
 
   render() {

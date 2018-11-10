@@ -14,8 +14,8 @@ export const createModule = body => (
   }).then(response => response.json())
 );
 
-export const updateModule = module => (
-  fetch(`${API_URL}/module/${module._id}`, {
+export const updateModule = (id, module) => (
+  fetch(`${API_URL}/module/${id}`, {
     method: 'PATCH',
     headers,
     body: JSON.stringify(module)

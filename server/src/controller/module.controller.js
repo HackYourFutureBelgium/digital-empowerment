@@ -22,8 +22,7 @@ exports.create = (req, res) => {
 
 exports.update = (req, res) => {
   const { moduleId } = req.params;
-  const { title, contents } = req.body;
-  Module.findOneAndUpdate({ _id: moduleId }, { title, ...contents }, { new: true })
+  Module.findOneAndUpdate({ _id: moduleId }, req.body, { new: true })
     .then((mod) => {
       if (!mod) {
         return res.status(404).send({
