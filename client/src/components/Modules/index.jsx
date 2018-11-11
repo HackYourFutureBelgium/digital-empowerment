@@ -14,7 +14,7 @@ class Modules extends Component {
 
   componentDidMount() {
     api.getModules().then((modules) => {
-      this.setState({ modules, activeModuleId: (modules.length === null) ? null : modules[0]._id });
+      this.setState({ modules, activeModuleId: (modules.length === 0) ? null : modules[0]._id });
     });
   }
 
