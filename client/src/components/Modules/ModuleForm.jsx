@@ -7,6 +7,20 @@ import 'react-quill/dist/quill.snow.css';
 
 Modal.setAppElement('#root');
 
+const editorOptions = {
+  toolbar: [
+    [{ header: '1' }, { header: '2' }],
+    // [{ size: [] }],
+    ['bold', 'italic', 'underline', 'strike'],
+    [
+      { list: 'ordered' }, { list: 'bullet' }
+    ],
+    ['link', 'image', 'video'],
+    ['clean']
+  ],
+  clipboard: { matchVisual: false }
+};
+
 class ModuleForm extends Component {
   CONTENT_TYPES = {
     EXPLANATION: 'explanation',
@@ -76,7 +90,11 @@ class ModuleForm extends Component {
           </label>
           <div className="module-form__field module-form__contents">
             Contents for the {currentlyEditing} step:
-            <ReactQuill value={contents[currentlyEditing]} onChange={this.handleContentChange} />
+            <ReactQuill
+              value={contents[currentlyEditing]}
+              onChange={this.handleContentChange}
+              modules={editorOptions}
+            />
             <div className="module-form__contents__selection">
               { Object.keys(this.CONTENT_TYPES).map(type => (
                 <button

@@ -45,7 +45,7 @@
 }
 
 .module__contents__stage {
-  margin-bottom: 3rem;
+  margin-bottom: 5rem;
 }
 
 .module__contents__stage strong {
@@ -60,6 +60,14 @@
   text-decoration: underline;
 }
 
+.module__contents__stage img {
+  max-width: 100%;
+}
+
+.module__contents__stage iframe {
+  width: 100%;
+  height: 48rem;
+}
 
 .module-form .input {
   display: block;
