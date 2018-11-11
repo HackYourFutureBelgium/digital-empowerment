@@ -8,7 +8,7 @@ import ConfirmationDialog from '../ConfirmationDialog';
 class Module extends Component {
   state = {
     confirmingDeletion: false,
-    updatedModule: false
+    updatingModule: false
   }
 
   confirmDeletion = () => {
