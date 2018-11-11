@@ -1,0 +1,25 @@
+{
+  "name": "digital-empowerment",
+  "version": "1.0.0",
+  "description": "We're developing a real-world application for Hobo. Hobo is a day center for homeless people in Brussels. They would like to create a learning tool that teaches basic computer skills and tasks for the people coming to the center.",
+  "main": "server/index.js",
+  "scripts": {
+    "heroku-postbuild": "cd client && npm install && npm run build",
+    "start": "cd ./server && npm install && node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HackYourFutureBelgium/class1-project-digital-empowerment.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/HackYourFutureBelgium/class1-project-digital-empowerment/issues"
+  },
+  "homepage": "https://github.com/HackYourFutureBelgium/class1-project-digital-empowerment#readme",
+  "engines": {
+    "node": "8.11.4"
+  },
+  "proxy": "http://localhost:4000"
+}

@@ -1,0 +1,45 @@
+.modules {
+
+}
+
+.module-container__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modules .module {
+  margin-bottom: 3rem;
+  padding: 1.5rem 3rem;
+  border: 1px solid #000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modules .module__title {
+  font-size: 1.7rem;
+  font-weight: 600;
+}
+
+.modules .module__actions {
+  min-width: 5rem;
+  font-size: 1.7rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.modules .module__actions i:hover {
+  color: #CC0000;
+  cursor: pointer;
+}
+
+.module-form .input {
+  display: block;
+  width: 100%;
+}
+
+.module-form__actions {
+  text-align: center;
+  margin: 2rem 0 1rem;
+}
