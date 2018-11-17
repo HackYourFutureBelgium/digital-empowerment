@@ -12,34 +12,85 @@
   margin-bottom: 3rem;
   padding: 1.5rem 3rem;
   border: 1px solid #000;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  position: relative;
+  cursor: pointer;
 }
 
-.modules .module__title {
+.module .module__title {
   font-size: 1.7rem;
   font-weight: 600;
 }
 
-.modules .module__actions {
+.module .module__actions {
   min-width: 5rem;
   font-size: 1.7rem;
   display: flex;
   justify-content: space-between;
+  position: absolute;
+  top: 3rem;
+  right: 3rem;
 }
 
-.modules .module__actions i:hover {
+.module .module__actions i:hover {
   color: #CC0000;
   cursor: pointer;
+}
+
+.module.open {
+  cursor: default;
+}
+
+.module.open h3 {
+  margin-bottom: 4rem;
+}
+
+.module__contents__stage {
+  margin-bottom: 5rem;
+}
+
+.module__contents__stage strong {
+  font-weight: bold;
+}
+
+.module__contents__stage em {
+  font-style: italic;
+}
+
+.module__contents__stage u {
+  text-decoration: underline;
+}
+
+.module__contents__stage img {
+  max-width: 100%;
+}
+
+.module__contents__stage iframe {
+  width: 100%;
+  height: 48rem;
 }
 
 .module-form .input {
   display: block;
   width: 100%;
+  margin-bottom: 1.5rem;
 }
+
+.module-form__field {
+  margin-bottom: 1.5rem;
+};
 
 .module-form__actions {
   text-align: center;
   margin: 2rem 0 1rem;
+}
+
+.module-form__contents__selection {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.module-form__contents__selection .link {
+  margin-right: 1rem;
 }

@@ -22,10 +22,6 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.get('/', (req, res) => {
-  res.json({ message: 'API ready' });
-});
-
 require('./src/route/module.route')(app);
 
 if (process.env.NODE_ENV === 'production') {
