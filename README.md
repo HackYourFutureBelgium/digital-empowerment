@@ -63,7 +63,7 @@ All of your components, I'd group these up per page as well.
 
 `server`  
 Folder for everything back-end related. Houses a decoupled, Node API.  
-**Note that this folder should have a `.env` file that includes a `MONGODB_URL` variable.** It should point to your local instance of MongoDB.
+**Note that this folder should have a `.env` file that includes a `MONGODB_URI` variable.** It should point to your local instance of MongoDB.
 ```
 MONGODB_URI=mongodb://localhost:27017/digital-empowerment
 ```
