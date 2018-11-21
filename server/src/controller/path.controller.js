@@ -4,9 +4,16 @@ exports.findAll = (req, res) => {
   Path.find()
     .then((modules) => { res.send(modules); })
     .catch((err) => {
-      res.status(500).send({
-        message: err.message
-      });
+      res.status(500).send({ message: err.message });
+    });
+};
+
+exports.findOne = (req, res) => {
+  Path.findById(req.params.pathId)
+    .populate()
+    .then((modules) => { res.send(modules); })
+    .catch((err) => {
+      res.status(500).send({ message: err.message });
     });
 };
 
