@@ -1,14 +1,16 @@
 import { API_URL } from './constants';
 
+const BASE_URL = `${API_URL}/path`;
+
 const headers = new Headers({
   'Content-Type': 'application/json'
 });
 
-export const getPaths = () => fetch(`${API_URL}/path`).then(response => response.json());
-export const getPath = id => fetch(`${API_URL}/path/${id}`).then(response => response.json());
+export const getPaths = () => fetch(BASE_URL).then(response => response.json());
+export const getPath = id => fetch(`${BASE_URL}/${id}`).then(response => response.json());
 
 export const createPath = body => (
-  fetch(`${API_URL}/path`, {
+  fetch(BASE_URL, {
     method: 'POST',
     headers,
     body: JSON.stringify(body)
