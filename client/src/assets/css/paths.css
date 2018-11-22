@@ -1,0 +1,14 @@
+.path-container {
+
+}
+
+.path-container__header {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.path-container__header__actions > button{
+  margin-right: 1rem;
+}
