@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import * as api from '../../api/paths';
 
 import '../../assets/css/paths.css';
@@ -13,14 +15,14 @@ class Paths extends Component {
     this.setState({ paths });
   }
 
-  choosePath = () => {
-
+  choosePath = (path) => {
+    this.props.history.push(`/path/${path._id}`);
   }
 
   renderPath = (path) => {
     return (
       <article className="paths__path-wrapper" key={path._id}>
-        <button type="button" onClick={this.choosePath} className="path button--seamless">
+        <button type="button" onClick={() => this.choosePath(path)} className="path button--seamless">
           {path.title}
         </button>
       </article>
@@ -49,4 +51,9 @@ class Paths extends Component {
   }
 }
 
-export default Paths;
+Paths.propTypes = {
+  // eslint-disable-next-line
+  history: PropTypes.object.isRequired
+};
+
+export default withRouter(Paths);

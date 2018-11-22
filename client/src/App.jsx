@@ -7,7 +7,7 @@ const App = () => (
   <BrowserRouter>
     <Switch>
       <Route path="/:path(|paths|index)" component={Paths} />
-      <Route path="/modules" component={Modules} />
+      <Route path="/path/:id" component={Modules} />
       <Route render={() => <p>Page not found</p>} />
     </Switch>
   </BrowserRouter>
