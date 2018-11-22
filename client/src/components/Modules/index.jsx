@@ -1,25 +1,33 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Module from './Module';
 import ModuleForm from './ModuleForm';
-import * as api from '../../api/modules';
+import * as pathsAPI from '../../api/paths';
+import * as modulesAPI from '../../api/modules';
 
 import '../../assets/css/modules.css';
 
 class Modules extends Component {
   state = {
+    path: null,
     modules: [],
     moduleFormShown: false,
-    activeModuleId: null
+    activeModuleId: null,
+    modulesAreLoading: true
   };
 
-  componentDidMount() {
-    api.getModules().then((modules) => {
+  async componentDidMount() {
+    modulesAPI.getModules().then((modules) => {
       this.setState({ modules, activeModuleId: (modules.length === 0) ? null : modules[0]._id });
     });
+
+    const { pathId } = this.props.match.params;
+    const path = await pathsAPI.getPath(pathId);
+    this.setState({ path, modules: path.modules, modulesAreLoading: false });
   }
 
   createModule = (module) => {
-    api.createModule(module).then((newModule) => {
+    modulesAPI.createModule(module).then((newModule) => {
       this.setState(previousState => ({
         newTitle: '',
         modules: [...previousState.modules, newModule],
@@ -29,7 +37,7 @@ class Modules extends Component {
   };
 
   updateModule = (id, module) => {
-    api.updateModule(id, module).then((updatedModule) => {
+    modulesAPI.updateModule(id, module).then((updatedModule) => {
       this.setState((previousState) => {
         const modules = [...previousState.modules];
         const index = modules.findIndex(mod => mod._id === id);
@@ -40,7 +48,7 @@ class Modules extends Component {
   };
 
   deleteModule = (module) => {
-    api.deleteModule(module._id).then(() => {
+    modulesAPI.deleteModule(module._id).then(() => {
       this.setState((previousState) => {
         const modules = [...previousState.modules].filter(mod => mod._id !== module._id);
         return { modules };
@@ -63,12 +71,16 @@ class Modules extends Component {
   }
 
   render() {
-    const { modules, moduleFormShown, activeModuleId } = this.state;
+    const {
+      modulesAreLoading, modules, moduleFormShown, activeModuleId, path
+    } = this.state;
+
+    if (modulesAreLoading) return <p />;
 
     return (
       <div className="container module-container">
         <header className="module-container__header">
-          <h2>Using a web browser</h2>
+          <h2>{path.title}</h2>
           <button type="button" className="button" onClick={this.showModuleFrom}>Add module</button>
         </header>
         <ModuleForm
@@ -97,5 +109,10 @@ class Modules extends Component {
     );
   }
 }
+
+Modules.propTypes = {
+  // eslint-disable-next-line
+  match: PropTypes.object.isRequired
+};
 
 export default Modules;
