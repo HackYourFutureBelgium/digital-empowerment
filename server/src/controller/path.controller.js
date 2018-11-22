@@ -10,8 +10,8 @@ exports.findAll = (req, res) => {
 
 exports.findOne = (req, res) => {
   Path.findById(req.params.pathId)
-    .populate()
-    .then((modules) => { res.send(modules); })
+    .populate('modules')
+    .then((path) => { res.send(path); })
     .catch((err) => {
       res.status(500).send({ message: err.message });
     });
@@ -26,4 +26,11 @@ exports.create = (req, res) => {
     .catch((err) => {
       res.status(500).send({ message: err.message });
     });
+};
+
+exports.addModuleToPath = async (pathId, moduleId) => {
+  const path = await Path.findById(pathId);
+  path.modules.push(moduleId);
+  await path.save();
+  Path.findOneAndUpdate({ _id: pathId }, path, { new: true });
 };

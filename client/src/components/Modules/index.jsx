@@ -27,7 +27,8 @@ class Modules extends Component {
   }
 
   createModule = (module) => {
-    modulesAPI.createModule(module).then((newModule) => {
+    const pathId = this.state.path._id;
+    modulesAPI.createModule(pathId, module).then((newModule) => {
       this.setState(previousState => ({
         newTitle: '',
         modules: [...previousState.modules, newModule],

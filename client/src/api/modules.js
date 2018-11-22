@@ -7,8 +7,8 @@ const headers = new Headers({
 
 export const getModules = () => fetch(BASE_URL).then(response => response.json());
 
-export const createModule = body => (
-  fetch(BASE_URL, {
+export const createModule = (pathId, body) => (
+  fetch(`${API_URL}/path/${pathId}/module`, {
     method: 'POST',
     headers,
     body: JSON.stringify(body)

@@ -6,8 +6,8 @@ import Modules from './components/Modules';
 const App = () => (
   <BrowserRouter>
     <Switch>
-      <Route path="/:path(|paths|index)" component={Paths} />
-      <Route path="/path/:pathId" component={Modules} />
+      <Route exact path="/:path(|paths|path|index)" component={Paths} />
+      <Route path="/paths/:pathId" component={Modules} />
       <Route render={() => <p>Page not found</p>} />
     </Switch>
   </BrowserRouter>

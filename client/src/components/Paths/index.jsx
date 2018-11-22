@@ -16,7 +16,7 @@ class Paths extends Component {
   }
 
   choosePath = (path) => {
-    this.props.history.push(`/path/${path._id}`);
+    this.props.history.push(`/paths/${path._id}`);
   }
 
   renderPath = (path) => {
