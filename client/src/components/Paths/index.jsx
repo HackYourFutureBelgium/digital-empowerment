@@ -13,10 +13,16 @@ class Paths extends Component {
     this.setState({ paths });
   }
 
+  choosePath = () => {
+
+  }
+
   renderPath = (path) => {
     return (
-      <article key={path._id}>
-        {path.title}
+      <article className="paths__path-wrapper" key={path._id}>
+        <button type="button" onClick={this.choosePath} className="path button--seamless">
+          {path.title}
+        </button>
       </article>
     );
   }
