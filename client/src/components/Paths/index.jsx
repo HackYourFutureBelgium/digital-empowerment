@@ -7,7 +7,8 @@ import '../../assets/css/paths.css';
 
 class Paths extends Component {
   state = {
-    paths: []
+    paths: [],
+    searchQuery: ''
   };
 
   async componentDidMount() {
@@ -17,6 +18,10 @@ class Paths extends Component {
 
   choosePath = (path) => {
     this.props.history.push(`/paths/${path._id}`);
+  }
+
+  search = (e) => {
+    this.setState({ searchQuery: e.currentTarget.value });
   }
 
   renderPath = (path) => {
@@ -30,9 +35,11 @@ class Paths extends Component {
   }
 
   render() {
-    const { paths } = this.state;
+    const { paths, searchQuery } = this.state;
 
-    const $paths = paths.map(this.renderPath);
+    const $paths = paths
+      .filter(path => path.title.toLowerCase().includes(searchQuery.toLowerCase()))
+      .map(this.renderPath);
 
     return (
       <main className="container path-container">
@@ -40,7 +47,7 @@ class Paths extends Component {
           <h2>Using a web browser</h2>
           <div className="path-container__header__actions">
             <button type="button" className="button" onClick={this.createPath}>Add path</button>
-            <input type="search" className="input" placeholder="search for paths" />
+            <input type="search" className="input" onChange={this.search} value={searchQuery} placeholder="search for paths" />
           </div>
         </header>
         <div className="paths">
