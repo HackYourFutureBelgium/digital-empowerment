@@ -35,10 +35,7 @@ class PathForm extends Component {
         className="modal path-form"
         overlayClassName="modal-overlay"
       >
-        { path
-          ? <h2 className="modal__title">Update path</h2>
-          : <h2 className="modal__title">Add a new path</h2>
-        }
+        <h2 className="modal__title">New path name</h2>
         <form onSubmit={this.onSubmit}>
           <label htmlFor="path-title" className="path-form__field">
             Title:

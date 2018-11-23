@@ -54,7 +54,8 @@ class Paths extends Component {
   }
 
   duplicatePath = (path) => {
-
+    const { title, modules } = path;
+    this.createPath({ title, modules });
   }
 
   startPathCreation = () => {

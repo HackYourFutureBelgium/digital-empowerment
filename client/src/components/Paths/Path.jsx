@@ -8,12 +8,9 @@ import ConfirmationDialog from '../ConfirmationDialog';
 class Path extends Component {
   state = {
     confirmingDeletion: false,
-    updatingPath: false
+    updatingPath: false,
+    duplicatingPath: false
   };
-
-  showPathForm = (e) => {
-    e.stopPropagation();
-  }
 
   promptConfirmDeletion = (e) => {
     e.stopPropagation();
@@ -24,13 +21,27 @@ class Path extends Component {
     this.setState({ confirmingDeletion: false });
   };
 
-  showPathForm = (e) => {
+  startUpdates = (e) => {
     e.stopPropagation();
     this.setState({ updatingPath: true });
   }
 
   cancelUpdates = () => {
     this.setState({ updatingPath: false });
+  }
+
+  startDuplication = (e) => {
+    e.stopPropagation();
+    this.setState({ duplicatingPath: true });
+  }
+
+  cancelDuplication = () => {
+    this.setState({ duplicatingPath: false });
+  }
+
+  duplicatePath = (path) => {
+    this.props.duplicate({ ...path, modules: this.props.path.modules });
+    this.setState({ duplicatingPath: false });
   }
 
   updatePath = (id, path) => {
@@ -43,7 +54,7 @@ class Path extends Component {
   }
 
   render() {
-    const { confirmingDeletion, updatingPath } = this.state;
+    const { confirmingDeletion, updatingPath, duplicatingPath } = this.state;
     const { path, choose } = this.props;
 
     return (
@@ -62,11 +73,16 @@ class Path extends Component {
           onClose={this.cancelUpdates}
           submit={this.updatePath}
         />
+        <PathForm
+          isShown={duplicatingPath}
+          onClose={this.cancelDuplication}
+          submit={this.duplicatePath}
+        />
         <button type="button" onClick={() => choose(path)} className="path button--seamless">
           {path.title}
           <div className="paths__actions">
-            <i><FontAwesomeIcon icon={faClone} onClick={this.duplicatePath} /></i>
-            <i><FontAwesomeIcon icon={faEdit} onClick={this.showPathForm} /></i>
+            <i><FontAwesomeIcon icon={faClone} onClick={this.startDuplication} /></i>
+            <i><FontAwesomeIcon icon={faEdit} onClick={this.startUpdates} /></i>
             <i><FontAwesomeIcon icon={faTrash} onClick={this.promptConfirmDeletion} /></i>
           </div>
         </button>
@@ -77,7 +93,8 @@ class Path extends Component {
 
 Path.propTypes = {
   path: PropTypes.shape({
-    title: PropTypes.string.isRequired
+    title: PropTypes.string.isRequired,
+    modules: PropTypes.arrayOf(PropTypes.string)
   }).isRequired,
   choose: PropTypes.func.isRequired,
   update: PropTypes.func.isRequired,
