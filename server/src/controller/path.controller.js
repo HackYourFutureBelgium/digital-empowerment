@@ -28,6 +28,21 @@ exports.create = (req, res) => {
     });
 };
 
+exports.update = (req, res) => {
+  const { pathId } = req.params;
+  Path.findOneAndUpdate({ _id: pathId }, req.body, { new: true })
+    .populate('modules')
+    .then(path => res.send(path))
+    .catch(err => res.status(500).send({ message: err.message }));
+};
+
+exports.delete = (req, res) => {
+  const { pathId } = req.params;
+  Path.findOneAndDelete({ _id: pathId })
+    .then(() => res.status(204).send({ message: 'Path deleted successfully!' }))
+    .catch(err => res.status(500).send({ message: err.message }));
+};
+
 exports.addModuleToPath = async (pathId, moduleId) => {
   const path = await Path.findById(pathId);
   path.modules.push(moduleId);

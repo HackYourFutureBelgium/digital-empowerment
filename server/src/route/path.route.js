@@ -6,4 +6,6 @@ module.exports = (app) => {
   app.get('/path/:pathId', paths.findOne);
   app.post('/path', paths.create);
   app.post('/path/:pathId/module', modules.create);
+  app.patch('/path/:pathId', paths.update);
+  app.delete('/path/:pathId', paths.delete);
 };
