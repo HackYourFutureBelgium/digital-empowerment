@@ -44,7 +44,7 @@ class Path extends Component {
 
   render() {
     const { confirmingDeletion, updatingPath } = this.state;
-    const { path } = this.props;
+    const { path, choose } = this.props;
 
     return (
       <article className="paths paths__path-wrapper">
@@ -62,7 +62,7 @@ class Path extends Component {
           onClose={this.cancelUpdates}
           submit={this.updatePath}
         />
-        <button type="button" onClick={() => this.choosePath(path)} className="path button--seamless">
+        <button type="button" onClick={() => choose(path)} className="path button--seamless">
           {path.title}
           <div className="paths__actions">
             <i><FontAwesomeIcon icon={faClone} onClick={this.duplicatePath} /></i>
