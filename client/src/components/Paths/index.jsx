@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash, faClone } from '@fortawesome/free-solid-svg-icons';
+import Path from './Path';
 import * as api from '../../api/paths';
 
 import '../../assets/css/paths.css';
@@ -42,24 +41,16 @@ class Paths extends Component {
 
   }
 
-  showPathForm = () => {
-
-  }
-
-  renderPath = (path) => {
-    return (
-      <article className="paths paths__path-wrapper" key={path._id}>
-        <button type="button" onClick={() => this.choosePath(path)} className="path button--seamless">
-          {path.title}
-          <div className="paths__actions">
-            <i><FontAwesomeIcon icon={faClone} onClick={this.duplicatePath} /></i>
-            <i><FontAwesomeIcon icon={faEdit} onClick={this.showPathForm} /></i>
-            <i><FontAwesomeIcon icon={faTrash} onClick={this.promptConfirmDeletion} /></i>
-          </div>
-        </button>
-      </article>
-    );
-  }
+  renderPath = path => (
+    <Path
+      key={path._id}
+      path={path}
+      choose={this.choosePath}
+      update={this.updatePath}
+      delete={this.deletePath}
+      duplicate={this.duplicatePath}
+    />
+  );
 
   render() {
     const { paths, searchQuery } = this.state;
