@@ -17,4 +17,12 @@ export const createPath = body => (
   }).then(response => response.json())
 );
 
+export const updatePath = (id, path) => (
+  fetch(`${BASE_URL}/${id}`, {
+    method: 'PATCH',
+    headers,
+    body: JSON.stringify(path)
+  }).then(response => response.json())
+);
+
 export const deletePath = id => fetch(`${BASE_URL}/${id}`, { method: 'DELETE', headers });

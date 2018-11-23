@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faClone } from '@fortawesome/free-solid-svg-icons';
+import PathForm from './PathForm';
 import ConfirmationDialog from '../ConfirmationDialog';
 
 class Path extends Component {
@@ -28,7 +29,12 @@ class Path extends Component {
     this.setState({ updatingPath: true });
   }
 
-  hideModuleForm = () => {
+  cancelUpdates = () => {
+    this.setState({ updatingPath: false });
+  }
+
+  updatePath = (id, path) => {
+    this.props.update(id, path);
     this.setState({ updatingPath: false });
   }
 
@@ -37,7 +43,7 @@ class Path extends Component {
   }
 
   render() {
-    const { confirmingDeletion } = this.state;
+    const { confirmingDeletion, updatingPath } = this.state;
     const { path } = this.props;
 
     return (
@@ -49,6 +55,12 @@ class Path extends Component {
           accept={this.deletePath}
           title="Confirm deletion"
           text={`Are you sure you want to delete path "${path.title}"`}
+        />
+        <PathForm
+          path={path}
+          isShown={updatingPath}
+          onClose={this.cancelUpdates}
+          submit={this.updatePath}
         />
         <button type="button" onClick={() => this.choosePath(path)} className="path button--seamless">
           {path.title}

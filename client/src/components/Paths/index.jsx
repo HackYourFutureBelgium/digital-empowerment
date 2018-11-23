@@ -35,8 +35,14 @@ class Paths extends Component {
     }));
   }
 
-  updatePath = () => {
-
+  updatePath = async (id, path) => {
+    const updatedPath = await api.updatePath(id, path).catch(err => console.error(err));
+    this.setState((previousState) => {
+      const paths = [...previousState.paths];
+      const index = paths.findIndex(p => p._id === id);
+      paths[index] = updatedPath;
+      return { paths };
+    });
   }
 
   deletePath = async (path) => {
