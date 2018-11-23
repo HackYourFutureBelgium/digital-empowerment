@@ -15,12 +15,13 @@
 
 .paths {
   width: 100%;
-  display: flex;
-  justify-content: space-evenly;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 2rem;
 }
 
 .paths__path-wrapper {
-  width: 22%;
+  display: block;
   border: 1px solid #000;
   height: 15rem;
   position: relative;

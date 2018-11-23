@@ -1,4 +1,6 @@
+const mongoose = require('mongoose');
 const Path = require('../model/path.model');
+const Module = require('../model/module.model');
 
 exports.findAll = (req, res) => {
   Path.find()
@@ -17,10 +19,20 @@ exports.findOne = (req, res) => {
     });
 };
 
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
   const newPath = new Path(req.body);
+  if (newPath.modules.length > 0) {
+    newPath.modules = await Promise.all(newPath.modules.map(async (moduleId) => {
+      const mod = await Module.findById(moduleId);
+      mod._id = mongoose.Types.ObjectId();
+      mod.isNew = true;
+      const newMod = new Module(mod);
+      await newMod.save();
+      return newMod._id;
+    }));
+  }
+
   newPath
-    .populate()
     .save()
     .then((data) => { res.send(data); })
     .catch((err) => {
