@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrash, faClone } from '@fortawesome/free-solid-svg-icons';
 import * as api from '../../api/paths';
 
 import '../../assets/css/paths.css';
@@ -24,11 +26,36 @@ class Paths extends Component {
     this.setState({ searchQuery: e.currentTarget.value });
   }
 
+  createPath = () => {
+
+  }
+
+  updatePath = () => {
+
+  }
+
+  deletePath = (path) => {
+
+  }
+
+  duplicatePath = (path) => {
+
+  }
+
+  showPathForm = () => {
+
+  }
+
   renderPath = (path) => {
     return (
-      <article className="paths__path-wrapper" key={path._id}>
+      <article className="paths paths__path-wrapper" key={path._id}>
         <button type="button" onClick={() => this.choosePath(path)} className="path button--seamless">
           {path.title}
+          <div className="paths__actions">
+            <i><FontAwesomeIcon icon={faClone} onClick={this.duplicatePath} /></i>
+            <i><FontAwesomeIcon icon={faEdit} onClick={this.showPathForm} /></i>
+            <i><FontAwesomeIcon icon={faTrash} onClick={this.promptConfirmDeletion} /></i>
+          </div>
         </button>
       </article>
     );

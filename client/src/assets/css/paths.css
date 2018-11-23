@@ -23,6 +23,7 @@
   width: 22%;
   border: 1px solid #000;
   height: 15rem;
+  position: relative;
 }
 
 .path {
@@ -32,4 +33,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.paths__actions {
+  position: absolute;
+  width: 40%;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
 }
