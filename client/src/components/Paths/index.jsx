@@ -39,8 +39,12 @@ class Paths extends Component {
 
   }
 
-  deletePath = (path) => {
-
+  deletePath = async (path) => {
+    await api.deletePath(path._id).catch(err => console.error(err));
+    this.setState((previousState) => {
+      const paths = [...previousState.paths].filter(p => p._id !== path._id);
+      return { paths };
+    });
   }
 
   duplicatePath = (path) => {
