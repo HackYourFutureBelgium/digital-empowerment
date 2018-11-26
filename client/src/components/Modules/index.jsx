@@ -17,13 +17,14 @@ class Modules extends Component {
   };
 
   async componentDidMount() {
-    modulesAPI.getModules().then((modules) => {
-      this.setState({ modules, activeModuleId: (modules.length === 0) ? null : modules[0]._id });
-    });
-
     const { pathId } = this.props.match.params;
     const path = await pathsAPI.getPath(pathId);
-    this.setState({ path, modules: path.modules, modulesAreLoading: false });
+    this.setState({
+      path,
+      activeModuleId: (path.modules.length === 0) ? null : path.modules[0]._id,
+      modules: path.modules,
+      modulesAreLoading: false
+    });
   }
 
   createModule = (module) => {
