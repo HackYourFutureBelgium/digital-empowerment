@@ -72,12 +72,27 @@ class Modules extends Component {
     this.setState({ moduleFormShown: false });
   }
 
+  renderModule = module => (
+    <Module
+      key={module._id}
+      module={module}
+      openModule={() => this.openModule(module._id)}
+      isOpen={this.state.activeModuleId === module._id}
+      deleteModule={this.deleteModule}
+      updateModule={this.updateModule}
+    />
+  );
+
   render() {
     const {
-      modulesAreLoading, modules, moduleFormShown, activeModuleId, path
+      modulesAreLoading, modules, moduleFormShown, path
     } = this.state;
 
     if (modulesAreLoading) return <p />;
+
+    const $modules = modules
+      .sort((m1, m2) => m2.createdAt - m1.createdAt)
+      .map(this.renderModule);
 
     return (
       <div className="container module-container">
@@ -92,18 +107,7 @@ class Modules extends Component {
         />
         <div className="modules">
           { modules.length > 0
-            ? modules
-              .sort((m1, m2) => m2.createdAt - m1.createdAt)
-              .map(module => (
-                <Module
-                  key={module._id}
-                  module={module}
-                  openModule={() => this.openModule(module._id)}
-                  isOpen={activeModuleId === module._id}
-                  deleteModule={this.deleteModule}
-                  updateModule={this.updateModule}
-                />
-              ))
+            ? $modules
             : <p>There are no modules yet</p>
           }
         </div>
