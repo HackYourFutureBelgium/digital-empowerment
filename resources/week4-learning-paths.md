@@ -156,8 +156,8 @@ Boom. Paths now contain references to existing modules.
 
 Things to think about:
 
-	* For now, when deleting a path you can also safely delete its modules (make sure to do this so we have no modules that aren't tied to a path)
-	* On path *duplication* you have to make a copy of the path's modules, and not it's module IDs. Otherwise, if you update a module in a duplicated path, it will also be updated in the original path.
+- For now, when deleting a path you can also safely delete its modules (make sure to do this so we have no modules that aren't tied to a path)
+- On path *duplication* you have to make a copy of the path's modules, and not it's module IDs. Otherwise, if you update a module in a duplicated path, it will also be updated in the original path.
 
 
 ### 5. Displaying learning path-specific modules
