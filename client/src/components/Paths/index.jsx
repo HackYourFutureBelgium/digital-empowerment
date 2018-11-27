@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { NonIdealState } from '@blueprintjs/core';
 import { withRouter } from 'react-router-dom';
@@ -14,7 +14,8 @@ class Paths extends Component {
     paths: [],
     searchQuery: '',
     creatingPath: false,
-    pathsAreLoading: true
+    pathsAreLoading: true,
+    fetchRequestFailed: false
   };
 
   constructor(props) {
@@ -23,9 +24,11 @@ class Paths extends Component {
   }
 
   async componentDidMount() {
-    const paths = await api.getPaths().catch(err => console.error(err));
+    const paths = await api.getPaths().catch(() => {
+      this.setState({ fetchRequestFailed: true });
+    });
     await this.setState({
-      paths,
+      paths: paths || [],
       pathsAreLoading: false
     });
     NProgress.done();
@@ -37,6 +40,10 @@ class Paths extends Component {
 
   search = (e) => {
     this.setState({ searchQuery: e.currentTarget.value });
+  }
+
+  clearSearch = () => {
+    this.setState({ searchQuery: '' });
   }
 
   createPath = async (path) => {
@@ -103,16 +110,34 @@ class Paths extends Component {
   )
 
   renderEmptySearchState = () => (
-    <NonIdealState />
+    <NonIdealState
+      title="No results"
+      icon="search"
+      description={(
+        <p>
+          There are no paths that match your search.
+        </p>
+      )}
+      action={<button type="button" className="button" onClick={this.clearSearch}>clear search</button>}
+    />
   )
 
   renderErrorState = () => (
-    <NonIdealState />
+    <NonIdealState
+      title="Something went wrong"
+      icon="error"
+      description={(
+        <p>
+          A problem occurred while fetching learning paths. This is
+          likely due to a problem with your internet connection.<br />
+        </p>
+      )}
+    />
   )
 
   render() {
     const {
-      paths, pathsAreLoading, searchQuery, creatingPath
+      paths, pathsAreLoading, searchQuery, creatingPath, fetchRequestFailed
     } = this.state;
 
     if (pathsAreLoading) return <p />;
@@ -124,8 +149,9 @@ class Paths extends Component {
     let $nonIdealState;
     if (paths.length === 0) $nonIdealState = this.renderEmptyState();
     else if (filteredPaths.length === 0) $nonIdealState = this.renderEmptySearchState();
+    else if (fetchRequestFailed) $nonIdealState = this.renderErrorState();
 
-    const $paths = filteredPaths.map(this.renderPath) || null;
+    const $paths = filteredPaths.map(this.renderPath);
 
     return (
       <main className="container path-container">
@@ -143,7 +169,7 @@ class Paths extends Component {
         />
         { $nonIdealState }
         <div className="paths">
-          {paths.length > 0 && $paths}
+          {$paths}
         </div>
       </main>
     );
