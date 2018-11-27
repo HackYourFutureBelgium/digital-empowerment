@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { NonIdealState } from '@blueprintjs/core';
 import PropTypes from 'prop-types';
 import NProgress from 'nprogress';
 import Module from './Module';
@@ -14,7 +15,8 @@ class Modules extends Component {
     modules: [],
     moduleFormShown: false,
     activeModuleId: null,
-    modulesAreLoading: true
+    modulesAreLoading: true,
+    fetchRequestFailed: false
   };
 
   constructor(props) {
@@ -24,11 +26,13 @@ class Modules extends Component {
 
   async componentDidMount() {
     const { pathId } = this.props.match.params;
-    const path = await pathsAPI.getPath(pathId);
+    const path = await pathsAPI.getPath(pathId).catch(() => {
+      this.setState({ fetchRequestFailed: true });
+    });
     await this.setState({
       path,
       activeModuleId: (path.modules.length === 0) ? null : path.modules[0]._id,
-      modules: path.modules,
+      modules: path.modules || [],
       modulesAreLoading: false
     });
     NProgress.done();
@@ -90,9 +94,35 @@ class Modules extends Component {
     />
   );
 
+  renderEmptyState = () => (
+    <NonIdealState
+      title="No modules yet"
+      description={(
+        <p>
+          This learning path does not have any modules yet<br />
+          As soon as you create one, it will displayed here.
+        </p>
+      )}
+      action={<button type="button" className="button" onClick={this.showModuleFrom}>create one now</button>}
+    />
+  )
+
+  renderErrorState = () => (
+    <NonIdealState
+      title="Something went wrong"
+      icon="error"
+      description={(
+        <p>
+          A problem occurred while fetching learning paths. This is
+          likely due to a problem with your internet connection.<br />
+        </p>
+      )}
+    />
+  )
+
   render() {
     const {
-      modulesAreLoading, modules, moduleFormShown, path
+      modulesAreLoading, modules, moduleFormShown, path, fetchRequestFailed
     } = this.state;
 
     if (modulesAreLoading) return <p />;
@@ -100,6 +130,10 @@ class Modules extends Component {
     const $modules = modules
       .sort((m1, m2) => m2.createdAt - m1.createdAt)
       .map(this.renderModule);
+
+    let $nonIdealState;
+    if (modules.length === 0) $nonIdealState = this.renderEmptyState();
+    else if (fetchRequestFailed) $nonIdealState = this.renderErrorState();
 
     return (
       <div className="container module-container">
@@ -112,11 +146,9 @@ class Modules extends Component {
           onClose={this.hideModuleForm}
           submit={this.createModule}
         />
+        {$nonIdealState}
         <div className="modules">
-          { modules.length > 0
-            ? $modules
-            : <p>There are no modules yet</p>
-          }
+          {$modules}
         </div>
       </div>
     );
