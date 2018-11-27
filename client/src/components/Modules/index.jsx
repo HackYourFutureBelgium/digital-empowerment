@@ -17,6 +17,11 @@ class Modules extends Component {
     modulesAreLoading: true
   };
 
+  constructor(props) {
+    super(props);
+    NProgress.start();
+  }
+
   async componentDidMount() {
     const { pathId } = this.props.match.params;
     const path = await pathsAPI.getPath(pathId);

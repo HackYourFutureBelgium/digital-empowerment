@@ -16,6 +16,11 @@ class Paths extends Component {
     pathsAreLoading: true
   };
 
+  constructor(props) {
+    super(props);
+    NProgress.start();
+  }
+
   async componentDidMount() {
     const paths = await api.getPaths().catch(err => console.error(err));
     await this.setState({
