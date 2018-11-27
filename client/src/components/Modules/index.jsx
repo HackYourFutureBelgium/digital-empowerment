@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import nprogress from 'nprogress';
 import Module from './Module';
 import ModuleForm from './ModuleForm';
 import * as pathsAPI from '../../api/paths';
@@ -16,15 +17,21 @@ class Modules extends Component {
     modulesAreLoading: true
   };
 
+  constructor(props) {
+    super(props);
+    nprogress.start();
+  }
+
   async componentDidMount() {
     const { pathId } = this.props.match.params;
     const path = await pathsAPI.getPath(pathId);
-    this.setState({
+    await this.setState({
       path,
       activeModuleId: (path.modules.length === 0) ? null : path.modules[0]._id,
       modules: path.modules,
       modulesAreLoading: false
     });
+    nprogress.done();
   }
 
   createModule = (module) => {
