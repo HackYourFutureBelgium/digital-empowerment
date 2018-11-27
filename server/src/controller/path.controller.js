@@ -43,7 +43,6 @@ exports.create = async (req, res) => {
 exports.update = (req, res) => {
   const { pathId } = req.params;
   Path.findOneAndUpdate({ _id: pathId }, req.body, { new: true })
-    .populate('modules')
     .then(path => res.send(path))
     .catch(err => res.status(500).send({ message: err.message }));
 };
