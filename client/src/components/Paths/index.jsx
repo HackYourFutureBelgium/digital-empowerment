@@ -17,7 +17,6 @@ class Paths extends Component {
   };
 
   async componentDidMount() {
-    console.log(NProgress);
     const paths = await api.getPaths().catch(err => console.error(err));
     await this.setState({
       paths,
