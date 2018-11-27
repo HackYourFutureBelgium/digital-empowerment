@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import NProgress from 'nprogress';
 import Path from './Path';
 import PathForm from './PathForm';
 import * as api from '../../api/paths';
@@ -11,12 +12,18 @@ class Paths extends Component {
   state = {
     paths: [],
     searchQuery: '',
-    creatingPath: false
+    creatingPath: false,
+    pathsAreLoading: true
   };
 
   async componentDidMount() {
+    console.log(NProgress);
     const paths = await api.getPaths().catch(err => console.error(err));
-    this.setState({ paths });
+    await this.setState({
+      paths,
+      pathsAreLoading: false
+    });
+    NProgress.done();
   }
 
   choosePath = (path) => {
@@ -78,7 +85,11 @@ class Paths extends Component {
   );
 
   render() {
-    const { paths, searchQuery, creatingPath } = this.state;
+    const {
+      paths, pathsAreLoading, searchQuery, creatingPath
+    } = this.state;
+
+    if (pathsAreLoading) return <p />;
 
     const $paths = paths
       .filter(path => path.title.toLowerCase().includes(searchQuery.toLowerCase()))
