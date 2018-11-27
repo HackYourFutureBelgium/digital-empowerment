@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash, faClone } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@blueprintjs/core';
 import PathForm from './PathForm';
 import ConfirmationDialog from '../ConfirmationDialog';
 
@@ -81,9 +80,9 @@ class Path extends Component {
         <button type="button" onClick={() => choose(path)} className="path button--seamless">
           {path.title}
           <div className="paths__actions">
-            <i><FontAwesomeIcon icon={faClone} onClick={this.startDuplication} /></i>
-            <i><FontAwesomeIcon icon={faEdit} onClick={this.startUpdates} /></i>
-            <i><FontAwesomeIcon icon={faTrash} onClick={this.promptConfirmDeletion} /></i>
+            <i><Icon icon="duplicate" onClick={this.startDuplication} /></i>
+            <i><Icon icon="edit" onClick={this.startUpdates} /></i>
+            <i><Icon icon="trash" onClick={this.promptConfirmDeletion} /></i>
           </div>
         </button>
       </article>

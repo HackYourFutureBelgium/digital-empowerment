@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@blueprintjs/core';
 import ModuleForm from './ModuleForm';
 import ConfirmationDialog from '../ConfirmationDialog';
 
@@ -76,8 +75,8 @@ class Module extends Component {
           </div>
         )}
         <div className="module__actions">
-          <i><FontAwesomeIcon icon={faEdit} onClick={this.showModuleForm} /></i>
-          <i><FontAwesomeIcon icon={faTrash} onClick={this.confirmDeletion} /></i>
+          <i><Icon icon="edit" onClick={this.showModuleForm} /></i>
+          <i><Icon icon="trash" onClick={this.confirmDeletion} /></i>
         </div>
       </article>
     );
