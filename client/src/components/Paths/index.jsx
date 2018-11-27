@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { NonIdealState } from '@blueprintjs/core';
 import { withRouter } from 'react-router-dom';
 import NProgress from 'nprogress';
 import Path from './Path';
@@ -88,6 +89,27 @@ class Paths extends Component {
     />
   );
 
+  renderEmptyState = () => (
+    <NonIdealState
+      title="No paths yet"
+      description={(
+        <p>
+          No learning paths have been added yet.<br />
+          As soon as you create one, it will displayed here.
+        </p>
+      )}
+      action={<button type="button" className="button" onClick={this.startPathCreation}>add one now</button>}
+    />
+  )
+
+  renderEmptySearchState = () => (
+    <NonIdealState />
+  )
+
+  renderErrorState = () => (
+    <NonIdealState />
+  )
+
   render() {
     const {
       paths, pathsAreLoading, searchQuery, creatingPath
@@ -95,14 +117,20 @@ class Paths extends Component {
 
     if (pathsAreLoading) return <p />;
 
-    const $paths = paths
-      .filter(path => path.title.toLowerCase().includes(searchQuery.toLowerCase()))
-      .map(this.renderPath);
+    const filteredPaths = paths.filter(path => (
+      path.title.toLowerCase().includes(searchQuery.toLowerCase())
+    ));
+
+    let $nonIdealState;
+    if (paths.length === 0) $nonIdealState = this.renderEmptyState();
+    else if (filteredPaths.length === 0) $nonIdealState = this.renderEmptySearchState();
+
+    const $paths = filteredPaths.map(this.renderPath) || null;
 
     return (
       <main className="container path-container">
         <header className="path-container__header">
-          <h2>Using a web browser</h2>
+          <h2>Learning paths</h2>
           <div className="path-container__header__actions">
             <button type="button" className="button" onClick={this.startPathCreation}>Add path</button>
             <input type="search" className="input" onChange={this.search} value={searchQuery} placeholder="search for paths" />
@@ -113,8 +141,9 @@ class Paths extends Component {
           onClose={this.cancelPathCreation}
           submit={this.createPath}
         />
+        { $nonIdealState }
         <div className="paths">
-          {$paths}
+          {paths.length > 0 && $paths}
         </div>
       </main>
     );
