@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import NProgress from 'nprogress';
 import Paths from './components/Paths';
 import Modules from './components/Modules';
+import NotFound from './components/404';
 
 const App = () => {
   const FancyRoute = ({ component: Component, ...rest }) => (
@@ -20,7 +21,7 @@ const App = () => {
       <Switch>
         <FancyRoute exact path="/:path(|paths|path|index)" component={Paths} />
         <FancyRoute path="/paths/:pathId" component={Modules} />
-        <FancyRoute render={() => <p>Page not found</p>} />
+        <FancyRoute component={NotFound} />
       </Switch>
     </BrowserRouter>
   );
