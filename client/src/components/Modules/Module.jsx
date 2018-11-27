@@ -10,7 +10,8 @@ class Module extends Component {
     updatingModule: false
   }
 
-  confirmDeletion = () => {
+  confirmDeletion = (e) => {
+    e.stopPropagation();
     this.setState({ confirmingDeletion: true });
   };
 
@@ -18,7 +19,8 @@ class Module extends Component {
     this.setState({ confirmingDeletion: false });
   };
 
-  showModuleForm = () => {
+  showModuleForm = (e) => {
+    e.stopPropagation();
     this.setState({ updatingModule: true });
   }
 
@@ -40,7 +42,7 @@ class Module extends Component {
     const { confirmingDeletion, updatingModule } = this.state;
     const { module, isOpen, openModule } = this.props;
     return (
-      <article className={`module${isOpen ? ' open' : ''}`} onClick={openModule}>
+      <article className="module-wrapper">
         <ConfirmationDialog
           isOpen={confirmingDeletion}
           onClose={this.cancelDeletion}
@@ -55,29 +57,31 @@ class Module extends Component {
           submit={this.updateModule}
           module={module}
         />
-        <h3 className="module__title">{module.title}</h3>
-        { isOpen && (
-          <div className="module__contents">
-            <div className="module__contents__stage">
-              Explanation:
-              <div dangerouslySetInnerHTML={{ __html: module.explanation }} />
-            </div>
+        <button type="button" onClick={openModule} className={`module button--seamless${isOpen ? ' open' : ''}`}>
+          <h3 className="module__title">{module.title}</h3>
+          { isOpen && (
+            <div className="module__contents bp3-running-text">
+              <div className="module__contents__stage">
+                Explanation:
+                <div dangerouslySetInnerHTML={{ __html: module.explanation }} />
+              </div>
 
-            <div className="module__contents__stage">
-              Exercise:
-              <div dangerouslySetInnerHTML={{ __html: module.exercise }} />
-            </div>
+              <div className="module__contents__stage">
+                Exercise:
+                <div dangerouslySetInnerHTML={{ __html: module.exercise }} />
+              </div>
 
-            <div className="module__contents__stage">
-              Evaluation:
-              <div dangerouslySetInnerHTML={{ __html: module.evaluation }} />
+              <div className="module__contents__stage">
+                Evaluation:
+                <div dangerouslySetInnerHTML={{ __html: module.evaluation }} />
+              </div>
             </div>
+          )}
+          <div className="module__actions">
+            <i><Icon icon="edit" onClick={this.showModuleForm} /></i>
+            <i><Icon icon="trash" onClick={this.confirmDeletion} /></i>
           </div>
-        )}
-        <div className="module__actions">
-          <i><Icon icon="edit" onClick={this.showModuleForm} /></i>
-          <i><Icon icon="trash" onClick={this.confirmDeletion} /></i>
-        </div>
+        </button>
       </article>
     );
   }

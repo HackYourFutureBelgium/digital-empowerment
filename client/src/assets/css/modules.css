@@ -1,19 +1,17 @@
-.modules {
-
-}
-
 .module-container__header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.modules .module {
+.module-wrapper {
   margin-bottom: 3rem;
+}
+
+.modules .module {
   padding: 1.5rem 3rem;
   border: 1px solid #000;
   position: relative;
-  cursor: pointer;
 }
 
 .module .module__title {
