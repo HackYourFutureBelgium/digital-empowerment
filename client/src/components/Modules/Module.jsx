@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Icon } from '@blueprintjs/core';
+import { Icon, Popover } from '@blueprintjs/core';
 import { INACTIVE, IS_LOADING } from '../../constants';
 import ModuleForm from './ModuleForm';
 import ConfirmationContent from '../ConfirmationContent';
@@ -47,7 +47,9 @@ class Module extends Component {
     this.hideModuleForm();
   }
 
-  deleteModule = async () => {
+  deleteModule = async (e) => {
+    e.stopPropagation();
+
     const { deleteModule, module } = this.props;
     this.setRequestState({ deleteModule: IS_LOADING });
     await api.deleteModule(module._id);
@@ -60,15 +62,6 @@ class Module extends Component {
 
     return (
       <article className="module-wrapper">
-        {/* <ConfirmationDialog
-          isOpen={confirmingDeletion}
-          onClose={this.cancelDeletion}
-          cancel={this.cancelDeletion}
-          accept={this.deleteModule}
-          isLoading={requestStates.deleteModule === IS_LOADING}
-          title="Confirm deletion"
-          text={`Are you sure you want to delete module "${module.title}"`}
-        /> */}
         <ModuleForm
           isShown={updatingModule}
           onClose={this.hideModuleForm}
@@ -98,7 +91,21 @@ class Module extends Component {
           )}
           <div className="module__actions">
             <i><Icon icon="edit" onClick={this.showModuleForm} /></i>
-            <i><Icon icon="trash" onClick={this.confirmDeletion} /></i>
+            <Popover
+              enforceFocus={false}
+              isOpen={confirmingDeletion}
+              onClose={this.cancelDeletion}
+              position="top-right"
+              popoverClassName="bp3-popover-content-sizing"
+            >
+              <i><Icon icon="trash" onClick={this.confirmDeletion} /></i>
+              <ConfirmationContent
+                message={<p>Are you sure you want to delete this module? This cannot be undone.</p>}
+                cancel={this.cancelDeletion}
+                accept={this.deleteModule}
+                isLoading={requestStates.deleteModule === IS_LOADING}
+              />
+            </Popover>
           </div>
         </button>
       </article>
