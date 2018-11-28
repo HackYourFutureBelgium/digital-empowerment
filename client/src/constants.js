@@ -1,7 +1,7 @@
 export const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
 
 const STATUSES = {
-  INCACTIVE: 0,
+  INACTIVE: 0,
   HAS_ERRORED: 1,
   IS_LOADING: 2
 };
