@@ -20,7 +20,7 @@ class Modules extends Component {
       fetchPath: IS_LOADING,
       addModule: INACTIVE,
       updateModule: INACTIVE,
-      deleteModule: INACTIVE,
+      deleteModule: INACTIVE
     }
   };
 
@@ -38,43 +38,39 @@ class Modules extends Component {
       path,
       activeModuleId: (path.modules.length === 0) ? null : path.modules[0]._id,
       modules: path.modules || [],
-      modulesAreLoading: false
+      requestStates: { fetchPath: INACTIVE }
     });
     NProgress.done();
   }
 
   setRequestState = (request, status) => (
-    this.setState({ requestStates: { [request]: status }})
+    this.setState({ requestStates: { [request]: status } })
   )
 
-  createModule = (module) => {
+  createModule = async (module) => {
     const pathId = this.state.path._id;
-    modulesAPI.createModule(pathId, module).then((newModule) => {
-      this.setState(previousState => ({
-        newTitle: '',
-        modules: [...previousState.modules, newModule],
-        moduleFormShown: false
-      }));
+    const newModule = await modulesAPI.createModule(pathId, module);
+    this.setState(previousState => ({
+      modules: [...previousState.modules, newModule],
+      moduleFormShown: false
+    }));
+  };
+
+  updateModule = async (id, module) => {
+    const updatedModule = await modulesAPI.updateModule(id, module);
+    this.setState((previousState) => {
+      const modules = [...previousState.modules];
+      const index = modules.findIndex(mod => mod._id === id);
+      modules[index] = updatedModule;
+      return { modules };
     });
   };
 
-  updateModule = (id, module) => {
-    modulesAPI.updateModule(id, module).then((updatedModule) => {
-      this.setState((previousState) => {
-        const modules = [...previousState.modules];
-        const index = modules.findIndex(mod => mod._id === id);
-        modules[index] = updatedModule;
-        return { modules };
-      });
-    });
-  };
-
-  deleteModule = (module) => {
-    modulesAPI.deleteModule(module._id).then(() => {
-      this.setState((previousState) => {
-        const modules = [...previousState.modules].filter(mod => mod._id !== module._id);
-        return { modules };
-      });
+  deleteModule = async (module) => {
+    await modulesAPI.deleteModule(module._id);
+    this.setState((previousState) => {
+      const modules = [...previousState.modules].filter(mod => mod._id !== module._id);
+      return { modules };
     });
   }
 
@@ -131,10 +127,12 @@ class Modules extends Component {
 
   render() {
     const {
-      modulesAreLoading, modules, moduleFormShown, path, fetchRequestFailed
+      requestStates, modules, moduleFormShown, path
     } = this.state;
 
-    if (modulesAreLoading) return <p />;
+    const { fetchPath } = requestStates;
+
+    if (fetchPath.IS_LOADING) return <p />;
 
     const $modules = modules
       .sort((m1, m2) => m2.createdAt - m1.createdAt)
@@ -142,7 +140,7 @@ class Modules extends Component {
 
     let $nonIdealState;
     if (modules.length === 0) $nonIdealState = this.renderEmptyState();
-    else if (fetchRequestFailed) $nonIdealState = this.renderErrorState();
+    else if (fetchPath.HAS_ERRORED) $nonIdealState = this.renderErrorState();
 
     return (
       <div className="container module-container">
