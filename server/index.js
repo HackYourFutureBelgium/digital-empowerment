@@ -22,8 +22,11 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-require('./src/route/module.route')(app);
-require('./src/route/path.route')(app);
+const router = express.Router();
+
+app.use('/api', router);
+require('./src/route/module.route')(router);
+require('./src/route/path.route')(router);
 
 if (process.env.NODE_ENV === 'production') {
   const buildPath = path.join(`${__dirname}`, '../client/build');
