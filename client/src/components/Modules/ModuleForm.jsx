@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import ReactQuill from 'react-quill';
+import { Button } from '@blueprintjs/core';
+import { IS_LOADING, HAS_ERRORED } from '../../constants';
 
 import 'react-quill/dist/quill.snow.css';
 
@@ -69,7 +71,9 @@ class ModuleForm extends Component {
   }
 
   render() {
-    const { isShown, onClose, module } = this.props;
+    const {
+      isShown, onClose, module, requestStatus
+    } = this.props;
     const { title, contents, currentlyEditing } = this.state;
 
     return (
@@ -109,7 +113,9 @@ class ModuleForm extends Component {
             </div>
           </div>
           <div className="module-form__actions">
-            <input type="submit" className="button" value={module ? 'Update module' : 'Add module'} />
+            <Button type="submit" loading={requestStatus === IS_LOADING}>
+              {module ? 'Update module' : 'Add module'}
+            </Button>
           </div>
         </form>
       </Modal>
@@ -129,7 +135,8 @@ ModuleForm.propTypes = {
     _id: PropTypes.string,
     title: PropTypes.string,
     contents: PropTypes.shape({})
-  })
+  }),
+  requestStatus: PropTypes.number.isRequired
 };
 
 export default ModuleForm;

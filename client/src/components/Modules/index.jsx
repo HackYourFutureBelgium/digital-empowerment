@@ -18,7 +18,7 @@ class Modules extends Component {
     activeModuleId: null,
     requestStates: {
       fetchPath: IS_LOADING,
-      addModule: INACTIVE,
+      createModule: INACTIVE,
       updateModule: INACTIVE,
       deleteModule: INACTIVE
     }
@@ -37,18 +37,21 @@ class Modules extends Component {
     await this.setState({
       path,
       activeModuleId: (path.modules.length === 0) ? null : path.modules[0]._id,
-      modules: path.modules || [],
-      requestStates: { fetchPath: INACTIVE }
+      modules: path.modules || []
     });
+    await this.setRequestState({ fetchPath: INACTIVE });
     NProgress.done();
   }
 
-  setRequestState = (request, status) => (
-    this.setState({ requestStates: { [request]: status } })
+  setRequestState = newStatus => (
+    this.setState(prevState => ({
+      requestStates: { ...prevState.requestStates, ...newStatus }
+    }))
   )
 
   createModule = async (module) => {
     const pathId = this.state.path._id;
+    await this.setRequestState({ createModule: IS_LOADING });
     const newModule = await modulesAPI.createModule(pathId, module);
     this.setState(previousState => ({
       modules: [...previousState.modules, newModule],
@@ -94,8 +97,8 @@ class Modules extends Component {
       module={module}
       openModule={() => this.openModule(module._id)}
       isOpen={this.state.activeModuleId === module._id}
-      deleteModule={this.deleteModule}
       updateModule={this.updateModule}
+      deleteModule={this.deleteModule}
     />
   );
 
@@ -130,9 +133,7 @@ class Modules extends Component {
       requestStates, modules, moduleFormShown, path
     } = this.state;
 
-    const { fetchPath } = requestStates;
-
-    if (fetchPath.IS_LOADING) return <p />;
+    if (requestStates.fetchPath === IS_LOADING) return <p />;
 
     const $modules = modules
       .sort((m1, m2) => m2.createdAt - m1.createdAt)
@@ -140,17 +141,18 @@ class Modules extends Component {
 
     let $nonIdealState;
     if (modules.length === 0) $nonIdealState = this.renderEmptyState();
-    else if (fetchPath.HAS_ERRORED) $nonIdealState = this.renderErrorState();
+    else if (requestStates.fetchPath === HAS_ERRORED) $nonIdealState = this.renderErrorState();
 
     return (
       <div className="container module-container">
         <header className="module-container__header">
-          <h2>{path.title}</h2>
+          <h2>{path ? path.title : null}</h2>
           <button type="button" className="button" onClick={this.showModuleFrom}>Add module</button>
         </header>
         <ModuleForm
           isShown={moduleFormShown}
           onClose={this.hideModuleForm}
+          requestStatus={requestStates.createModule}
           submit={this.createModule}
         />
         {$nonIdealState}
