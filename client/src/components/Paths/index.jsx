@@ -117,7 +117,7 @@ class Paths extends Component {
           As soon as you create one, it will displayed here.
         </p>
       )}
-      action={<button type="button" className="button" onClick={this.startPathCreation}>add one now</button>}
+      action={<button type="button" className="button" onClick={this.startPathCreation}>create one now</button>}
     />
   )
 
@@ -125,11 +125,7 @@ class Paths extends Component {
     <NonIdealState
       title="No results"
       icon="search"
-      description={(
-        <p>
-          There are no paths that match your search.
-        </p>
-      )}
+      description={(<p>There are no paths that match your search.</p>)}
       action={<button type="button" className="button" onClick={this.clearSearch}>clear search</button>}
     />
   )
