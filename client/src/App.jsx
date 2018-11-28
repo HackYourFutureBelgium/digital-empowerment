@@ -1,8 +1,11 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { FocusStyleManager } from '@blueprintjs/core';
 import Paths from './components/Paths';
 import Modules from './components/Modules';
 import NotFound from './components/404';
+
+FocusStyleManager.onlyShowFocusOnTabs();
 
 const App = () => (
   <BrowserRouter>
