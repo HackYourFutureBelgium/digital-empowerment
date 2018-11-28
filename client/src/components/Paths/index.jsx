@@ -58,7 +58,7 @@ class Paths extends Component {
 
   createPath = async (path) => {
     await this.setRequestState({ createPath: IS_LOADING });
-    api.createPath(path).then((newPath) => {
+    return api.createPath(path).then((newPath) => {
       this.setState(previousState => ({
         paths: [...previousState.paths, newPath],
         creatingPath: false
@@ -68,27 +68,25 @@ class Paths extends Component {
     });
   }
 
-  updatePath = async (id, path) => {
-    const updatedPath = await api.updatePath(id, path).catch(err => console.error(err));
+  updatePath = updatedPath => (
     this.setState((previousState) => {
       const paths = [...previousState.paths];
-      const index = paths.findIndex(p => p._id === id);
+      const index = paths.findIndex(p => p._id === updatedPath._id);
       paths[index] = updatedPath;
       return { paths };
-    });
-  }
+    })
+  );
 
-  deletePath = async (path) => {
-    await api.deletePath(path._id).catch(err => console.error(err));
+  deletePath = pathId => (
     this.setState((previousState) => {
-      const paths = [...previousState.paths].filter(p => p._id !== path._id);
+      const paths = [...previousState.paths].filter(p => p._id !== pathId);
       return { paths };
-    });
-  }
+    })
+  );
 
   duplicatePath = (path) => {
     const { title, modules } = path;
-    this.createPath({ title, modules });
+    return this.createPath({ title, modules });
   }
 
   startPathCreation = () => {

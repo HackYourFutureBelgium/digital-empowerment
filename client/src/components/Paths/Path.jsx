@@ -3,13 +3,26 @@ import PropTypes from 'prop-types';
 import { Icon } from '@blueprintjs/core';
 import PathForm from './PathForm';
 import ConfirmationDialog from '../ConfirmationDialog';
+import * as api from '../../api/paths';
+import { IS_LOADING, INACTIVE, HAS_ERRORED } from '../../constants';
 
 class Path extends Component {
   state = {
     confirmingDeletion: false,
     updatingPath: false,
-    duplicatingPath: false
+    duplicatingPath: false,
+    requestStates: {
+      deletePath: INACTIVE,
+      updatePath: INACTIVE,
+      duplicatePath: INACTIVE
+    }
   };
+
+  setRequestState = newStatus => (
+    this.setState(prevState => ({
+      requestStates: { ...prevState.requestStates, ...newStatus }
+    }))
+  )
 
   promptConfirmDeletion = (e) => {
     e.stopPropagation();
@@ -38,22 +51,43 @@ class Path extends Component {
     this.setState({ duplicatingPath: false });
   }
 
-  duplicatePath = (path) => {
-    this.props.duplicate({ ...path, modules: this.props.path.modules });
+  duplicatePath = async (path) => {
+    await this.setRequestState({ duplicatePath: IS_LOADING });
+    await this.props.duplicate({ ...path, modules: this.props.path.modules });
+    this.setRequestState({ duplicatePath: INACTIVE });
     this.setState({ duplicatingPath: false });
   }
 
-  updatePath = (id, path) => {
-    this.props.update(id, path);
-    this.setState({ updatingPath: false });
+  updatePath = async (id, path) => {
+    await this.setRequestState({ updatePath: IS_LOADING });
+    api.updatePath(id, path)
+      .then(async (updatedPath) => {
+        await this.props.update(updatedPath);
+        await this.setRequestState({ updatePath: INACTIVE });
+        this.setState({ updatingPath: false });
+      })
+      .catch(() => {
+        this.setRequestState({ updatePath: HAS_ERRORED });
+      });
   }
 
-  deletePath = () => {
-    this.props.delete(this.props.path);
+  deletePath = async () => {
+    const { path } = this.props;
+    await this.setRequestState({ deletePath: IS_LOADING });
+    await api.deletePath(path._id)
+      .then(async () => {
+        await this.setRequestState({ deletePath: INACTIVE });
+        this.props.delete(path._id);
+      })
+      .catch(() => {
+        this.setRequestState({ deletePath: HAS_ERRORED });
+      });
   }
 
   render() {
-    const { confirmingDeletion, updatingPath, duplicatingPath } = this.state;
+    const {
+      confirmingDeletion, updatingPath, duplicatingPath, requestStates
+    } = this.state;
     const { path, choose } = this.props;
 
     return (
@@ -63,6 +97,7 @@ class Path extends Component {
           onClose={this.cancelDeletion}
           cancel={this.cancelDeletion}
           accept={this.deletePath}
+          isLoading={requestStates.deletePath === IS_LOADING}
           title="Confirm deletion"
           text={`Are you sure you want to delete path "${path.title}"`}
         />
@@ -71,11 +106,13 @@ class Path extends Component {
           isShown={updatingPath}
           onClose={this.cancelUpdates}
           submit={this.updatePath}
+          requestStatus={requestStates.updatePath}
         />
         <PathForm
           isShown={duplicatingPath}
           onClose={this.cancelDuplication}
           submit={this.duplicatePath}
+          requestStatus={requestStates.duplicatePath}
         />
         <button type="button" onClick={() => choose(path)} className="path button--seamless">
           {path.title}
