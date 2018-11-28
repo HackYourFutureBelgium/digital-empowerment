@@ -1,4 +1,4 @@
-import { API_URL } from './constants';
+import { API_URL } from '../constants';
 
 const BASE_URL = `${API_URL}/path`;
 

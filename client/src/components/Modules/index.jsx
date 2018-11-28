@@ -16,6 +16,8 @@ class Modules extends Component {
     moduleFormShown: false,
     activeModuleId: null,
     modulesAreLoading: true,
+    requests: {
+    },
     fetchRequestFailed: false
   };
 
