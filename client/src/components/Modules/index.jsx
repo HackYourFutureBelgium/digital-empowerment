@@ -51,7 +51,7 @@ class Modules extends Component {
 
   createModule = async (module) => {
     const pathId = this.state.path._id;
-    await this.setRequestState({ createModule: IS_LOADING });
+    this.setRequestState({ createModule: IS_LOADING });
     const newModule = await modulesAPI.createModule(pathId, module);
     this.setState(previousState => ({
       modules: [...previousState.modules, newModule],
@@ -60,7 +60,7 @@ class Modules extends Component {
   };
 
   updateModule = async (id, module) => {
-    await this.setRequestState({ updateModule: IS_LOADING });
+    this.setRequestState({ updateModule: IS_LOADING });
     const updatedModule = await modulesAPI.updateModule(id, module);
     return this.setState((previousState) => {
       const modules = [...previousState.modules];
@@ -71,8 +71,10 @@ class Modules extends Component {
   };
 
   deleteModule = async (module) => {
+    this.setRequestState({ deleteModule: IS_LOADING });
     await modulesAPI.deleteModule(module._id);
-    return this.setState((previousState) => {
+    await this.setRequestState({ deleteModule: INACTIVE });
+    await this.setState((previousState) => {
       const modules = [...previousState.modules].filter(mod => mod._id !== module._id);
       return { modules };
     });

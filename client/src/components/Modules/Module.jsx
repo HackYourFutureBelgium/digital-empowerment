@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from '@blueprintjs/core';
+import { IS_LOADING } from '../../constants';
 import ModuleForm from './ModuleForm';
 import ConfirmationDialog from '../ConfirmationDialog';
 
@@ -33,15 +34,15 @@ class Module extends Component {
     this.hideModuleForm();
   }
 
-  deleteModule = () => {
+  deleteModule = async () => {
     const { deleteModule, module } = this.props;
-    deleteModule(module);
+    await deleteModule(module);
   }
 
   render() {
     const { confirmingDeletion, updatingModule } = this.state;
     const {
-      module, isOpen, openModule, updateStatus
+      module, isOpen, openModule, updateStatus, deleteStatus
     } = this.props;
 
     return (
@@ -51,6 +52,7 @@ class Module extends Component {
           onClose={this.cancelDeletion}
           cancel={this.cancelDeletion}
           accept={this.deleteModule}
+          isLoading={deleteStatus === IS_LOADING}
           title="Confirm deletion"
           text={`Are you sure you want to delete module "${module.title}"`}
         />
