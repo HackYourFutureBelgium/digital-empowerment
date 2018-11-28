@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { NonIdealState } from '@blueprintjs/core';
+import { NonIdealState, InputGroup, Button } from '@blueprintjs/core';
 import { withRouter } from 'react-router-dom';
 import NProgress from 'nprogress';
 import Path from './Path';
@@ -49,7 +49,7 @@ class Paths extends Component {
   }
 
   search = (e) => {
-    this.setState({ searchQuery: e.currentTarget.value });
+    this.setState({ searchQuery: e.target.value });
   }
 
   clearSearch = () => {
@@ -166,8 +166,8 @@ class Paths extends Component {
         <header className="path-container__header">
           <h2>Learning paths</h2>
           <div className="path-container__header__actions">
-            <button type="button" className="button" onClick={this.startPathCreation}>Add path</button>
-            <input type="search" className="input" onChange={this.search} value={searchQuery} placeholder="search for paths" />
+            <Button type="button" icon="plus" intent="primary" onClick={this.startPathCreation}>add path</Button>
+            <InputGroup type="search" leftIcon="search" onChange={this.search} />
           </div>
         </header>
         <PathForm

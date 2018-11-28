@@ -9,7 +9,11 @@
   align-items: center;
 }
 
-.path-container__header__actions > button{
+.path-container__header__actions {
+  display: flex;
+}
+
+.path-container__header__actions > button {
   margin-right: 1rem;
 }
 
