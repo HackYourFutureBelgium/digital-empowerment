@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { NonIdealState } from '@blueprintjs/core';
+import { NonIdealState, Button } from '@blueprintjs/core';
 import PropTypes from 'prop-types';
 import NProgress from 'nprogress';
 import Module from './Module';
@@ -110,7 +110,7 @@ class Modules extends Component {
           As soon as you create one, it will displayed here.
         </p>
       )}
-      action={<button type="button" className="button" onClick={this.showModuleFrom}>create one now</button>}
+      action={<Button type="button" intent="primary" onClick={this.showModuleFrom}>create one now</Button>}
     />
   )
 
@@ -146,7 +146,7 @@ class Modules extends Component {
       <div className="container module-container">
         <header className="module-container__header">
           <h2>{path ? path.title : null}</h2>
-          <button type="button" className="button" onClick={this.showModuleFrom}>Add module</button>
+          <Button type="button" icon="plus" intent="primary" onClick={this.showModuleFrom}>new module</Button>
         </header>
         <ModuleForm
           isShown={moduleFormShown}

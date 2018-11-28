@@ -117,7 +117,7 @@ class Paths extends Component {
           As soon as you create one, it will displayed here.
         </p>
       )}
-      action={<button type="button" className="button" onClick={this.startPathCreation}>create one now</button>}
+      action={<Button type="button" intent="primary" onClick={this.startPathCreation}>create one now</Button>}
     />
   )
 
@@ -126,7 +126,7 @@ class Paths extends Component {
       title="No results"
       icon="search"
       description={(<p>There are no paths that match your search.</p>)}
-      action={<button type="button" className="button" onClick={this.clearSearch}>clear search</button>}
+      action={<Button type="button" intent="primary" onClick={this.clearSearch}>clear search</Button>}
     />
   )
 
@@ -166,7 +166,7 @@ class Paths extends Component {
         <header className="path-container__header">
           <h2>Learning paths</h2>
           <div className="path-container__header__actions">
-            <Button type="button" icon="plus" intent="primary" onClick={this.startPathCreation}>add path</Button>
+            <Button type="button" icon="plus" intent="primary" onClick={this.startPathCreation}>new path</Button>
             <InputGroup type="search" leftIcon="search" onChange={this.search} />
           </div>
         </header>

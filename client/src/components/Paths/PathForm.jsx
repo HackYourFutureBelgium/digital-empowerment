@@ -46,7 +46,7 @@ class PathForm extends Component {
             <input type="text" className="input" id="path-title" value={title} onChange={this.setTitle} />
           </label>
           <div className="path-form__actions">
-            <Button type="submit" loading={requestStatus === IS_LOADING}>
+            <Button type="submit" intent="primary" loading={requestStatus === IS_LOADING}>
               {path ? 'Update path' : 'Add path'}
             </Button>
           </div>
