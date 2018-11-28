@@ -23,9 +23,13 @@ const ConfirmationDialog = ({
   </Modal>
 );
 
+ConfirmationDialog.defaultProps = {
+  isLoading: false
+};
+
 ConfirmationDialog.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  isLoading: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   cancel: PropTypes.func.isRequired,
   accept: PropTypes.func.isRequired,

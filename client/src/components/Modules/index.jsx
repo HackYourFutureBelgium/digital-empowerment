@@ -18,9 +18,7 @@ class Modules extends Component {
     activeModuleId: null,
     requestStates: {
       fetchPath: IS_LOADING,
-      createModule: INACTIVE,
-      updateModule: INACTIVE,
-      deleteModule: INACTIVE
+      createModule: INACTIVE
     }
   };
 
@@ -59,26 +57,21 @@ class Modules extends Component {
     }));
   };
 
-  updateModule = async (id, module) => {
-    this.setRequestState({ updateModule: IS_LOADING });
-    const updatedModule = await modulesAPI.updateModule(id, module);
-    return this.setState((previousState) => {
+  updateModule = updatedModule => (
+    this.setState((previousState) => {
       const modules = [...previousState.modules];
-      const index = modules.findIndex(mod => mod._id === id);
+      const index = modules.findIndex(mod => mod._id === updatedModule._id);
       modules[index] = updatedModule;
       return { modules };
-    });
-  };
+    })
+  )
 
-  deleteModule = async (module) => {
-    this.setRequestState({ deleteModule: IS_LOADING });
-    await modulesAPI.deleteModule(module._id);
-    await this.setRequestState({ deleteModule: INACTIVE });
-    await this.setState((previousState) => {
-      const modules = [...previousState.modules].filter(mod => mod._id !== module._id);
+  deleteModule = async moduleId => (
+    this.setState((previousState) => {
+      const modules = [...previousState.modules].filter(mod => mod._id !== moduleId);
       return { modules };
-    });
-  }
+    })
+  )
 
   openModule = (id) => {
     const { activeModuleId } = this.state;
@@ -95,7 +88,7 @@ class Modules extends Component {
   }
 
   renderModule = (module) => {
-    const { requestStates, activeModuleId } = this.state;
+    const { activeModuleId } = this.state;
     return (
       <Module
         key={module._id}
@@ -103,9 +96,7 @@ class Modules extends Component {
         openModule={() => this.openModule(module._id)}
         isOpen={activeModuleId === module._id}
         updateModule={this.updateModule}
-        updateStatus={requestStates.updateModule}
         deleteModule={this.deleteModule}
-        deleteStatus={requestStates.deleteModule}
       />
     );
   }

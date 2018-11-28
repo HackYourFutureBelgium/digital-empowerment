@@ -1,15 +1,26 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from '@blueprintjs/core';
-import { IS_LOADING } from '../../constants';
+import { INACTIVE, IS_LOADING } from '../../constants';
 import ModuleForm from './ModuleForm';
 import ConfirmationDialog from '../ConfirmationDialog';
+import * as api from '../../api/modules';
 
 class Module extends Component {
   state = {
     confirmingDeletion: false,
-    updatingModule: false
+    updatingModule: false,
+    requestStates: {
+      updateModule: INACTIVE,
+      deleteModule: INACTIVE
+    }
   }
+
+  setRequestState = newStatus => (
+    this.setState(prevState => ({
+      requestStates: { ...prevState.requestStates, ...newStatus }
+    }))
+  )
 
   confirmDeletion = (e) => {
     e.stopPropagation();
@@ -29,21 +40,23 @@ class Module extends Component {
     this.setState({ updatingModule: false });
   }
 
-  updateModule = async (body, id) => {
-    await this.props.updateModule(body, id);
+  updateModule = async (id, body) => {
+    this.setRequestState({ updateModule: IS_LOADING });
+    const updatedModule = await api.updateModule(id, body);
+    await this.props.updateModule(updatedModule);
     this.hideModuleForm();
   }
 
   deleteModule = async () => {
     const { deleteModule, module } = this.props;
-    await deleteModule(module);
+    this.setRequestState({ deleteModule: IS_LOADING });
+    await api.deleteModule(module._id);
+    deleteModule(module._id);
   }
 
   render() {
-    const { confirmingDeletion, updatingModule } = this.state;
-    const {
-      module, isOpen, openModule, updateStatus, deleteStatus
-    } = this.props;
+    const { confirmingDeletion, updatingModule, requestStates } = this.state;
+    const { module, isOpen, openModule } = this.props;
 
     return (
       <article className="module-wrapper">
@@ -52,7 +65,7 @@ class Module extends Component {
           onClose={this.cancelDeletion}
           cancel={this.cancelDeletion}
           accept={this.deleteModule}
-          isLoading={deleteStatus === IS_LOADING}
+          isLoading={requestStates.deleteModule === IS_LOADING}
           title="Confirm deletion"
           text={`Are you sure you want to delete module "${module.title}"`}
         />
@@ -60,7 +73,7 @@ class Module extends Component {
           isShown={updatingModule}
           onClose={this.hideModuleForm}
           submit={this.updateModule}
-          requestStatus={updateStatus}
+          requestStatus={requestStates.updateModule}
           module={module}
         />
         <button type="button" onClick={openModule} className={`module button--seamless${isOpen ? ' open' : ''}`}>
@@ -101,9 +114,7 @@ Module.propTypes = {
   openModule: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
   deleteModule: PropTypes.func.isRequired,
-  updateModule: PropTypes.func.isRequired,
-  updateStatus: PropTypes.number.isRequired,
-  deleteStatus: PropTypes.number.isRequired
+  updateModule: PropTypes.func.isRequired
 };
 
 export default Module;
