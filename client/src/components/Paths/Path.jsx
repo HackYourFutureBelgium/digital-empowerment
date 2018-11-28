@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Icon } from '@blueprintjs/core';
+import { Icon, Popover } from '@blueprintjs/core';
 import PathForm from './PathForm';
-import ConfirmationDialog from '../ConfirmationDialog';
+import ConfirmationContent from '../ConfirmationContent';
 import * as api from '../../api/paths';
 import { IS_LOADING, INACTIVE, HAS_ERRORED } from '../../constants';
 
@@ -71,7 +71,9 @@ class Path extends Component {
       });
   }
 
-  deletePath = async () => {
+  deletePath = async (e) => {
+    e.stopPropagation();
+
     const { path } = this.props;
     await this.setRequestState({ deletePath: IS_LOADING });
     await api.deletePath(path._id)
@@ -92,15 +94,6 @@ class Path extends Component {
 
     return (
       <article className="paths paths__path-wrapper">
-        <ConfirmationDialog
-          isOpen={confirmingDeletion}
-          onClose={this.cancelDeletion}
-          cancel={this.cancelDeletion}
-          accept={this.deletePath}
-          isLoading={requestStates.deletePath === IS_LOADING}
-          title="Confirm deletion"
-          text={`Are you sure you want to delete path "${path.title}"`}
-        />
         <PathForm
           path={path}
           isShown={updatingPath}
@@ -119,7 +112,27 @@ class Path extends Component {
           <div className="paths__actions">
             <i><Icon icon="duplicate" onClick={this.startDuplication} /></i>
             <i><Icon icon="edit" onClick={this.startUpdates} /></i>
-            <i><Icon icon="trash" onClick={this.promptConfirmDeletion} /></i>
+            <Popover
+              enforceFocus={false}
+              isOpen={confirmingDeletion}
+              onClose={this.cancelDeletion}
+              position="bottom-right"
+              popoverClassName="bp3-popover-content-sizing"
+              className="pahts__actions__delete"
+            >
+              <i><Icon icon="trash" onClick={this.promptConfirmDeletion} /></i>
+              <ConfirmationContent
+                message={(
+                  <p>
+                    Are you sure you want to delete this learning path and all of its modules?<br />
+                    This cannot be undone.
+                  </p>
+                )}
+                cancel={this.cancelDeletion}
+                accept={this.deletePath}
+                isLoading={requestStates.deletePath === IS_LOADING}
+              />
+            </Popover>
           </div>
         </button>
       </article>

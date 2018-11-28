@@ -75,3 +75,15 @@ h3 {
 .link.active {
   color: purple;
 }
+
+.confirmation-content {
+  text-align: center;
+}
+
+.confirmation-content__actions {
+  text-align: right;
+}
+
+.confirmation-content__actions > button {
+  margin-left: 1rem;
+}

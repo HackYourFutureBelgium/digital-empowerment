@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Icon } from '@blueprintjs/core';
 import { INACTIVE, IS_LOADING } from '../../constants';
 import ModuleForm from './ModuleForm';
-import ConfirmationDialog from '../ConfirmationDialog';
+import ConfirmationContent from '../ConfirmationContent';
 import * as api from '../../api/modules';
 
 class Module extends Component {
@@ -60,7 +60,7 @@ class Module extends Component {
 
     return (
       <article className="module-wrapper">
-        <ConfirmationDialog
+        {/* <ConfirmationDialog
           isOpen={confirmingDeletion}
           onClose={this.cancelDeletion}
           cancel={this.cancelDeletion}
@@ -68,7 +68,7 @@ class Module extends Component {
           isLoading={requestStates.deleteModule === IS_LOADING}
           title="Confirm deletion"
           text={`Are you sure you want to delete module "${module.title}"`}
-        />
+        /> */}
         <ModuleForm
           isShown={updatingModule}
           onClose={this.hideModuleForm}
