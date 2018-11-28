@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { NonIdealState, InputGroup, Button } from '@blueprintjs/core';
+import {
+  NonIdealState, InputGroup, Button, Tag
+} from '@blueprintjs/core';
 import { withRouter } from 'react-router-dom';
 import NProgress from 'nprogress';
 import Path from './Path';
@@ -167,7 +169,12 @@ class Paths extends Component {
           <h2>Learning paths</h2>
           <div className="path-container__header__actions">
             <Button type="button" icon="plus" intent="primary" onClick={this.startPathCreation}>new path</Button>
-            <InputGroup type="search" leftIcon="search" onChange={this.search} />
+            <InputGroup
+              rightElement={(<Tag minimal round>{filteredPaths.length}</Tag>)}
+              type="search"
+              leftIcon="search"
+              onChange={this.search}
+            />
           </div>
         </header>
         <PathForm
