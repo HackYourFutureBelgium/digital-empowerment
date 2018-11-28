@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
+import { Button } from '@blueprintjs/core';
+import { IS_LOADING } from '../../constants';
 
 Modal.setAppElement('#root');
 
@@ -25,7 +27,9 @@ class PathForm extends Component {
   }
 
   render() {
-    const { isShown, onClose, path } = this.props;
+    const {
+      isShown, onClose, path, requestStatus
+    } = this.props;
     const { title } = this.state;
 
     return (
@@ -42,7 +46,9 @@ class PathForm extends Component {
             <input type="text" className="input" id="path-title" value={title} onChange={this.setTitle} />
           </label>
           <div className="path-form__actions">
-            <input type="submit" className="button" value={path ? 'Update path' : 'Add path'} />
+            <Button type="submit" loading={requestStatus === IS_LOADING}>
+              {path ? 'Update path' : 'Add path'}
+            </Button>
           </div>
         </form>
       </Modal>
@@ -60,7 +66,8 @@ PathForm.propTypes = {
   submit: PropTypes.func.isRequired,
   path: PropTypes.shape({
     title: PropTypes.string
-  })
+  }),
+  requestStatus: PropTypes.number.isRequired
 };
 
 export default PathForm;

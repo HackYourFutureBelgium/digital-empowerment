@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import NProgress from 'nprogress';
 import Path from './Path';
 import PathForm from './PathForm';
+import { IS_LOADING, INACTIVE, HAS_ERRORED } from '../../constants';
 import * as api from '../../api/paths';
 
 import '../../assets/css/paths.css';
@@ -14,8 +15,10 @@ class Paths extends Component {
     paths: [],
     searchQuery: '',
     creatingPath: false,
-    pathsAreLoading: true,
-    fetchRequestFailed: false
+    requestStates: {
+      fetchPaths: IS_LOADING,
+      createPath: INACTIVE
+    }
   };
 
   constructor(props) {
@@ -23,16 +26,23 @@ class Paths extends Component {
     NProgress.start();
   }
 
-  async componentDidMount() {
-    const paths = await api.getPaths().catch(() => {
-      this.setState({ fetchRequestFailed: true });
-    });
-    await this.setState({
-      paths: paths || [],
-      pathsAreLoading: false
-    });
-    NProgress.done();
+  componentDidMount() {
+    api.getPaths()
+      .then(async (paths) => {
+        await this.setState({ paths: paths || [] });
+        await this.setRequestState({ fetchPaths: INACTIVE });
+        NProgress.done();
+      })
+      .catch(() => {
+        this.setRequestState({ fetchPaths: HAS_ERRORED });
+      });
   }
+
+  setRequestState = newStatus => (
+    this.setState(prevState => ({
+      requestStates: { ...prevState.requestStates, ...newStatus }
+    }))
+  )
 
   choosePath = (path) => {
     this.props.history.push(`/paths/${path._id}`);
@@ -47,11 +57,15 @@ class Paths extends Component {
   }
 
   createPath = async (path) => {
-    const newPath = await api.createPath(path).catch(err => console.error(err));
-    this.setState(previousState => ({
-      paths: [...previousState.paths, newPath],
-      creatingPath: false
-    }));
+    await this.setRequestState({ createPath: IS_LOADING });
+    api.createPath(path).then((newPath) => {
+      this.setState(previousState => ({
+        paths: [...previousState.paths, newPath],
+        creatingPath: false
+      }));
+    }).catch(() => {
+      this.setRequestState({ createPath: HAS_ERRORED });
+    });
   }
 
   updatePath = async (id, path) => {
@@ -137,10 +151,10 @@ class Paths extends Component {
 
   render() {
     const {
-      paths, pathsAreLoading, searchQuery, creatingPath, fetchRequestFailed
+      paths, searchQuery, creatingPath, requestStates
     } = this.state;
 
-    if (pathsAreLoading) return <p />;
+    if (requestStates.fetchPaths === IS_LOADING) return <p />;
 
     const filteredPaths = paths.filter(path => (
       path.title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -149,7 +163,7 @@ class Paths extends Component {
     let $nonIdealState;
     if (paths.length === 0) $nonIdealState = this.renderEmptyState();
     else if (filteredPaths.length === 0) $nonIdealState = this.renderEmptySearchState();
-    else if (fetchRequestFailed) $nonIdealState = this.renderErrorState();
+    else if (requestStates.fetchPaths === HAS_ERRORED) $nonIdealState = this.renderErrorState();
 
     const $paths = filteredPaths.map(this.renderPath);
 
@@ -163,6 +177,7 @@ class Paths extends Component {
           </div>
         </header>
         <PathForm
+          requestStatus={requestStates.createPath}
           isShown={creatingPath}
           onClose={this.cancelPathCreation}
           submit={this.createPath}
