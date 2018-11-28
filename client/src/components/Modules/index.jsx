@@ -60,8 +60,9 @@ class Modules extends Component {
   };
 
   updateModule = async (id, module) => {
+    await this.setRequestState({ updateModule: IS_LOADING });
     const updatedModule = await modulesAPI.updateModule(id, module);
-    this.setState((previousState) => {
+    return this.setState((previousState) => {
       const modules = [...previousState.modules];
       const index = modules.findIndex(mod => mod._id === id);
       modules[index] = updatedModule;
@@ -71,7 +72,7 @@ class Modules extends Component {
 
   deleteModule = async (module) => {
     await modulesAPI.deleteModule(module._id);
-    this.setState((previousState) => {
+    return this.setState((previousState) => {
       const modules = [...previousState.modules].filter(mod => mod._id !== module._id);
       return { modules };
     });
@@ -91,16 +92,21 @@ class Modules extends Component {
     this.setState({ moduleFormShown: false });
   }
 
-  renderModule = module => (
-    <Module
-      key={module._id}
-      module={module}
-      openModule={() => this.openModule(module._id)}
-      isOpen={this.state.activeModuleId === module._id}
-      updateModule={this.updateModule}
-      deleteModule={this.deleteModule}
-    />
-  );
+  renderModule = (module) => {
+    const { requestStates, activeModuleId } = this.state;
+    return (
+      <Module
+        key={module._id}
+        module={module}
+        openModule={() => this.openModule(module._id)}
+        isOpen={activeModuleId === module._id}
+        updateModule={this.updateModule}
+        updateStatus={requestStates.updateModule}
+        deleteModule={this.deleteModule}
+        deleteStatus={requestStates.deleteModule}
+      />
+    );
+  }
 
   renderEmptyState = () => (
     <NonIdealState

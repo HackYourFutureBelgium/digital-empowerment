@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import ReactQuill from 'react-quill';
 import { Button } from '@blueprintjs/core';
-import { IS_LOADING, HAS_ERRORED } from '../../constants';
+import { IS_LOADING } from '../../constants';
 
 import 'react-quill/dist/quill.snow.css';
 

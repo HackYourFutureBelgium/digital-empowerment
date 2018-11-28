@@ -28,8 +28,8 @@ class Module extends Component {
     this.setState({ updatingModule: false });
   }
 
-  updateModule = (body, id) => {
-    this.props.updateModule(body, id);
+  updateModule = async (body, id) => {
+    await this.props.updateModule(body, id);
     this.hideModuleForm();
   }
 
@@ -40,7 +40,10 @@ class Module extends Component {
 
   render() {
     const { confirmingDeletion, updatingModule } = this.state;
-    const { module, isOpen, openModule } = this.props;
+    const {
+      module, isOpen, openModule, updateStatus
+    } = this.props;
+
     return (
       <article className="module-wrapper">
         <ConfirmationDialog
@@ -55,6 +58,7 @@ class Module extends Component {
           isShown={updatingModule}
           onClose={this.hideModuleForm}
           submit={this.updateModule}
+          requestStatus={updateStatus}
           module={module}
         />
         <button type="button" onClick={openModule} className={`module button--seamless${isOpen ? ' open' : ''}`}>
@@ -95,7 +99,9 @@ Module.propTypes = {
   openModule: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
   deleteModule: PropTypes.func.isRequired,
-  updateModule: PropTypes.func.isRequired
+  updateModule: PropTypes.func.isRequired,
+  updateStatus: PropTypes.number.isRequired,
+  deleteStatus: PropTypes.number.isRequired
 };
 
 export default Module;
