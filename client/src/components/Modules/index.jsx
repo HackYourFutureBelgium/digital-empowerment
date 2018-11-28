@@ -6,6 +6,7 @@ import Module from './Module';
 import ModuleForm from './ModuleForm';
 import * as pathsAPI from '../../api/paths';
 import * as modulesAPI from '../../api/modules';
+import { IS_LOADING, INACTIVE, HAS_ERRORED } from '../../constants';
 
 import '../../assets/css/modules.css';
 
@@ -15,10 +16,12 @@ class Modules extends Component {
     modules: [],
     moduleFormShown: false,
     activeModuleId: null,
-    modulesAreLoading: true,
-    requests: {
-    },
-    fetchRequestFailed: false
+    requestStates: {
+      fetchPath: IS_LOADING,
+      addModule: INACTIVE,
+      updateModule: INACTIVE,
+      deleteModule: INACTIVE,
+    }
   };
 
   constructor(props) {
@@ -29,7 +32,7 @@ class Modules extends Component {
   async componentDidMount() {
     const { pathId } = this.props.match.params;
     const path = await pathsAPI.getPath(pathId).catch(() => {
-      this.setState({ fetchRequestFailed: true });
+      this.setRequestState({ fetchPath: HAS_ERRORED });
     });
     await this.setState({
       path,
@@ -39,6 +42,10 @@ class Modules extends Component {
     });
     NProgress.done();
   }
+
+  setRequestState = (request, status) => (
+    this.setState({ requestStates: { [request]: status }})
+  )
 
   createModule = (module) => {
     const pathId = this.state.path._id;
