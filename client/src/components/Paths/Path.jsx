@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Popover } from '@blueprintjs/core';
+import { Icon, Popover, Card } from '@blueprintjs/core';
 import PathForm from './PathForm';
 import ConfirmationContent from '../ConfirmationContent';
 import * as api from '../../api/paths';
@@ -93,7 +93,7 @@ class Path extends Component {
     const { path, choose } = this.props;
 
     return (
-      <article className="paths paths__path-wrapper">
+      <Card interactive onClick={() => choose(path)} elevation={1} className="path">
         <PathForm
           path={path}
           isShown={updatingPath}
@@ -107,35 +107,33 @@ class Path extends Component {
           submit={this.duplicatePath}
           requestStatus={requestStates.duplicatePath}
         />
-        <button type="button" onClick={() => choose(path)} className="path button--seamless">
-          {path.title}
-          <div className="paths__actions">
-            <i><Icon icon="duplicate" onClick={this.startDuplication} /></i>
-            <i><Icon icon="edit" onClick={this.startUpdates} /></i>
-            <Popover
-              enforceFocus={false}
-              isOpen={confirmingDeletion}
-              onClose={this.cancelDeletion}
-              position="bottom-right"
-              popoverClassName="bp3-popover-content-sizing"
-              className="pahts__actions__delete"
-            >
-              <i><Icon icon="trash" onClick={this.promptConfirmDeletion} /></i>
-              <ConfirmationContent
-                message={(
-                  <p>
-                    Are you sure you want to delete this learning path and all of its modules?<br />
-                    This cannot be undone.
-                  </p>
-                )}
-                cancel={this.cancelDeletion}
-                accept={this.deletePath}
-                isLoading={requestStates.deletePath === IS_LOADING}
-              />
-            </Popover>
-          </div>
-        </button>
-      </article>
+        <h5>{path.title}</h5>
+        <div className="paths__actions">
+          <i><Icon icon="duplicate" onClick={this.startDuplication} /></i>
+          <i><Icon icon="edit" onClick={this.startUpdates} /></i>
+          <Popover
+            enforceFocus={false}
+            isOpen={confirmingDeletion}
+            onClose={this.cancelDeletion}
+            position="bottom-right"
+            popoverClassName="bp3-popover-content-sizing"
+            className="pahts__actions__delete"
+          >
+            <i><Icon icon="trash" onClick={this.promptConfirmDeletion} /></i>
+            <ConfirmationContent
+              message={(
+                <p>
+                  Are you sure you want to delete this learning path and all of its modules?<br />
+                  This cannot be undone.
+                </p>
+              )}
+              cancel={this.cancelDeletion}
+              accept={this.deletePath}
+              isLoading={requestStates.deletePath === IS_LOADING}
+            />
+          </Popover>
+        </div>
+      </Card>
     );
   }
 }
