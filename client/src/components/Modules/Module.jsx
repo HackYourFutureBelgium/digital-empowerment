@@ -102,7 +102,7 @@ class Module extends Component {
             enforceFocus={false}
             isOpen={confirmingDeletion}
             onClose={this.cancelDeletion}
-            position="top-right"
+            position="bottom-right"
             popoverClassName="bp3-popover-content-sizing"
           >
             <i><Icon icon="trash" onClick={this.confirmDeletion} /></i>

@@ -89,7 +89,7 @@
 }
 
 .module__stages__stage {
-  padding: 1rem 0;
+  margin: 1rem 0;
 }
 
 .editor-output strong {
@@ -117,6 +117,10 @@
   display: block;
   width: 100%;
   margin-bottom: 1.5rem;
+}
+
+.module-form .quill {
+  background-color: #fff;
 }
 
 .module-form__field {
