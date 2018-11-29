@@ -16,26 +16,30 @@
 }
 
 .module .module__actions {
-  min-width: 5rem;
-  font-size: 1.7rem;
   display: flex;
-  justify-content: space-between;
   position: absolute;
   top: 3rem;
   right: 3rem;
 }
 
+.module .module__actions i {
+  cursor: pointer;
+  transition: color ease .3s;
+  margin-left: 2rem;
+}
+
 .module .module__actions i:hover {
-  color: #CC0000;
+  color: #DB3737;
   cursor: pointer;
 }
 
-.module.open {
-  cursor: default;
+.module__actions__completion-indicator {
+  color: #0D8050;
+  font-size: 1.4rem;
 }
 
-.module.open h3 {
-  margin-bottom: 4rem;
+.module__actions__completion-indicator .bp3-icon {
+  margin-right: .5rem;
 }
 
 .module__contents__stages li {

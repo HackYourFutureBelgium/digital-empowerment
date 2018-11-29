@@ -79,17 +79,15 @@ class Modules extends Component {
     this.setState({ activeModuleId: id });
   }
 
-  openNextModule = (nextModule) => {
-    if (nextModule) this.openModule(nextModule._id);
-    else this.setState({ activeModuleId: null });
-  }
-
   completeModule = async (moduleId) => {
     const { modules } = this.state;
     const index = modules.findIndex(mod => mod._id === moduleId);
-    modules[index].completed = true;
+    modules[index].isCompleted = true;
     this.setState({ modules });
-    this.openNextModule(modules[index + 1] || null);
+
+    const nextModule = modules[index + 1] || null;
+    if (nextModule) this.openModule(nextModule._id);
+    else this.setState({ activeModuleId: null });
   }
 
   showModuleFrom = () => {

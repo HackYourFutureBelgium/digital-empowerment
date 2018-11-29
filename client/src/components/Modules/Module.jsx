@@ -109,6 +109,11 @@ class Module extends Component {
           </div>
         </Collapse>
         <div className="module__actions">
+          { module.isCompleted && (
+            <span className="module__actions__completion-indicator">
+              <Icon intent="success" icon="tick-circle" />Completed
+            </span>
+          )}
           <i><Icon icon="edit" onClick={this.showModuleForm} /></i>
           <Popover
             enforceFocus={false}
