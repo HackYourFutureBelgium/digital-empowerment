@@ -38,27 +38,27 @@
   margin-bottom: 4rem;
 }
 
-.module__contents__stage {
+.module__contents__stages li {
   margin-bottom: 5rem;
 }
 
-.module__contents__stage strong {
+.module__contents__stages strong {
   font-weight: bold;
 }
 
-.module__contents__stage em {
+.module__contents__stages em {
   font-style: italic;
 }
 
-.module__contents__stage u {
+.module__contents__stages u {
   text-decoration: underline;
 }
 
-.module__contents__stage img {
+.module__contents__stages img {
   max-width: 100%;
 }
 
-.module__contents__stage iframe {
+.module__contents__stages iframe {
   width: 100%;
   height: 48rem;
 }

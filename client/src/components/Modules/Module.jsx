@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Icon, Popover, Card, Collapse
+  Icon, Popover, Card, Collapse, Button
 } from '@blueprintjs/core';
-import { INACTIVE, IS_LOADING } from '../../constants';
+import { INACTIVE, IS_LOADING, CONTENT_TYPES } from '../../constants';
 import ModuleForm from './ModuleForm';
 import ConfirmationContent from '../ConfirmationContent';
 import * as api from '../../api/modules';
@@ -12,6 +12,7 @@ class Module extends Component {
   state = {
     confirmingDeletion: false,
     updatingModule: false,
+    activeStage: CONTENT_TYPES.EXPLANATION,
     requestStates: {
       updateModule: INACTIVE,
       deleteModule: INACTIVE
@@ -42,6 +43,10 @@ class Module extends Component {
     this.setState({ updatingModule: false });
   }
 
+  setActiveStage = (activeStage) => {
+    this.setState({ activeStage });
+  }
+
   updateModule = async (id, body) => {
     this.setRequestState({ updateModule: IS_LOADING });
     const updatedModule = await api.updateModule(id, body);
@@ -59,8 +64,12 @@ class Module extends Component {
   }
 
   render() {
-    const { confirmingDeletion, updatingModule, requestStates } = this.state;
-    const { module, isOpen, openModule } = this.props;
+    const {
+      confirmingDeletion, updatingModule, requestStates, activeStage
+    } = this.state;
+    const {
+      module, isOpen, openModule, completeModule
+    } = this.props;
 
     return (
       <Card interactive={!isOpen} onClick={openModule} elevation={2} className={`module${isOpen ? ' open' : ''}`}>
@@ -72,22 +81,31 @@ class Module extends Component {
           module={module}
         />
         <h5 className="module__title">{module.title}</h5>
-        <Collapse isOpen={isOpen}>
+        <Collapse isOpen={isOpen} keepChildrenMounted>
           <div className="module__contents bp3-running-text">
-            <div className="module__contents__stage">
-              Explanation:
-              <div dangerouslySetInnerHTML={{ __html: module.explanation }} />
-            </div>
-
-            <div className="module__contents__stage">
-              Exercise:
-              <div dangerouslySetInnerHTML={{ __html: module.exercise }} />
-            </div>
-
-            <div className="module__contents__stage">
-              Evaluation:
-              <div dangerouslySetInnerHTML={{ __html: module.evaluation }} />
-            </div>
+            <ul className="module__contents__stages">
+              <li>
+                Explanation
+                <Collapse isOpen={activeStage === CONTENT_TYPES.EXPLANATION} keepChildrenMounted>
+                  <div dangerouslySetInnerHTML={{ __html: module.explanation }} />
+                  <Button type="button" onClick={() => this.setActiveStage(CONTENT_TYPES.EXERCISE)}>start exercise</Button>
+                </Collapse>
+              </li>
+              <li>
+                Exercise
+                <Collapse isOpen={activeStage === CONTENT_TYPES.EXERCISE} keepChildrenMounted>
+                  <div dangerouslySetInnerHTML={{ __html: module.exercise }} />
+                  <Button type="button" onClick={() => this.setActiveStage(CONTENT_TYPES.EVALUATION)}>next</Button>
+                </Collapse>
+              </li>
+              <li>
+                Evaluation
+                <Collapse isOpen={activeStage === CONTENT_TYPES.EVALUATION} keepChildrenMounted>
+                  <div dangerouslySetInnerHTML={{ __html: module.evaluation }} />
+                  <Button type="button" onClick={() => completeModule(module._id)}>finish!</Button>
+                </Collapse>
+              </li>
+            </ul>
           </div>
         </Collapse>
         <div className="module__actions">
@@ -121,7 +139,8 @@ Module.propTypes = {
   openModule: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
   deleteModule: PropTypes.func.isRequired,
-  updateModule: PropTypes.func.isRequired
+  updateModule: PropTypes.func.isRequired,
+  completeModule: PropTypes.func.isRequired
 };
 
 export default Module;
