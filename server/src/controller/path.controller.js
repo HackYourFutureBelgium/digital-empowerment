@@ -24,6 +24,7 @@ exports.create = async (req, res) => {
   if (newPath.modules.length > 0) {
     newPath.modules = await Promise.all(newPath.modules.map(async (moduleId) => {
       const mod = await Module.findById(moduleId);
+      if (!mod) return null;
       mod._id = mongoose.Types.ObjectId();
       mod.isNew = true;
       const newMod = new Module(mod);
