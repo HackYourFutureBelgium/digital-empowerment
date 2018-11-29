@@ -55,6 +55,7 @@ class Paths extends Component {
   }
 
   clearSearch = () => {
+    if (this.searchInput) this.searchInput.value = '';
     this.setState({ searchQuery: '' });
   }
 
@@ -174,6 +175,7 @@ class Paths extends Component {
               type="search"
               leftIcon="search"
               onChange={this.search}
+              inputRef={(c) => { this.searchInput = c; }}
             />
           </div>
         </header>
