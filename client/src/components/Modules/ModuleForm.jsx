@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import ReactQuill from 'react-quill';
 import { Button } from '@blueprintjs/core';
-import { IS_LOADING } from '../../constants';
+import { IS_LOADING, CONTENT_TYPES } from '../../constants';
 
 import 'react-quill/dist/quill.snow.css';
 
@@ -24,15 +24,9 @@ const editorOptions = {
 };
 
 class ModuleForm extends Component {
-  CONTENT_TYPES = {
-    EXPLANATION: 'explanation',
-    EXERCISE: 'exercise',
-    EVALUATION: 'evaluation'
-  };
-
   constructor(props) {
     super(props);
-    const { EXPLANATION, EXERCISE, EVALUATION } = this.CONTENT_TYPES;
+    const { EXPLANATION, EXERCISE, EVALUATION } = CONTENT_TYPES;
     this.state = {
       title: props.module ? props.module.title : '',
       contents: {
@@ -59,7 +53,7 @@ class ModuleForm extends Component {
   }
 
   handleContentSelection = (type) => {
-    this.setState({ currentlyEditing: this.CONTENT_TYPES[type] });
+    this.setState({ currentlyEditing: CONTENT_TYPES[type] });
   }
 
   onSubmit = (e) => {
@@ -100,12 +94,12 @@ class ModuleForm extends Component {
               modules={editorOptions}
             />
             <div className="module-form__contents__selection">
-              { Object.keys(this.CONTENT_TYPES).map(type => (
+              { Object.keys(CONTENT_TYPES).map(type => (
                 <button
                   onClick={() => this.handleContentSelection(type)}
                   key={type}
                   type="button"
-                  className={`link${this.CONTENT_TYPES[type] === currentlyEditing ? ' active' : ''}`}
+                  className={`link${CONTENT_TYPES[type] === currentlyEditing ? ' active' : ''}`}
                 >
                   {type}
                 </button>

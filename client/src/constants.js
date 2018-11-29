@@ -7,3 +7,9 @@ const STATUSES = {
 };
 
 export const { IS_LOADING, INACTIVE, HAS_ERRORED } = STATUSES;
+
+export const CONTENT_TYPES = {
+  EXPLANATION: 'explanation',
+  EXERCISE: 'exercise',
+  EVALUATION: 'evaluation'
+};
