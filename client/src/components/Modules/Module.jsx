@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Icon, Popover, Card, Collapse, Button
+  Icon, Popover, Card, Collapse
 } from '@blueprintjs/core';
 import { INACTIVE, IS_LOADING, CONTENT_TYPES } from '../../constants';
 import ModuleForm from './ModuleForm';
+import ModuleStages from './ModuleStages';
 import ConfirmationContent from '../ConfirmationContent';
 import * as api from '../../api/modules';
 
@@ -78,33 +79,16 @@ class Module extends Component {
           module={module}
         />
         <Card interactive={!isOpen} onClick={() => openModule(module._id)} elevation={2} className="module">
-          <h5 className="module__title">{module.title}</h5>
+          <h4 className="module__title">{module.title}</h4>
           <Collapse isOpen={isOpen} keepChildrenMounted>
-            <div className="module__contents bp3-running-text">
-              <ul className="module__contents__stages">
-                <li>
-                  Explanation
-                  <Collapse isOpen={activeStage === CONTENT_TYPES.EXPLANATION} keepChildrenMounted>
-                    <div dangerouslySetInnerHTML={{ __html: module.explanation }} />
-                    <Button type="button" onClick={() => this.setActiveStage(CONTENT_TYPES.EXERCISE)}>start exercise</Button>
-                  </Collapse>
-                </li>
-                <li>
-                  Exercise
-                  <Collapse isOpen={activeStage === CONTENT_TYPES.EXERCISE} keepChildrenMounted>
-                    <div dangerouslySetInnerHTML={{ __html: module.exercise }} />
-                    <Button type="button" onClick={() => this.setActiveStage(CONTENT_TYPES.EVALUATION)}>next</Button>
-                  </Collapse>
-                </li>
-                <li>
-                  Evaluation
-                  <Collapse isOpen={activeStage === CONTENT_TYPES.EVALUATION} keepChildrenMounted>
-                    <div dangerouslySetInnerHTML={{ __html: module.evaluation }} />
-                    <Button type="button" onClick={() => completeModule(module._id)}>finish!</Button>
-                  </Collapse>
-                </li>
-              </ul>
-            </div>
+            <ul className="module__stages">
+              <ModuleStages
+                module={module}
+                completeModule={completeModule}
+                setActiveStage={this.setActiveStage}
+                activeStage={activeStage}
+              />
+            </ul>
           </Collapse>
         </Card>
         <div className="module__wrapper__actions">
