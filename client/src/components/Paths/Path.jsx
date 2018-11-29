@@ -93,7 +93,7 @@ class Path extends Component {
     const { path, choose } = this.props;
 
     return (
-      <Card interactive onClick={() => choose(path)} elevation={1} className="path">
+      <Card interactive onClick={() => choose(path)} elevation={2} className="path">
         <PathForm
           path={path}
           isShown={updatingPath}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Popover } from '@blueprintjs/core';
+import { Icon, Popover, Card } from '@blueprintjs/core';
 import { INACTIVE, IS_LOADING } from '../../constants';
 import ModuleForm from './ModuleForm';
 import ConfirmationContent from '../ConfirmationContent';
@@ -61,7 +61,7 @@ class Module extends Component {
     const { module, isOpen, openModule } = this.props;
 
     return (
-      <article className="module-wrapper">
+      <Card interactive={!isOpen} onClick={openModule} elevation={2} className={`module${isOpen ? ' open' : ''}`}>
         <ModuleForm
           isShown={updatingModule}
           onClose={this.hideModuleForm}
@@ -69,46 +69,44 @@ class Module extends Component {
           requestStatus={requestStates.updateModule}
           module={module}
         />
-        <button type="button" onClick={openModule} className={`module button--seamless${isOpen ? ' open' : ''}`}>
-          <h3 className="module__title">{module.title}</h3>
-          { isOpen && (
-            <div className="module__contents bp3-running-text">
-              <div className="module__contents__stage">
-                Explanation:
-                <div dangerouslySetInnerHTML={{ __html: module.explanation }} />
-              </div>
-
-              <div className="module__contents__stage">
-                Exercise:
-                <div dangerouslySetInnerHTML={{ __html: module.exercise }} />
-              </div>
-
-              <div className="module__contents__stage">
-                Evaluation:
-                <div dangerouslySetInnerHTML={{ __html: module.evaluation }} />
-              </div>
+        <h5 className="module__title">{module.title}</h5>
+        { isOpen && (
+          <div className="module__contents bp3-running-text">
+            <div className="module__contents__stage">
+              Explanation:
+              <div dangerouslySetInnerHTML={{ __html: module.explanation }} />
             </div>
-          )}
-          <div className="module__actions">
-            <i><Icon icon="edit" onClick={this.showModuleForm} /></i>
-            <Popover
-              enforceFocus={false}
-              isOpen={confirmingDeletion}
-              onClose={this.cancelDeletion}
-              position="top-right"
-              popoverClassName="bp3-popover-content-sizing"
-            >
-              <i><Icon icon="trash" onClick={this.confirmDeletion} /></i>
-              <ConfirmationContent
-                message={<p>Are you sure you want to delete this module? This cannot be undone.</p>}
-                cancel={this.cancelDeletion}
-                accept={this.deleteModule}
-                isLoading={requestStates.deleteModule === IS_LOADING}
-              />
-            </Popover>
+
+            <div className="module__contents__stage">
+              Exercise:
+              <div dangerouslySetInnerHTML={{ __html: module.exercise }} />
+            </div>
+
+            <div className="module__contents__stage">
+              Evaluation:
+              <div dangerouslySetInnerHTML={{ __html: module.evaluation }} />
+            </div>
           </div>
-        </button>
-      </article>
+        )}
+        <div className="module__actions">
+          <i><Icon icon="edit" onClick={this.showModuleForm} /></i>
+          <Popover
+            enforceFocus={false}
+            isOpen={confirmingDeletion}
+            onClose={this.cancelDeletion}
+            position="top-right"
+            popoverClassName="bp3-popover-content-sizing"
+          >
+            <i><Icon icon="trash" onClick={this.confirmDeletion} /></i>
+            <ConfirmationContent
+              message={<p>Are you sure you want to delete this module? This cannot be undone.</p>}
+              cancel={this.cancelDeletion}
+              accept={this.deleteModule}
+              isLoading={requestStates.deleteModule === IS_LOADING}
+            />
+          </Popover>
+        </div>
+      </Card>
     );
   }
 }
