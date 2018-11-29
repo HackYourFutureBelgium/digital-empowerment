@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Popover, Card } from '@blueprintjs/core';
+import {
+  Icon, Popover, Card, Collapse
+} from '@blueprintjs/core';
 import { INACTIVE, IS_LOADING } from '../../constants';
 import ModuleForm from './ModuleForm';
 import ConfirmationContent from '../ConfirmationContent';
@@ -70,7 +72,7 @@ class Module extends Component {
           module={module}
         />
         <h5 className="module__title">{module.title}</h5>
-        { isOpen && (
+        <Collapse isOpen={isOpen}>
           <div className="module__contents bp3-running-text">
             <div className="module__contents__stage">
               Explanation:
@@ -87,7 +89,7 @@ class Module extends Component {
               <div dangerouslySetInnerHTML={{ __html: module.evaluation }} />
             </div>
           </div>
-        )}
+        </Collapse>
         <div className="module__actions">
           <i><Icon icon="edit" onClick={this.showModuleForm} /></i>
           <Popover
