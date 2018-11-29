@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactQuill from 'react-quill';
-import { Button, Dialog } from '@blueprintjs/core';
+import {
+  Button, Dialog, FormGroup, InputGroup, Tab, Tabs
+} from '@blueprintjs/core';
 import { IS_LOADING, CONTENT_TYPES } from '../../constants';
 
 import 'react-quill/dist/quill.snow.css';
@@ -61,11 +63,22 @@ class ModuleForm extends Component {
     module ? submit(module._id, { title, ...contents }) : submit({ title, ...contents });
   }
 
+  ContentEditor = (currentlyEditing) => {
+    const { contents } = this.state;
+    return (
+      <ReactQuill
+        value={contents[currentlyEditing]}
+        onChange={this.handleContentChange}
+        modules={editorOptions}
+      />
+    );
+  }
+
   render() {
     const {
       isShown, onClose, module, requestStatus
     } = this.props;
-    const { title, contents, currentlyEditing } = this.state;
+    const { title, currentlyEditing } = this.state;
 
     return (
       <Dialog
@@ -76,30 +89,20 @@ class ModuleForm extends Component {
       >
         <div className="bp3-dialog-body">
           <form onSubmit={this.onSubmit}>
-            <label htmlFor="module-title" className="module-form__field">
-              Title:
-              <input type="text" className="input" id="module-title" value={title} onChange={this.setTitle} />
-            </label>
-            <div className="module-form__field module-form__contents">
-              Contents for the {currentlyEditing} step:
-              <ReactQuill
-                value={contents[currentlyEditing]}
-                onChange={this.handleContentChange}
-                modules={editorOptions}
-              />
-              <div className="module-form__contents__selection">
-                { Object.keys(CONTENT_TYPES).map(type => (
-                  <button
-                    onClick={() => this.handleContentSelection(type)}
-                    key={type}
-                    type="button"
-                    className={`link${CONTENT_TYPES[type] === currentlyEditing ? ' active' : ''}`}
-                  >
-                    {type}
-                  </button>
-                ))}
-              </div>
-            </div>
+            <FormGroup label="Title" labelFor="module-title" labelInfo="(required)">
+              <InputGroup id="module-title" value={title} onChange={this.setTitle} />
+            </FormGroup>
+            <Tabs className="editor-selector" id="editor-selector" onChange={this.handleContentSelection} selected={currentlyEditing}>
+              {Object.keys(CONTENT_TYPES).map(type => (
+                <Tab
+                  key={type}
+                  id={type}
+                  title={type}
+                  panel={this.ContentEditor(currentlyEditing)}
+                />
+              ))}
+              <Tabs.Expander />
+            </Tabs>
             <div className="module-form__actions">
               <Button type="submit" intent="primary" loading={requestStatus === IS_LOADING}>
                 {module ? 'update module' : 'create module'}

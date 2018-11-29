@@ -41,7 +41,7 @@ class PathForm extends Component {
         <div className="bp3-dialog-body">
           <form onSubmit={this.onSubmit}>
             <FormGroup label="Title" labelFor="path-title" labelInfo="(required)">
-              <InputGroup id="path-title" value={title} />
+              <InputGroup id="path-title" value={title} onChange={this.setTitle} />
             </FormGroup>
             <div className="path-form__actions">
               <Button type="submit" intent="primary" loading={requestStatus === IS_LOADING}>

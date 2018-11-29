@@ -113,32 +113,15 @@
   height: 48rem;
 }
 
-.module-form .input {
-  display: block;
-  width: 100%;
-  margin-bottom: 1.5rem;
-}
-
 .module-form .quill {
   background-color: #fff;
 }
 
-.module-form__field {
-  margin-bottom: 1.5rem;
-};
-
-.module-form__contents__selection {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  margin-top: 2rem;
+.editor-selector .bp3-tab-panel {
+  margin-top: 1rem;
 }
 
 .module-form__actions {
   display: flex;
   justify-content: flex-end;
-}
-
-.module-form__contents__selection .link {
-  margin-right: 1rem;
 }
