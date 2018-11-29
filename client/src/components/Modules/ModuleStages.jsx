@@ -9,7 +9,10 @@ const ModuleStages = ({
   <Fragment>
     <li>
       <div className="module__stages__title">
-        <i><Icon iconSize={10} icon="circle" /></i>
+        {(activeStage === CONTENT_TYPES.EXPLANATION)
+          ? <i><Icon iconSize={10} icon="circle" /></i>
+          : <i><Icon iconSize={10} intent="success" icon="tick-circle" /></i>
+        }
         <h5>Explanation</h5>
       </div>
       <Collapse className="module__stages__stage" isOpen={activeStage === CONTENT_TYPES.EXPLANATION} keepChildrenMounted>
@@ -19,7 +22,10 @@ const ModuleStages = ({
     </li>
     <li>
       <div className="module__stages__title">
-        <i><Icon iconSize={10} icon="circle" /></i>
+        {activeStage === CONTENT_TYPES.EVALUATION
+          ? <i><Icon iconSize={10} intent="success" icon="tick-circle" /></i>
+          : <i><Icon iconSize={10} icon="circle" /></i>
+        }
         <h5>Exercise</h5>
       </div>
       <Collapse className="module__stages__stage" isOpen={activeStage === CONTENT_TYPES.EXERCISE} keepChildrenMounted>
@@ -29,7 +35,10 @@ const ModuleStages = ({
     </li>
     <li>
       <div className="module__stages__title">
-        <i><Icon iconSize={10} icon="circle" /></i>
+        {module.isCompleted
+          ? <i><Icon iconSize={10} intent="success" icon="tick-circle" /></i>
+          : <i><Icon iconSize={10} icon="circle" /></i>
+        }
         <h5>Evaluation</h5>
       </div>
       <Collapse className="module__stages__stage" isOpen={activeStage === CONTENT_TYPES.EVALUATION} keepChildrenMounted>
