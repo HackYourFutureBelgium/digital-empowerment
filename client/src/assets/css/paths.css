@@ -37,11 +37,19 @@
 
 .paths__actions {
   position: absolute;
-  width: 40%;
-  right: 0.5rem;
-  bottom: 0.5rem;
+  width: 35%;
+  right: .7rem;
+  bottom: .7rem;
   display: flex;
   justify-content: space-between;
+  visibility: none;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.4s linear;
+}
+
+.path:hover .paths__actions {
+  visibility: visible;
+  opacity: 1;
 }
 
 .paths__actions i:hover {
