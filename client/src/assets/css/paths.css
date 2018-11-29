@@ -56,6 +56,10 @@
   opacity: 1;
 }
 
+.paths__actions i {
+  transition: color ease .3s;
+}
+
 .paths__actions i:hover {
   color: #DB3737;
 }

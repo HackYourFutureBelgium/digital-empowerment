@@ -47,7 +47,7 @@ class PathForm extends Component {
           </label>
           <div className="path-form__actions">
             <Button type="submit" intent="primary" loading={requestStatus === IS_LOADING}>
-              {path ? 'Update path' : 'Add path'}
+              {path ? 'update path' : 'create path'}
             </Button>
           </div>
         </form>
