@@ -127,16 +127,16 @@
   margin-bottom: 1.5rem;
 };
 
-.module-form__actions {
-  text-align: center;
-  margin: 2rem 0 1rem;
-}
-
 .module-form__contents__selection {
   width: 100%;
   display: flex;
   justify-content: space-between;
   margin-top: 2rem;
+}
+
+.module-form__actions {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .module-form__contents__selection .link {

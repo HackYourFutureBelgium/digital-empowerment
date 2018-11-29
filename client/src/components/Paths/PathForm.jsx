@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Modal from 'react-modal';
-import { Button } from '@blueprintjs/core';
+import { Button, Dialog } from '@blueprintjs/core';
 import { IS_LOADING } from '../../constants';
-
-Modal.setAppElement('#root');
 
 class PathForm extends Component {
   constructor(props) {
@@ -33,25 +30,26 @@ class PathForm extends Component {
     const { title } = this.state;
 
     return (
-      <Modal
+      <Dialog
         isOpen={isShown}
-        onRequestClose={onClose}
-        className="modal path-form"
-        overlayClassName="modal-overlay"
+        onClose={onClose}
+        className="dialog path-form"
+        title="New path name"
       >
-        <h2 className="modal__title">New path name</h2>
-        <form onSubmit={this.onSubmit}>
-          <label htmlFor="path-title" className="path-form__field">
-            Title:
-            <input type="text" className="input" id="path-title" value={title} onChange={this.setTitle} />
-          </label>
-          <div className="path-form__actions">
-            <Button type="submit" intent="primary" loading={requestStatus === IS_LOADING}>
-              {path ? 'update path' : 'create path'}
-            </Button>
-          </div>
-        </form>
-      </Modal>
+        <div className="bp3-dialog-body">
+          <form onSubmit={this.onSubmit}>
+            <label htmlFor="path-title" className="path-form__field">
+              Title:
+              <input type="text" className="input" id="path-title" value={title} onChange={this.setTitle} />
+            </label>
+            <div className="path-form__actions">
+              <Button type="submit" intent="primary" loading={requestStatus === IS_LOADING}>
+                {path ? 'update path' : 'create path'}
+              </Button>
+            </div>
+          </form>
+        </div>
+      </Dialog>
     );
   }
 }
