@@ -24,8 +24,7 @@ class Path extends Component {
     }))
   )
 
-  promptConfirmDeletion = (e) => {
-    e.stopPropagation();
+  promptConfirmDeletion = () => {
     this.setState({ confirmingDeletion: true });
   }
 
@@ -33,8 +32,7 @@ class Path extends Component {
     this.setState({ confirmingDeletion: false });
   };
 
-  startUpdates = (e) => {
-    e.stopPropagation();
+  startUpdates = () => {
     this.setState({ updatingPath: true });
   }
 
@@ -42,8 +40,7 @@ class Path extends Component {
     this.setState({ updatingPath: false });
   }
 
-  startDuplication = (e) => {
-    e.stopPropagation();
+  startDuplication = () => {
     this.setState({ duplicatingPath: true });
   }
 
@@ -71,9 +68,7 @@ class Path extends Component {
       });
   }
 
-  deletePath = async (e) => {
-    e.stopPropagation();
-
+  deletePath = async () => {
     const { path } = this.props;
     await this.setRequestState({ deletePath: IS_LOADING });
     await api.deletePath(path._id)
@@ -93,7 +88,7 @@ class Path extends Component {
     const { path, choose } = this.props;
 
     return (
-      <Card interactive onClick={() => choose(path)} elevation={2} className="path">
+      <article className="path-wrapper">
         <PathForm
           path={path}
           isShown={updatingPath}
@@ -107,7 +102,9 @@ class Path extends Component {
           submit={this.duplicatePath}
           requestStatus={requestStates.duplicatePath}
         />
-        <h5>{path.title}</h5>
+        <Card interactive onClick={() => choose(path)} elevation={2} className="path">
+          <h5>{path.title}</h5>
+        </Card>
         <div className="paths__actions">
           <i><Icon icon="duplicate" onClick={this.startDuplication} /></i>
           <i><Icon icon="edit" onClick={this.startUpdates} /></i>
@@ -133,7 +130,7 @@ class Path extends Component {
             />
           </Popover>
         </div>
-      </Card>
+      </article>
     );
   }
 }

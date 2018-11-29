@@ -24,9 +24,13 @@
   grid-gap: 2rem;
 }
 
-.path {
+.path-wrapper {
+  position: relative;
   width: 100%;
   height: 100%;
+}
+
+.path {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -47,7 +51,7 @@
   transition: visibility 0s, opacity 0.4s linear;
 }
 
-.path:hover .paths__actions {
+.path-wrapper:hover .paths__actions {
   visibility: visible;
   opacity: 1;
 }

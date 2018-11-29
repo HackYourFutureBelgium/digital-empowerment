@@ -70,14 +70,14 @@ class Module extends Component {
 
     return (
       <article className="module-wrapper">
+        <ModuleForm
+          isShown={updatingModule}
+          onClose={this.hideModuleForm}
+          submit={this.updateModule}
+          requestStatus={requestStates.updateModule}
+          module={module}
+        />
         <Card interactive={!isOpen} onClick={() => openModule(module._id)} elevation={2} className="module">
-          <ModuleForm
-            isShown={updatingModule}
-            onClose={this.hideModuleForm}
-            submit={this.updateModule}
-            requestStatus={requestStates.updateModule}
-            module={module}
-          />
           <h5 className="module__title">{module.title}</h5>
           <Collapse isOpen={isOpen} keepChildrenMounted>
             <div className="module__contents bp3-running-text">
