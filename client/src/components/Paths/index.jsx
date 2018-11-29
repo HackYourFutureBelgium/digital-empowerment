@@ -33,11 +33,9 @@ class Paths extends Component {
       .then(async (paths) => {
         await this.setState({ paths: paths || [] });
         await this.setRequestState({ fetchPaths: INACTIVE });
-        NProgress.done();
       })
-      .catch(() => {
-        this.setRequestState({ fetchPaths: HAS_ERRORED });
-      });
+      .catch(() => this.setRequestState({ fetchPaths: HAS_ERRORED }))
+      .finally(() => NProgress.done());
   }
 
   setRequestState = newStatus => (

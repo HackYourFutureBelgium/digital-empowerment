@@ -27,18 +27,19 @@ class Modules extends Component {
     NProgress.start();
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const { pathId } = this.props.match.params;
-    const path = await pathsAPI.getPath(pathId).catch(() => {
-      this.setRequestState({ fetchPath: HAS_ERRORED });
-    });
-    await this.setState({
-      path,
-      activeModuleId: (path.modules.length === 0) ? null : path.modules[0]._id,
-      modules: path.modules || []
-    });
-    await this.setRequestState({ fetchPath: INACTIVE });
-    NProgress.done();
+    pathsAPI.getPath(pathId)
+      .then(async (path) => {
+        await this.setState({
+          path,
+          activeModuleId: (path.modules.length === 0) ? null : path.modules[0]._id,
+          modules: path.modules || []
+        });
+        await this.setRequestState({ fetchPath: INACTIVE });
+      })
+      .catch(() => this.setRequestState({ fetchPath: HAS_ERRORED }))
+      .finally(() => NProgress.done());
   }
 
   setRequestState = newStatus => (
@@ -50,11 +51,15 @@ class Modules extends Component {
   createModule = async (module) => {
     const pathId = this.state.path._id;
     this.setRequestState({ createModule: IS_LOADING });
-    const newModule = await modulesAPI.createModule(pathId, module);
-    this.setState(previousState => ({
-      modules: [...previousState.modules, newModule],
-      moduleFormShown: false
-    }));
+    modulesAPI.createModule(pathId, module)
+      .then(async (newModule) => {
+        await this.setState(previousState => ({
+          modules: [...previousState.modules, newModule],
+          moduleFormShown: false
+        }));
+        this.setRequestState({ createModule: INACTIVE });
+      })
+      .catch(() => this.setRequestState({ createModule: HAS_ERRORED }));
   };
 
   updateModule = updatedModule => (

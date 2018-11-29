@@ -107,8 +107,8 @@ class ModuleForm extends Component {
             </div>
           </div>
           <div className="module-form__actions">
-            <Button type="submit" loading={requestStatus === IS_LOADING}>
-              {module ? 'Update module' : 'Add module'}
+            <Button type="submit" intent="primary" loading={requestStatus === IS_LOADING}>
+              {module ? 'update module' : 'create module'}
             </Button>
           </div>
         </form>
