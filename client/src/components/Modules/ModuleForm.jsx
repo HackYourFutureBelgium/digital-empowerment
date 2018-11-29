@@ -85,7 +85,7 @@ class ModuleForm extends Component {
         isOpen={isShown}
         onClose={onClose}
         className="dialog module-form"
-        title={module ? 'Update module' : 'Add new module'}
+        title={module ? 'Update module' : 'Create new module'}
       >
         <div className="bp3-dialog-body">
           <form onSubmit={this.onSubmit}>
