@@ -25,8 +25,7 @@ class Module extends Component {
     }))
   )
 
-  confirmDeletion = (e) => {
-    e.stopPropagation();
+  confirmDeletion = () => {
     this.setState({ confirmingDeletion: true });
   };
 
@@ -54,9 +53,7 @@ class Module extends Component {
     this.hideModuleForm();
   }
 
-  deleteModule = async (e) => {
-    e.stopPropagation();
-
+  deleteModule = async () => {
     const { deleteModule, module } = this.props;
     this.setRequestState({ deleteModule: IS_LOADING });
     await api.deleteModule(module._id);
@@ -72,45 +69,47 @@ class Module extends Component {
     } = this.props;
 
     return (
-      <Card interactive={!isOpen} onClick={openModule} elevation={2} className={`module${isOpen ? ' open' : ''}`}>
-        <ModuleForm
-          isShown={updatingModule}
-          onClose={this.hideModuleForm}
-          submit={this.updateModule}
-          requestStatus={requestStates.updateModule}
-          module={module}
-        />
-        <h5 className="module__title">{module.title}</h5>
-        <Collapse isOpen={isOpen} keepChildrenMounted>
-          <div className="module__contents bp3-running-text">
-            <ul className="module__contents__stages">
-              <li>
-                Explanation
-                <Collapse isOpen={activeStage === CONTENT_TYPES.EXPLANATION} keepChildrenMounted>
-                  <div dangerouslySetInnerHTML={{ __html: module.explanation }} />
-                  <Button type="button" onClick={() => this.setActiveStage(CONTENT_TYPES.EXERCISE)}>start exercise</Button>
-                </Collapse>
-              </li>
-              <li>
-                Exercise
-                <Collapse isOpen={activeStage === CONTENT_TYPES.EXERCISE} keepChildrenMounted>
-                  <div dangerouslySetInnerHTML={{ __html: module.exercise }} />
-                  <Button type="button" onClick={() => this.setActiveStage(CONTENT_TYPES.EVALUATION)}>next</Button>
-                </Collapse>
-              </li>
-              <li>
-                Evaluation
-                <Collapse isOpen={activeStage === CONTENT_TYPES.EVALUATION} keepChildrenMounted>
-                  <div dangerouslySetInnerHTML={{ __html: module.evaluation }} />
-                  <Button type="button" onClick={() => completeModule(module._id)}>finish!</Button>
-                </Collapse>
-              </li>
-            </ul>
-          </div>
-        </Collapse>
-        <div className="module__actions">
+      <article className="module-wrapper">
+        <Card interactive={!isOpen} onClick={() => openModule(module._id)} elevation={2} className="module">
+          <ModuleForm
+            isShown={updatingModule}
+            onClose={this.hideModuleForm}
+            submit={this.updateModule}
+            requestStatus={requestStates.updateModule}
+            module={module}
+          />
+          <h5 className="module__title">{module.title}</h5>
+          <Collapse isOpen={isOpen} keepChildrenMounted>
+            <div className="module__contents bp3-running-text">
+              <ul className="module__contents__stages">
+                <li>
+                  Explanation
+                  <Collapse isOpen={activeStage === CONTENT_TYPES.EXPLANATION} keepChildrenMounted>
+                    <div dangerouslySetInnerHTML={{ __html: module.explanation }} />
+                    <Button type="button" onClick={() => this.setActiveStage(CONTENT_TYPES.EXERCISE)}>start exercise</Button>
+                  </Collapse>
+                </li>
+                <li>
+                  Exercise
+                  <Collapse isOpen={activeStage === CONTENT_TYPES.EXERCISE} keepChildrenMounted>
+                    <div dangerouslySetInnerHTML={{ __html: module.exercise }} />
+                    <Button type="button" onClick={() => this.setActiveStage(CONTENT_TYPES.EVALUATION)}>next</Button>
+                  </Collapse>
+                </li>
+                <li>
+                  Evaluation
+                  <Collapse isOpen={activeStage === CONTENT_TYPES.EVALUATION} keepChildrenMounted>
+                    <div dangerouslySetInnerHTML={{ __html: module.evaluation }} />
+                    <Button type="button" onClick={() => completeModule(module._id)}>finish!</Button>
+                  </Collapse>
+                </li>
+              </ul>
+            </div>
+          </Collapse>
+        </Card>
+        <div className="module__wrapper__actions">
           { module.isCompleted && (
-            <span className="module__actions__completion-indicator">
+            <span className="completion-indicator">
               <Icon intent="success" icon="tick-circle" />Completed
             </span>
           )}
@@ -131,7 +130,7 @@ class Module extends Component {
             />
           </Popover>
         </div>
-      </Card>
+      </article>
     );
   }
 }

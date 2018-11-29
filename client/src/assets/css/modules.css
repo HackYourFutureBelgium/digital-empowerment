@@ -4,9 +4,12 @@
   align-items: center;
 }
 
+.module-wrapper {
+  position: relative;
+}
+
 .modules .module {
   padding: .5rem 3rem;
-  position: relative;
   margin-bottom: 3rem;
 }
 
@@ -15,30 +18,30 @@
   font-weight: 600;
 }
 
-.module .module__actions {
+.module__wrapper__actions {
   display: flex;
   position: absolute;
   top: 3rem;
   right: 3rem;
 }
 
-.module .module__actions i {
+.module__wrapper__actions i {
   cursor: pointer;
   transition: color ease .3s;
   margin-left: 2rem;
 }
 
-.module .module__actions i:hover {
+.module__wrapper__actions i:hover {
   color: #DB3737;
   cursor: pointer;
 }
 
-.module__actions__completion-indicator {
+.completion-indicator {
   color: #0D8050;
   font-size: 1.4rem;
 }
 
-.module__actions__completion-indicator .bp3-icon {
+.completion-indicator .bp3-icon {
   margin-right: .5rem;
 }
 
