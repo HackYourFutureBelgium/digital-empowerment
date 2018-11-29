@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Dialog } from '@blueprintjs/core';
+import {
+  Button, Dialog, FormGroup, InputGroup
+} from '@blueprintjs/core';
 import { IS_LOADING } from '../../constants';
 
 class PathForm extends Component {
@@ -38,10 +40,9 @@ class PathForm extends Component {
       >
         <div className="bp3-dialog-body">
           <form onSubmit={this.onSubmit}>
-            <label htmlFor="path-title" className="path-form__field">
-              Title:
-              <input type="text" className="input" id="path-title" value={title} onChange={this.setTitle} />
-            </label>
+            <FormGroup label="Title" labelFor="path-title" labelInfo="(required)">
+              <InputGroup id="path-title" value={title} />
+            </FormGroup>
             <div className="path-form__actions">
               <Button type="submit" intent="primary" loading={requestStatus === IS_LOADING}>
                 {path ? 'update path' : 'create path'}
