@@ -5,6 +5,7 @@ import {
 } from '@blueprintjs/core';
 import { withRouter } from 'react-router-dom';
 import NProgress from 'nprogress';
+import Header from '../Header';
 import Path from './Path';
 import PathForm from './PathForm';
 import { IS_LOADING, INACTIVE, HAS_ERRORED } from '../../constants';
@@ -164,6 +165,7 @@ class Paths extends Component {
 
     return (
       <main className="container path-container">
+        <Header />
         <header className="path-container__header">
           <h2>Learning paths</h2>
           <div className="path-container__header__actions">

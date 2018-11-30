@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import NProgress from 'nprogress';
 import Module from './Module';
 import ModuleForm from './ModuleForm';
+import Header from '../Header';
 import * as pathsAPI from '../../api/paths';
 import * as modulesAPI from '../../api/modules';
 import { IS_LOADING, INACTIVE, HAS_ERRORED } from '../../constants';
@@ -161,6 +162,7 @@ class Modules extends Component {
 
     return (
       <div className="container module-container">
+        <Header />
         <header className="module-container__header">
           <h2>{path ? path.title : null}</h2>
           <Button type="button" icon="plus" intent="primary" onClick={this.showModuleFrom}>new module</Button>

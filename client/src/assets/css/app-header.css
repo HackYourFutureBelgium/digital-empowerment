@@ -1,0 +1,23 @@
+.bp3-navbar.app-header {
+  height: 5rem;
+  box-shadow: none;
+  padding: 0 3rem;
+}
+
+.app-header a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.app-header a:hover {
+  text-decoration: none;
+}
+
+.app-header a:visited, .app-header a:active {
+  color: inherit;
+}
+
+/* Make progress bar appear under header*/
+#nprogress .bar {
+  top: 5rem;
+}
