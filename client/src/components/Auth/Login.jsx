@@ -1,25 +1,36 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
 import {
   Dialog,
   FormGroup,
   InputGroup,
   Button
 } from '@blueprintjs/core';
+import cookies from '../../constants';
 import * as api from '../../api/user';
 
 import '../../assets/css/login.css';
 
 class Login extends Component {
   state = {
-    isLoggingIn: false,
+    loginLoading: false,
     email: '',
     password: ''
   };
 
-  login = async () => {
+  login = () => {
+    this.setState({ loginLoading: true });
 
+    const { email, password } = this.state;
+    const { completeLogin } = this.props;
+    api.login(email, password)
+      .then((res) => {
+        cookies.set('auth', res.token);
+        delete res.token;
+        cookies.set('user', res);
+        completeLogin();
+      })
+      .catch(error => console.error(error));
   };
 
   setField = (e) => {
@@ -27,7 +38,7 @@ class Login extends Component {
   }
 
   render() {
-    const { isLoggingIn, email, password } = this.state;
+    const { loginLoading, email, password } = this.state;
     const { cancelLogin } = this.props;
 
     return (
@@ -45,7 +56,7 @@ class Login extends Component {
             <FormGroup label="Password" labelFor="login-password">
               <InputGroup type="password" id="login-password" name="password" value={password} onChange={this.setField} required />
             </FormGroup>
-            <Button type="submit" intent="primary" onClick={this.login} loading={isLoggingIn}>Log in</Button>
+            <Button type="submit" intent="primary" onClick={this.login} loading={loginLoading}>Log in</Button>
           </form>
         </div>
       </Dialog>
@@ -54,7 +65,8 @@ class Login extends Component {
 }
 
 Login.propTypes = {
-  cancelLogin: PropTypes.func.isRequired
+  cancelLogin: PropTypes.func.isRequired,
+  completeLogin: PropTypes.func.isRequired
 };
 
 export default Login;
