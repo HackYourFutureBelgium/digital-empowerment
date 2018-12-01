@@ -149,6 +149,7 @@ class Modules extends Component {
     const {
       requestStates, modules, moduleFormShown, path
     } = this.state;
+    const { user } = this.props;
 
     if (requestStates.fetchPath === IS_LOADING) return <p />;
 
@@ -162,7 +163,7 @@ class Modules extends Component {
 
     return (
       <div className="container module-container">
-        <Header />
+        <Header user={user} />
         <header className="module-container__header">
           <h2>{path ? path.title : null}</h2>
           <Button type="button" icon="plus" intent="primary" onClick={this.showModuleFrom}>new module</Button>
@@ -184,7 +185,8 @@ class Modules extends Component {
 
 Modules.propTypes = {
   // eslint-disable-next-line
-  match: PropTypes.object.isRequired
+  match: PropTypes.object.isRequired,
+  user: PropTypes.shape({}).isRequired
 };
 
 export default Modules;

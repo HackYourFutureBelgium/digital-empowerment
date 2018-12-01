@@ -6,7 +6,7 @@ import {
   InputGroup,
   Button
 } from '@blueprintjs/core';
-import cookies from '../../constants';
+import { cookies } from '../../constants';
 import * as api from '../../api/user';
 
 import '../../assets/css/login.css';
@@ -18,7 +18,8 @@ class Login extends Component {
     password: ''
   };
 
-  login = () => {
+  login = (e) => {
+    e.preventDefault();
     this.setState({ loginLoading: true });
 
     const { email, password } = this.state;
@@ -49,14 +50,14 @@ class Login extends Component {
         className="dialog"
       >
         <div className="bp3-dialog-body">
-          <form>
+          <form onSubmit={this.login}>
             <FormGroup label="Email" labelFor="login-email">
               <InputGroup type="email" id="login-email" name="email" value={email} onChange={this.setField} required />
             </FormGroup>
             <FormGroup label="Password" labelFor="login-password">
               <InputGroup type="password" id="login-password" name="password" value={password} onChange={this.setField} required />
             </FormGroup>
-            <Button type="submit" intent="primary" onClick={this.login} loading={loginLoading}>Log in</Button>
+            <Button type="submit" intent="primary" loading={loginLoading}>Log in</Button>
           </form>
         </div>
       </Dialog>

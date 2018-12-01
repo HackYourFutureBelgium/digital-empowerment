@@ -149,6 +149,7 @@ class Paths extends Component {
     const {
       paths, searchQuery, creatingPath, requestStates
     } = this.state;
+    const { user } = this.props;
 
     if (requestStates.fetchPaths === IS_LOADING) return <p />;
 
@@ -165,7 +166,7 @@ class Paths extends Component {
 
     return (
       <main className="container path-container">
-        <Header />
+        <Header user={user} />
         <header className="path-container__header">
           <h2>Learning paths</h2>
           <div className="path-container__header__actions">
@@ -194,9 +195,14 @@ class Paths extends Component {
   }
 }
 
+Paths.defaultProps = {
+  user: null
+};
+
 Paths.propTypes = {
   // eslint-disable-next-line
-  history: PropTypes.object.isRequired
+  history: PropTypes.object.isRequired,
+  user: PropTypes.shape({})
 };
 
 export default withRouter(Paths);
