@@ -18,7 +18,7 @@ const Header = () => (
       <NavbarDivider />
       <Link to="/"><Button minimal icon="home" text="Home" /></Link>
       <Link to="/paths"><Button minimal icon="path-search" text="Paths" /></Link>
-      <Link to="/"><Button minimal icon="log-in" text="Log in" /></Link>
+      <Link to="/login"><Button minimal icon="log-in" text="Log in" /></Link>
     </NavbarGroup>
   </Navbar>
 );
