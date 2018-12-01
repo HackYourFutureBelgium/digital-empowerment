@@ -23,10 +23,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 const router = express.Router();
-
 app.use('/api', router);
 require('./src/route/module.route')(router);
 require('./src/route/path.route')(router);
+require('./src/route/user.route')(router);
 
 if (process.env.NODE_ENV === 'production') {
   const buildPath = path.join(`${__dirname}`, '../client/build');
