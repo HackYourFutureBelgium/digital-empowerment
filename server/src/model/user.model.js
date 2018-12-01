@@ -11,6 +11,7 @@ const UserSchema = mongoose.Schema(
       type: String,
       required: true
     },
+    token: String,
     role: String
   },
   {
