@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Modal from 'react-modal';
-
-Modal.setAppElement('#root');
+import {
+  Button, Dialog, FormGroup, InputGroup
+} from '@blueprintjs/core';
+import { IS_LOADING } from '../../constants';
 
 class PathForm extends Component {
   constructor(props) {
@@ -25,27 +26,31 @@ class PathForm extends Component {
   }
 
   render() {
-    const { isShown, onClose, path } = this.props;
+    const {
+      isShown, onClose, path, requestStatus
+    } = this.props;
     const { title } = this.state;
 
     return (
-      <Modal
+      <Dialog
         isOpen={isShown}
-        onRequestClose={onClose}
-        className="modal path-form"
-        overlayClassName="modal-overlay"
+        onClose={onClose}
+        className="dialog path-form"
+        title="New path name"
       >
-        <h2 className="modal__title">New path name</h2>
-        <form onSubmit={this.onSubmit}>
-          <label htmlFor="path-title" className="path-form__field">
-            Title:
-            <input type="text" className="input" id="path-title" value={title} onChange={this.setTitle} />
-          </label>
-          <div className="path-form__actions">
-            <input type="submit" className="button" value={path ? 'Update path' : 'Add path'} />
-          </div>
-        </form>
-      </Modal>
+        <div className="bp3-dialog-body">
+          <form onSubmit={this.onSubmit}>
+            <FormGroup label="Title" labelFor="path-title" labelInfo="(required)">
+              <InputGroup id="path-title" value={title} onChange={this.setTitle} />
+            </FormGroup>
+            <div className="path-form__actions">
+              <Button type="submit" intent="primary" loading={requestStatus === IS_LOADING}>
+                {path ? 'update path' : 'create path'}
+              </Button>
+            </div>
+          </form>
+        </div>
+      </Dialog>
     );
   }
 }
@@ -60,7 +65,8 @@ PathForm.propTypes = {
   submit: PropTypes.func.isRequired,
   path: PropTypes.shape({
     title: PropTypes.string
-  })
+  }),
+  requestStatus: PropTypes.number.isRequired
 };
 
 export default PathForm;

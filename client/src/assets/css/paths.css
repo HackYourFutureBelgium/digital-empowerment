@@ -1,5 +1,5 @@
-.path-container {
-
+.path-container .bp3-non-ideal-state {
+  height: 30rem;
 }
 
 .path-container__header {
@@ -9,7 +9,11 @@
   align-items: center;
 }
 
-.path-container__header__actions > button{
+.path-container__header__actions {
+  display: flex;
+}
+
+.path-container__header__actions > button {
   margin-right: 1rem;
 }
 
@@ -20,33 +24,49 @@
   grid-gap: 2rem;
 }
 
-.paths__path-wrapper {
-  display: block;
-  border: 1px solid #000;
+.path-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.path {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   height: 15rem;
   position: relative;
 }
 
-.path {
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .paths__actions {
   position: absolute;
-  width: 40%;
-  right: 0.5rem;
-  bottom: 0.5rem;
+  width: 35%;
+  right: .7rem;
+  bottom: .7rem;
   display: flex;
   justify-content: space-between;
+  visibility: none;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.4s linear;
+}
+
+.path-wrapper:hover .paths__actions {
+  visibility: visible;
+  opacity: 1;
+}
+
+.paths__actions i {
+  transition: color ease .3s;
 }
 
 .paths__actions i:hover {
-  color: red;
+  color: #DB3737;
+}
+
+.path-form__actions {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .path-form .input {
@@ -58,8 +78,3 @@
 .path-form__field {
   margin-bottom: 1.5rem;
 };
-
-.path-form__actions {
-  text-align: center;
-  margin: 2rem 0 1rem;
-}

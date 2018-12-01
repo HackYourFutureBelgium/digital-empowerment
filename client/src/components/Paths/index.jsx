@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import {
+  NonIdealState, InputGroup, Button, Tag
+} from '@blueprintjs/core';
 import { withRouter } from 'react-router-dom';
+import NProgress from 'nprogress';
+import Header from '../Header';
 import Path from './Path';
 import PathForm from './PathForm';
+import { IS_LOADING, INACTIVE, HAS_ERRORED } from '../../constants';
 import * as api from '../../api/paths';
 
 import '../../assets/css/paths.css';
@@ -11,51 +17,78 @@ class Paths extends Component {
   state = {
     paths: [],
     searchQuery: '',
-    creatingPath: false
+    creatingPath: false,
+    requestStates: {
+      fetchPaths: IS_LOADING,
+      createPath: INACTIVE
+    }
   };
 
-  async componentDidMount() {
-    const paths = await api.getPaths().catch(err => console.error(err));
-    this.setState({ paths });
+  constructor(props) {
+    super(props);
+    NProgress.start();
   }
+
+  componentDidMount() {
+    api.getPaths()
+      .then(async (paths) => {
+        await this.setState({ paths: paths || [] });
+        await this.setRequestState({ fetchPaths: INACTIVE });
+      })
+      .catch(() => this.setRequestState({ fetchPaths: HAS_ERRORED }))
+      .finally(() => NProgress.done());
+  }
+
+  setRequestState = newStatus => (
+    this.setState(prevState => ({
+      requestStates: { ...prevState.requestStates, ...newStatus }
+    }))
+  )
 
   choosePath = (path) => {
     this.props.history.push(`/paths/${path._id}`);
   }
 
   search = (e) => {
-    this.setState({ searchQuery: e.currentTarget.value });
+    this.setState({ searchQuery: e.target.value });
+  }
+
+  clearSearch = () => {
+    if (this.searchInput) this.searchInput.value = '';
+    this.setState({ searchQuery: '' });
   }
 
   createPath = async (path) => {
-    const newPath = await api.createPath(path).catch(err => console.error(err));
-    this.setState(previousState => ({
-      paths: [...previousState.paths, newPath],
-      creatingPath: false
-    }));
+    await this.setRequestState({ createPath: IS_LOADING });
+    return api.createPath(path).then((newPath) => {
+      this.setState(previousState => ({
+        paths: [...previousState.paths, newPath],
+        creatingPath: false
+      }));
+    }).catch(() => {
+      this.setRequestState({ createPath: HAS_ERRORED });
+    });
   }
 
-  updatePath = async (id, path) => {
-    const updatedPath = await api.updatePath(id, path).catch(err => console.error(err));
+  updatePath = updatedPath => (
     this.setState((previousState) => {
       const paths = [...previousState.paths];
-      const index = paths.findIndex(p => p._id === id);
+      const index = paths.findIndex(p => p._id === updatedPath._id);
       paths[index] = updatedPath;
       return { paths };
-    });
-  }
+    })
+  );
 
-  deletePath = async (path) => {
-    await api.deletePath(path._id).catch(err => console.error(err));
+  deletePath = pathId => (
     this.setState((previousState) => {
-      const paths = [...previousState.paths].filter(p => p._id !== path._id);
+      const paths = [...previousState.paths].filter(p => p._id !== pathId);
       return { paths };
-    });
-  }
+    })
+  );
 
   duplicatePath = (path) => {
     const { title, modules } = path;
-    this.createPath({ title, modules });
+    return this.createPath({ title, modules });
   }
 
   startPathCreation = () => {
@@ -77,27 +110,82 @@ class Paths extends Component {
     />
   );
 
-  render() {
-    const { paths, searchQuery, creatingPath } = this.state;
+  renderEmptyState = () => (
+    <NonIdealState
+      title="No paths yet"
+      description={(
+        <p>
+          No learning paths have been added yet.<br />
+          As soon as you create one, it will displayed here.
+        </p>
+      )}
+      action={<Button type="button" intent="primary" onClick={this.startPathCreation}>create one now</Button>}
+    />
+  )
 
-    const $paths = paths
-      .filter(path => path.title.toLowerCase().includes(searchQuery.toLowerCase()))
-      .map(this.renderPath);
+  renderEmptySearchState = () => (
+    <NonIdealState
+      title="No results"
+      icon="search"
+      description={(<p>There are no paths that match your search.</p>)}
+      action={<Button type="button" intent="primary" onClick={this.clearSearch}>clear search</Button>}
+    />
+  )
+
+  renderErrorState = () => (
+    <NonIdealState
+      title="Something went wrong"
+      icon="error"
+      description={(
+        <p>
+          A problem occurred while fetching learning paths. This is
+          likely due to a problem with your internet connection.<br />
+        </p>
+      )}
+    />
+  )
+
+  render() {
+    const {
+      paths, searchQuery, creatingPath, requestStates
+    } = this.state;
+
+    if (requestStates.fetchPaths === IS_LOADING) return <p />;
+
+    const filteredPaths = paths.filter(path => (
+      path.title.toLowerCase().includes(searchQuery.toLowerCase())
+    ));
+
+    let $nonIdealState;
+    if (paths.length === 0) $nonIdealState = this.renderEmptyState();
+    else if (filteredPaths.length === 0) $nonIdealState = this.renderEmptySearchState();
+    else if (requestStates.fetchPaths === HAS_ERRORED) $nonIdealState = this.renderErrorState();
+
+    const $paths = filteredPaths.map(this.renderPath);
 
     return (
       <main className="container path-container">
+        <Header />
         <header className="path-container__header">
-          <h2>Using a web browser</h2>
+          <h2>Learning paths</h2>
           <div className="path-container__header__actions">
-            <button type="button" className="button" onClick={this.startPathCreation}>Add path</button>
-            <input type="search" className="input" onChange={this.search} value={searchQuery} placeholder="search for paths" />
+            <Button type="button" icon="plus" intent="primary" onClick={this.startPathCreation}>new path</Button>
+            <InputGroup
+              rightElement={(<Tag minimal round>{filteredPaths.length}</Tag>)}
+              type="search"
+              leftIcon="search"
+              onChange={this.search}
+              inputRef={(c) => { this.searchInput = c; }}
+            />
           </div>
         </header>
         <PathForm
+          requestStatus={requestStates.createPath}
           isShown={creatingPath}
           onClose={this.cancelPathCreation}
           submit={this.createPath}
         />
+        { $nonIdealState }
         <div className="paths">
           {$paths}
         </div>

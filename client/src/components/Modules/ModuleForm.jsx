@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Modal from 'react-modal';
 import ReactQuill from 'react-quill';
+import {
+  Button, Dialog, FormGroup, InputGroup, Tab, Tabs
+} from '@blueprintjs/core';
+import { IS_LOADING, CONTENT_TYPES } from '../../constants';
 
 import 'react-quill/dist/quill.snow.css';
-
-Modal.setAppElement('#root');
 
 const editorOptions = {
   toolbar: [
@@ -22,15 +23,9 @@ const editorOptions = {
 };
 
 class ModuleForm extends Component {
-  CONTENT_TYPES = {
-    EXPLANATION: 'explanation',
-    EXERCISE: 'exercise',
-    EVALUATION: 'evaluation'
-  };
-
   constructor(props) {
     super(props);
-    const { EXPLANATION, EXERCISE, EVALUATION } = this.CONTENT_TYPES;
+    const { EXPLANATION, EXERCISE, EVALUATION } = CONTENT_TYPES;
     this.state = {
       title: props.module ? props.module.title : '',
       contents: {
@@ -57,7 +52,7 @@ class ModuleForm extends Component {
   }
 
   handleContentSelection = (type) => {
-    this.setState({ currentlyEditing: this.CONTENT_TYPES[type] });
+    this.setState({ currentlyEditing: CONTENT_TYPES[type] });
   }
 
   onSubmit = (e) => {
@@ -68,51 +63,54 @@ class ModuleForm extends Component {
     module ? submit(module._id, { title, ...contents }) : submit({ title, ...contents });
   }
 
+  ContentEditor = (currentlyEditing) => {
+    const { contents } = this.state;
+    return (
+      <ReactQuill
+        value={contents[currentlyEditing]}
+        onChange={this.handleContentChange}
+        modules={editorOptions}
+      />
+    );
+  }
+
   render() {
-    const { isShown, onClose, module } = this.props;
-    const { title, contents, currentlyEditing } = this.state;
+    const {
+      isShown, onClose, module, requestStatus
+    } = this.props;
+    const { title, currentlyEditing } = this.state;
 
     return (
-      <Modal
+      <Dialog
         isOpen={isShown}
-        onRequestClose={onClose}
-        className="modal module-form"
-        overlayClassName="modal-overlay"
+        onClose={onClose}
+        className="dialog module-form"
+        title={module ? 'Update module' : 'Create new module'}
       >
-        { module
-          ? <h2 className="modal__title">Update module</h2>
-          : <h2 className="modal__title">Add a new module</h2>
-        }
-        <form onSubmit={this.onSubmit}>
-          <label htmlFor="module-title" className="module-form__field">
-            Title:
-            <input type="text" className="input" id="module-title" value={title} onChange={this.setTitle} />
-          </label>
-          <div className="module-form__field module-form__contents">
-            Contents for the {currentlyEditing} step:
-            <ReactQuill
-              value={contents[currentlyEditing]}
-              onChange={this.handleContentChange}
-              modules={editorOptions}
-            />
-            <div className="module-form__contents__selection">
-              { Object.keys(this.CONTENT_TYPES).map(type => (
-                <button
-                  onClick={() => this.handleContentSelection(type)}
+        <div className="bp3-dialog-body">
+          <form onSubmit={this.onSubmit}>
+            <FormGroup label="Title" labelFor="module-title" labelInfo="(required)">
+              <InputGroup id="module-title" value={title} onChange={this.setTitle} />
+            </FormGroup>
+            <Tabs className="editor-selector" id="editor-selector" onChange={this.handleContentSelection} selected={currentlyEditing}>
+              {Object.keys(CONTENT_TYPES).map(type => (
+                <Tab
                   key={type}
-                  type="button"
-                  className={`link${this.CONTENT_TYPES[type] === currentlyEditing ? ' active' : ''}`}
-                >
-                  {type}
-                </button>
+                  id={type}
+                  title={type}
+                  panel={this.ContentEditor(currentlyEditing)}
+                />
               ))}
+              <Tabs.Expander />
+            </Tabs>
+            <div className="module-form__actions">
+              <Button type="submit" intent="primary" loading={requestStatus === IS_LOADING}>
+                {module ? 'update module' : 'create module'}
+              </Button>
             </div>
-          </div>
-          <div className="module-form__actions">
-            <input type="submit" className="button" value={module ? 'Update module' : 'Add module'} />
-          </div>
-        </form>
-      </Modal>
+          </form>
+        </div>
+      </Dialog>
     );
   }
 }
@@ -129,7 +127,8 @@ ModuleForm.propTypes = {
     _id: PropTypes.string,
     title: PropTypes.string,
     contents: PropTypes.shape({})
-  })
+  }),
+  requestStatus: PropTypes.number.isRequired
 };
 
 export default ModuleForm;

@@ -24,6 +24,7 @@ exports.create = async (req, res) => {
   if (newPath.modules.length > 0) {
     newPath.modules = await Promise.all(newPath.modules.map(async (moduleId) => {
       const mod = await Module.findById(moduleId);
+      if (!mod) return null;
       mod._id = mongoose.Types.ObjectId();
       mod.isNew = true;
       const newMod = new Module(mod);
@@ -43,7 +44,6 @@ exports.create = async (req, res) => {
 exports.update = (req, res) => {
   const { pathId } = req.params;
   Path.findOneAndUpdate({ _id: pathId }, req.body, { new: true })
-    .populate('modules')
     .then(path => res.send(path))
     .catch(err => res.status(500).send({ message: err.message }));
 };

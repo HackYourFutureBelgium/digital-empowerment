@@ -48,7 +48,7 @@ exports.update = (req, res) => {
 
 exports.delete = (req, res) => {
   const { moduleId } = req.params;
-  Module.findOneAndDelete(moduleId)
+  Module.findOneAndDelete({ _id: moduleId })
     .then((mod) => {
       if (!mod) {
         return res.status(404).send({

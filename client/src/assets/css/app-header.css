@@ -1,0 +1,19 @@
+.bp3-navbar.app-header {
+  height: 6rem;
+  padding: 0 3rem;
+  display: flex;
+  align-items: center;
+}
+
+.app-header a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.app-header a:hover {
+  text-decoration: none;
+}
+
+.app-header a:visited, .app-header a:active {
+  color: inherit;
+}
