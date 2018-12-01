@@ -1,25 +1,35 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Module from './Module';
 import ModuleForm from './ModuleForm';
-import * as api from '../../api/modules';
+import * as pathsAPI from '../../api/paths';
+import * as modulesAPI from '../../api/modules';
 
 import '../../assets/css/modules.css';
 
 class Modules extends Component {
   state = {
+    path: null,
     modules: [],
     moduleFormShown: false,
-    activeModuleId: null
+    activeModuleId: null,
+    modulesAreLoading: true
   };
 
-  componentDidMount() {
-    api.getModules().then((modules) => {
-      this.setState({ modules, activeModuleId: (modules.length === 0) ? null : modules[0]._id });
+  async componentDidMount() {
+    const { pathId } = this.props.match.params;
+    const path = await pathsAPI.getPath(pathId);
+    this.setState({
+      path,
+      activeModuleId: (path.modules.length === 0) ? null : path.modules[0]._id,
+      modules: path.modules,
+      modulesAreLoading: false
     });
   }
 
   createModule = (module) => {
-    api.createModule(module).then((newModule) => {
+    const pathId = this.state.path._id;
+    modulesAPI.createModule(pathId, module).then((newModule) => {
       this.setState(previousState => ({
         newTitle: '',
         modules: [...previousState.modules, newModule],
@@ -29,7 +39,7 @@ class Modules extends Component {
   };
 
   updateModule = (id, module) => {
-    api.updateModule(id, module).then((updatedModule) => {
+    modulesAPI.updateModule(id, module).then((updatedModule) => {
       this.setState((previousState) => {
         const modules = [...previousState.modules];
         const index = modules.findIndex(mod => mod._id === id);
@@ -40,7 +50,7 @@ class Modules extends Component {
   };
 
   deleteModule = (module) => {
-    api.deleteModule(module._id).then(() => {
+    modulesAPI.deleteModule(module._id).then(() => {
       this.setState((previousState) => {
         const modules = [...previousState.modules].filter(mod => mod._id !== module._id);
         return { modules };
@@ -62,13 +72,32 @@ class Modules extends Component {
     this.setState({ moduleFormShown: false });
   }
 
+  renderModule = module => (
+    <Module
+      key={module._id}
+      module={module}
+      openModule={() => this.openModule(module._id)}
+      isOpen={this.state.activeModuleId === module._id}
+      deleteModule={this.deleteModule}
+      updateModule={this.updateModule}
+    />
+  );
+
   render() {
-    const { modules, moduleFormShown, activeModuleId } = this.state;
+    const {
+      modulesAreLoading, modules, moduleFormShown, path
+    } = this.state;
+
+    if (modulesAreLoading) return <p />;
+
+    const $modules = modules
+      .sort((m1, m2) => m2.createdAt - m1.createdAt)
+      .map(this.renderModule);
 
     return (
       <div className="container module-container">
         <header className="module-container__header">
-          <h2>Using a web browser</h2>
+          <h2>{path.title}</h2>
           <button type="button" className="button" onClick={this.showModuleFrom}>Add module</button>
         </header>
         <ModuleForm
@@ -78,18 +107,7 @@ class Modules extends Component {
         />
         <div className="modules">
           { modules.length > 0
-            ? modules
-              .sort((m1, m2) => m2.createdAt - m1.createdAt)
-              .map(module => (
-                <Module
-                  key={module._id}
-                  module={module}
-                  openModule={() => this.openModule(module._id)}
-                  isOpen={activeModuleId === module._id}
-                  deleteModule={this.deleteModule}
-                  updateModule={this.updateModule}
-                />
-              ))
+            ? $modules
             : <p>There are no modules yet</p>
           }
         </div>
@@ -97,5 +115,10 @@ class Modules extends Component {
     );
   }
 }
+
+Modules.propTypes = {
+  // eslint-disable-next-line
+  match: PropTypes.object.isRequired
+};
 
 export default Modules;

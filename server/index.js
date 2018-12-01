@@ -23,6 +23,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 require('./src/route/module.route')(app);
+require('./src/route/path.route')(app);
 
 if (process.env.NODE_ENV === 'production') {
   const buildPath = path.join(`${__dirname}`, '../client/build');
