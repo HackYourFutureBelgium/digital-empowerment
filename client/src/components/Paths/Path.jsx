@@ -85,7 +85,7 @@ class Path extends Component {
     const {
       confirmingDeletion, updatingPath, duplicatingPath, requestStates
     } = this.state;
-    const { path, choose } = this.props;
+    const { path, choose, user } = this.props;
 
     return (
       <article className="path-wrapper">
@@ -105,35 +105,41 @@ class Path extends Component {
         <Card interactive onClick={() => choose(path)} elevation={2} className="path">
           <h5>{path.title}</h5>
         </Card>
-        <div className="paths__actions">
-          <i><Icon icon="duplicate" onClick={this.startDuplication} /></i>
-          <i><Icon icon="edit" onClick={this.startUpdates} /></i>
-          <Popover
-            enforceFocus={false}
-            isOpen={confirmingDeletion}
-            onClose={this.cancelDeletion}
-            position="bottom-right"
-            popoverClassName="bp3-popover-content-sizing"
-            className="pahts__actions__delete"
-          >
-            <i><Icon icon="trash" onClick={this.promptConfirmDeletion} /></i>
-            <ConfirmationContent
-              message={(
-                <p>
-                  Are you sure you want to delete this learning path and all of its modules?<br />
-                  This cannot be undone.
-                </p>
-              )}
-              cancel={this.cancelDeletion}
-              accept={this.deletePath}
-              isLoading={requestStates.deletePath === IS_LOADING}
-            />
-          </Popover>
-        </div>
+        { user && (
+          <div className="paths__actions">
+            <i><Icon icon="duplicate" onClick={this.startDuplication} /></i>
+            <i><Icon icon="edit" onClick={this.startUpdates} /></i>
+            <Popover
+              enforceFocus={false}
+              isOpen={confirmingDeletion}
+              onClose={this.cancelDeletion}
+              position="bottom-right"
+              popoverClassName="bp3-popover-content-sizing"
+              className="pahts__actions__delete"
+            >
+              <i><Icon icon="trash" onClick={this.promptConfirmDeletion} /></i>
+              <ConfirmationContent
+                message={(
+                  <p>
+                    Are you sure you want to delete this learning path and all of its modules?<br />
+                    This cannot be undone.
+                  </p>
+                )}
+                cancel={this.cancelDeletion}
+                accept={this.deletePath}
+                isLoading={requestStates.deletePath === IS_LOADING}
+              />
+            </Popover>
+          </div>
+        )}
       </article>
     );
   }
 }
+
+Path.defaultProps = {
+  user: null
+};
 
 Path.propTypes = {
   path: PropTypes.shape({
@@ -143,7 +149,8 @@ Path.propTypes = {
   choose: PropTypes.func.isRequired,
   update: PropTypes.func.isRequired,
   delete: PropTypes.func.isRequired,
-  duplicate: PropTypes.func.isRequired
+  duplicate: PropTypes.func.isRequired,
+  user: PropTypes.shape({})
 };
 
 export default Path;

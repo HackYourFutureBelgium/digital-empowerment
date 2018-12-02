@@ -107,6 +107,7 @@ class Paths extends Component {
       update={this.updatePath}
       delete={this.deletePath}
       duplicate={this.duplicatePath}
+      user={this.props.user}
     />
   );
 
@@ -170,7 +171,9 @@ class Paths extends Component {
         <header className="path-container__header">
           <h2>Learning paths</h2>
           <div className="path-container__header__actions">
-            <Button type="button" icon="plus" intent="primary" onClick={this.startPathCreation}>new path</Button>
+            { user && (
+              <Button type="button" icon="plus" intent="primary" onClick={this.startPathCreation}>new path</Button>
+            )}
             <InputGroup
               rightElement={(<Tag minimal round>{filteredPaths.length}</Tag>)}
               type="search"
