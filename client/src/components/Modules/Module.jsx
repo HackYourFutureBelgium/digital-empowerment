@@ -66,7 +66,7 @@ class Module extends Component {
       confirmingDeletion, updatingModule, requestStates, activeStage
     } = this.state;
     const {
-      module, isOpen, openModule, completeModule
+      module, isOpen, openModule, completeModule, user
     } = this.props;
 
     return (
@@ -97,27 +97,33 @@ class Module extends Component {
               <Icon intent="success" icon="tick-circle" />Completed
             </span>
           )}
-          <i><Icon icon="edit" onClick={this.showModuleForm} /></i>
-          <Popover
-            enforceFocus={false}
-            isOpen={confirmingDeletion}
-            onClose={this.cancelDeletion}
-            position="bottom-right"
-            popoverClassName="bp3-popover-content-sizing"
-          >
-            <i><Icon icon="trash" onClick={this.confirmDeletion} /></i>
-            <ConfirmationContent
-              message={<p>Are you sure you want to delete this module? This cannot be undone.</p>}
-              cancel={this.cancelDeletion}
-              accept={this.deleteModule}
-              isLoading={requestStates.deleteModule === IS_LOADING}
-            />
-          </Popover>
+          { user && <i><Icon icon="edit" onClick={this.showModuleForm} /></i>}
+          { user && (
+            <Popover
+              enforceFocus={false}
+              isOpen={confirmingDeletion}
+              onClose={this.cancelDeletion}
+              position="bottom-right"
+              popoverClassName="bp3-popover-content-sizing"
+            >
+              <i><Icon icon="trash" onClick={this.confirmDeletion} /></i>
+              <ConfirmationContent
+                message={<p>Are you sure you want to delete this module? This cannot be undone.</p>}
+                cancel={this.cancelDeletion}
+                accept={this.deleteModule}
+                isLoading={requestStates.deleteModule === IS_LOADING}
+              />
+            </Popover>
+          )}
         </div>
       </article>
     );
   }
 }
+
+Module.defaultProps = {
+  user: null
+};
 
 Module.propTypes = {
   module: PropTypes.shape({
@@ -128,7 +134,8 @@ Module.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   deleteModule: PropTypes.func.isRequired,
   updateModule: PropTypes.func.isRequired,
-  completeModule: PropTypes.func.isRequired
+  completeModule: PropTypes.func.isRequired,
+  user: PropTypes.shape({})
 };
 
 export default Module;

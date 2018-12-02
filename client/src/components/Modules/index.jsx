@@ -166,13 +166,14 @@ class Modules extends Component {
         <Header user={user} />
         <header className="module-container__header">
           <h2>{path ? path.title : null}</h2>
-          <Button type="button" icon="plus" intent="primary" onClick={this.showModuleFrom}>new module</Button>
+          { user && <Button type="button" icon="plus" intent="primary" onClick={this.showModuleFrom}>new module</Button>}
         </header>
         <ModuleForm
           isShown={moduleFormShown}
           onClose={this.hideModuleForm}
           requestStatus={requestStates.createModule}
           submit={this.createModule}
+          user={user}
         />
         {$nonIdealState}
         <div className="modules">
@@ -183,10 +184,14 @@ class Modules extends Component {
   }
 }
 
+Modules.defaultProps = {
+  user: null
+};
+
 Modules.propTypes = {
   // eslint-disable-next-line
   match: PropTypes.object.isRequired,
-  user: PropTypes.shape({}).isRequired
+  user: PropTypes.shape({})
 };
 
 export default Modules;
