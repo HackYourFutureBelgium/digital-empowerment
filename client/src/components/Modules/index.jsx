@@ -106,9 +106,11 @@ class Modules extends Component {
 
   renderModule = (module) => {
     const { activeModuleId } = this.state;
+    const { user } = this.props;
     return (
       <Module
         key={module._id}
+        user={user}
         module={module}
         completeModule={this.completeModule}
         openModule={() => this.openModule(module._id)}

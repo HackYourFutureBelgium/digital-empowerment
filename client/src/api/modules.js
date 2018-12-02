@@ -1,8 +1,9 @@
-import { API_URL } from '../constants';
+import { API_URL, cookies } from '../constants';
 
 const BASE_URL = `${API_URL}/module`;
 const headers = new Headers({
-  'Content-Type': 'application/json'
+  'Content-Type': 'application/json',
+  Authorization: `Bearer ${cookies.get('auth')}`
 });
 
 export const getModules = () => fetch(BASE_URL).then(response => response.json());
