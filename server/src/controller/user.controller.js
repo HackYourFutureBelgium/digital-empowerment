@@ -6,6 +6,8 @@ exports.login = (req, res) => {
   const { email, password } = req.body;
   User.findOne({ email })
     .then((user) => {
+      if (!user) return res.status(401).send({ message: 'Invalid username or password' });
+
       const passwordIsValid = bcrypt.compareSync(password, user.password);
       if (!passwordIsValid) return res.status(401).send({ token: null });
 
