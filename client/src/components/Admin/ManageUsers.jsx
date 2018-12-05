@@ -50,9 +50,40 @@ class ManageUsers extends Component {
     this.setState({ searchQuery: '' });
   }
 
-  startAddUser = () => {
+  startUserCreation = () => {
 
   }
+
+  renderEmptyState = () => (
+    <NonIdealState
+      title="No users yet"
+      description={(<p>You are the only user so far.</p>)}
+      action={<Button type="button" intent="primary" onClick={this.startUserCreation}>create another one</Button>}
+    />
+  )
+
+  renderEmptySearchState = () => (
+    <NonIdealState
+      title="No results"
+      icon="search"
+      description={(<p>There are no user roles or emails that match your search.</p>)}
+      action={<Button type="button" intent="primary" onClick={this.clearSearch}>clear search</Button>}
+    />
+  )
+
+  renderErrorState = () => (
+    <NonIdealState
+      title="Something went wrong"
+      icon="error"
+      description={(
+        <p>
+          A problem occurred while fetching users. This is
+          likely due to a problem with your internet connection.<br />
+        </p>
+      )}
+    />
+  )
+
 
   render() {
     const { users, searchQuery, requestStates } = this.state;
@@ -66,6 +97,11 @@ class ManageUsers extends Component {
         || role.toLowerCase().includes(searchQuery.toLowerCase()));
     });
 
+    let $nonIdealState;
+    if (users.length === 0) $nonIdealState = this.renderEmptyState();
+    else if (filteredUsers.length === 0) $nonIdealState = this.renderEmptySearchState();
+    else if (requestStates.fetchUsers === HAS_ERRORED) $nonIdealState = this.renderErrorState();
+
     const $users = filteredUsers.map(user => <li key={user.id}>{user.email}</li>);
 
     return (
@@ -74,7 +110,7 @@ class ManageUsers extends Component {
         <header className="user-container__header">
           <h2>Active users</h2>
           <div className="user-container__header__actions">
-            <Button type="button" icon="plus" intent="primary" onClick={this.startAddUser}>new user</Button>
+            <Button type="button" icon="plus" intent="primary" onClick={this.startUserCreation}>new user</Button>
             <InputGroup
               rightElement={(<Tag minimal round>{filteredUsers.length}</Tag>)}
               type="search"
@@ -84,6 +120,7 @@ class ManageUsers extends Component {
             />
           </div>
         </header>
+        {$nonIdealState}
         <ul className="users">
           {$users}
         </ul>
