@@ -13,6 +13,7 @@ import '../../assets/css/users.css';
 class ManageUsers extends Component {
   state = {
     users: [],
+    searchQuery: '',
     requestStates: {
       fetchUsers: IS_LOADING
     }
@@ -33,18 +34,32 @@ class ManageUsers extends Component {
     }))
   )
 
+  search = (e) => {
+    this.setState({ searchQuery: e.target.value });
+  }
+
+  clearSearch = () => {
+    if (this.searchInput) this.searchInput.value = '';
+    this.setState({ searchQuery: '' });
+  }
+
   startAddUser = () => {
 
   }
 
   render() {
-    const { users, requestStates } = this.state;
+    const { users, searchQuery, requestStates } = this.state;
     const { user: currentUser } = this.props;
 
     if (requestStates.fetchUsers === IS_LOADING) return <p />;
 
-    console.log(users);
-    const $users = users.map(user => <li key={user.id}>{user.email}</li>);
+    const filteredUsers = users.filter((user) => {
+      const { email, role } = user;
+      return (email.toLowerCase().includes(searchQuery.toLowerCase())
+        || role.toLowerCase().includes(searchQuery.toLowerCase()));
+    });
+
+    const $users = filteredUsers.map(user => <li key={user.id}>{user.email}</li>);
 
     return (
       <div className="container user-container">
@@ -52,9 +67,14 @@ class ManageUsers extends Component {
         <header className="user-container__header">
           <h2>Active users</h2>
           <div className="user-container__header__actions">
-            { currentUser && (
-              <Button type="button" icon="plus" intent="primary" onClick={this.startAddUser}>new user</Button>
-            )}
+            <Button type="button" icon="plus" intent="primary" onClick={this.startAddUser}>new user</Button>
+            <InputGroup
+              rightElement={(<Tag minimal round>{filteredUsers.length}</Tag>)}
+              type="search"
+              leftIcon="search"
+              onChange={this.search}
+              inputRef={(c) => { this.searchInput = c; }}
+            />
           </div>
         </header>
         <ul className="users">
