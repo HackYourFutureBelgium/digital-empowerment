@@ -25,8 +25,8 @@ exports.login = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-  User.find()
-    .then((modules) => { res.send(modules); })
+  User.find().select('-password')
+    .then((users) => { res.send(users); })
     .catch((err) => {
       res.status(500).send({ message: err.message });
     });
