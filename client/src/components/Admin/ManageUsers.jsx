@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {
   NonIdealState, InputGroup, Button, Tag
 } from '@blueprintjs/core';
+import NProgress from 'nprogress';
 import Header from '../Header';
 import { IS_LOADING, INACTIVE, HAS_ERRORED } from '../../constants';
 import * as api from '../../api/users';
@@ -19,13 +20,19 @@ class ManageUsers extends Component {
     }
   };
 
+  constructor(props) {
+    super(props);
+    NProgress.start();
+  }
+
   componentDidMount() {
     api.getUsers()
       .then(async (users) => {
         await this.setState({ users: users.map(u => new User(u)) || [] });
         this.setRequestState({ fetchUsers: INACTIVE });
       })
-      .catch(() => this.setRequestState({ fetchUsers: HAS_ERRORED }));
+      .catch(() => this.setRequestState({ fetchUsers: HAS_ERRORED }))
+      .finally(() => NProgress.done());
   }
 
   setRequestState = newStatus => (
