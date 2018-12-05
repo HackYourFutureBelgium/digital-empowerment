@@ -94,11 +94,12 @@ class ManageUsers extends Component {
     const filteredUsers = users.filter((user) => {
       const { email, role } = user;
       return (email.toLowerCase().includes(searchQuery.toLowerCase())
-        || role.toLowerCase().includes(searchQuery.toLowerCase()));
+        || role.toLowerCase().includes(searchQuery.toLowerCase()))
+        && user.email !== currentUser.email;
     });
 
     let $nonIdealState;
-    if (users.length === 0) $nonIdealState = this.renderEmptyState();
+    if (users.length <= 1) $nonIdealState = this.renderEmptyState();
     else if (filteredUsers.length === 0) $nonIdealState = this.renderEmptySearchState();
     else if (requestStates.fetchUsers === HAS_ERRORED) $nonIdealState = this.renderErrorState();
 
