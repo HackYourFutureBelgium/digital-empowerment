@@ -11,12 +11,16 @@ const UserSchema = mongoose.Schema(
       type: String,
       required: true
     },
-    token: String,
     role: String
   },
   {
     timestamps: true
   }
 );
+
+UserSchema.virtual('isAdmin')
+  .get(function determineIfAdmin() {
+    return this.role === 'admin';
+  });
 
 module.exports = mongoose.model('User', UserSchema);
