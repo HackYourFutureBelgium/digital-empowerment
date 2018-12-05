@@ -24,6 +24,14 @@ exports.login = (req, res) => {
     });
 };
 
+exports.findAll = (req, res) => {
+  User.find()
+    .then((modules) => { res.send(modules); })
+    .catch((err) => {
+      res.status(500).send({ message: err.message });
+    });
+};
+
 exports.create = (req, res) => {
   const newUser = { ...req.body };
   newUser.password = bcrypt.hashSync(newUser.password, 8);
