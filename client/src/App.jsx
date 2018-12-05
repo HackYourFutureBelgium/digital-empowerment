@@ -5,6 +5,7 @@ import { cookies } from './constants';
 import Paths from './components/Paths';
 import Modules from './components/Modules';
 import NotFound from './components/404';
+import User from './models/User';
 
 FocusStyleManager.onlyShowFocusOnTabs();
 
@@ -13,7 +14,7 @@ class App extends Component {
     super();
     const user = cookies.get('user');
     this.state = {
-      user: user || null
+      user: user ? new User(user) : null
     };
     cookies.addChangeListener(this.authStateChanged);
   }
@@ -23,7 +24,7 @@ class App extends Component {
     // user logged out
     if (!cookie.value) return this.setState({ user: null });
     const user = JSON.parse(cookie.value);
-    return this.setState({ user: user || null });
+    return this.setState({ user: user ? new User(user) : null });
   }
 
   render() {
