@@ -21,11 +21,14 @@ class App extends Component {
   }
 
   authStateChanged = (cookie) => {
-    if (!cookie || cookie.name !== 'user') return null;
+    if (!cookie || cookie.name !== 'user') return;
     // user logged out
-    if (!cookie.value) return this.setState({ user: null });
+    if (!cookie.value) {
+      window.location.href = '/';
+      return;
+    }
     const user = JSON.parse(cookie.value);
-    return this.setState({ user: user ? new User(user) : null });
+    this.setState({ user: user ? new User(user) : null });
   }
 
   render() {
