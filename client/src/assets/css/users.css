@@ -1,0 +1,18 @@
+.user-container .bp3-non-ideal-state {
+  height: 30rem;
+}
+
+.user-container__header {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-container__header__actions {
+  display: flex;
+}
+
+.user-container__header__actions > button {
+  margin-right: 1rem;
+}

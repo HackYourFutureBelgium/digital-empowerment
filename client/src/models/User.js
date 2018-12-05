@@ -2,7 +2,7 @@ class User {
   constructor(user) {
     this.id = user._id;
     this._id = user._id;
-    this.email = user;
+    this.email = user.email;
     this.role = user.role || 'user';
   }
 

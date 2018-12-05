@@ -7,7 +7,7 @@ import {
   Button
 } from '@blueprintjs/core';
 import { cookies } from '../../constants';
-import * as api from '../../api/user';
+import * as api from '../../api/users';
 
 import '../../assets/css/login.css';
 
