@@ -25,7 +25,8 @@ exports.login = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-  User.find()
+  if (!req.user.isAdmin) return res.status(403).send({ message: 'Unauthorized' });
+  return User.find()
     .then((modules) => { res.send(modules); })
     .catch((err) => {
       res.status(500).send({ message: err.message });
