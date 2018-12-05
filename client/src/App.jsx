@@ -4,6 +4,7 @@ import { FocusStyleManager } from '@blueprintjs/core';
 import { cookies } from './constants';
 import Paths from './components/Paths';
 import Modules from './components/Modules';
+import ManageUsers from './components/Admin/ManageUsers';
 import NotFound from './components/404';
 import User from './models/User';
 
@@ -35,6 +36,9 @@ class App extends Component {
         <Switch>
           <Route exact path="/:path(|paths|path|index)" render={props => <Paths {...props} user={user} />} />
           <Route path="/paths/:pathId" user={user} render={props => <Modules {...props} user={user} />} />
+          { user && user.isAdmin
+            && <Route path="/manage-users" render={props => <ManageUsers {...props} user={user} />} />
+          }
           <Route component={NotFound} user={user} />
         </Switch>
       </BrowserRouter>

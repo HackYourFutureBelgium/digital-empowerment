@@ -45,6 +45,9 @@ class Header extends Component {
           <NavbarDivider />
           <Link to="/"><Button minimal icon="home" text="Home" /></Link>
           <Link to="/paths"><Button minimal icon="path-search" text="Paths" /></Link>
+          { user && user.isAdmin
+            && <Link to="/manage-users"><Button minimal icon="people" text="Manage users" /></Link>
+          }
           { user
             ? <Button minimal icon="log-out" text="Log out" onClick={this.doLogout} />
             : <Button minimal icon="log-in" text="Log in" onClick={this.startLogin} />
