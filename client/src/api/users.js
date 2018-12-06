@@ -16,3 +16,13 @@ export const login = (email, password) => (
     body: JSON.stringify({ email, password })
   }).then(response => response.json())
 );
+
+export const updateUser = (id, user) => (
+  fetch(`${BASE_URL}/${id}`, {
+    method: 'PATCH',
+    headers,
+    body: JSON.stringify(user)
+  }).then(response => response.json())
+);
+
+export const deleteUser = id => fetch(`${BASE_URL}/${id}`, { method: 'DELETE', headers });

@@ -5,6 +5,7 @@ import {
 } from '@blueprintjs/core';
 import NProgress from 'nprogress';
 import Header from '../Header';
+import UserRow from './UserRow';
 import { IS_LOADING, INACTIVE, HAS_ERRORED } from '../../constants';
 import * as api from '../../api/users';
 import User from '../../models/User';
@@ -84,6 +85,9 @@ class ManageUsers extends Component {
     />
   )
 
+  renderUser = user => (
+    <UserRow key={user.id} user={user} />
+  );
 
   render() {
     const { users, searchQuery, requestStates } = this.state;
@@ -103,7 +107,7 @@ class ManageUsers extends Component {
     else if (filteredUsers.length === 0) $nonIdealState = this.renderEmptySearchState();
     else if (requestStates.fetchUsers === HAS_ERRORED) $nonIdealState = this.renderErrorState();
 
-    const $users = filteredUsers.map(user => <li key={user.id}>{user.email}</li>);
+    const $users = filteredUsers.map(this.renderUser);
 
     return (
       <div className="container user-container">
@@ -122,9 +126,18 @@ class ManageUsers extends Component {
           </div>
         </header>
         {$nonIdealState}
-        <ul className="users">
-          {$users}
-        </ul>
+        <table className="bp3-interactive bp3-html-table-striped bp3-html-table users">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Role</th>
+              <th>&nbsp;</th>
+            </tr>
+          </thead>
+          <tbody>
+            {$users}
+          </tbody>
+        </table>
       </div>
     );
   }
