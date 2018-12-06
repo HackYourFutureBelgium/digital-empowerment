@@ -42,6 +42,22 @@ class ManageUsers extends Component {
     }))
   )
 
+  updateUser = updatedUser => (
+    this.setState((previousState) => {
+      const users = [...previousState.users];
+      const index = users.findIndex(u => u._id === updatedUser._id);
+      users[index] = updatedUser;
+      return { users };
+    })
+  );
+
+  deleteUser = userId => (
+    this.setState((previousState) => {
+      const users = [...previousState.users].filter(u => u._id !== userId);
+      return { users };
+    })
+  );
+
   search = (e) => {
     this.setState({ searchQuery: e.target.value });
   }
@@ -86,7 +102,12 @@ class ManageUsers extends Component {
   )
 
   renderUser = user => (
-    <UserRow key={user.id} user={user} />
+    <UserRow
+      key={user.id}
+      user={user}
+      updateUser={this.updateUser}
+      deleteUser={this.deleteUser}
+    />
   );
 
   render() {
