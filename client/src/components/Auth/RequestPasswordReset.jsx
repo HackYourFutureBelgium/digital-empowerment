@@ -33,7 +33,9 @@ class RequestPasswordReset extends React.Component {
 
   requestPasswordReset = () => {
     this.setRequestState({ requestPasswordReset: IS_LOADING });
-    api.requestPasswordReset()
+
+    const { email } = this.state;
+    api.requestPasswordReset(email)
       .then(() => {
         this.setState({ emailSent: true });
         this.setRequestState({ requestPasswordReset: INACTIVE });

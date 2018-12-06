@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../model/user.model');
@@ -22,6 +23,22 @@ exports.login = (req, res) => {
         role: user.role
       });
     });
+};
+
+exports.resetPassword = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+
+  // "accept" the password reset request even if the email isn't tied to a registered user account
+  // https://ux.stackexchange.com/questions/87079/reset-password-appropriate-response-if-email-doesnt-exist
+  if (!user) return res.status(202).send();
+
+  return crypto.randomBytes(64, async (err, buffer) => {
+    const token = buffer.toString('hex');
+    user.token = token;
+    await user.save();
+    return res.status(202).send();
+  });
 };
 
 exports.findAll = (req, res) => {
