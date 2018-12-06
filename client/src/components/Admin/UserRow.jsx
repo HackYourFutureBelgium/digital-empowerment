@@ -8,7 +8,6 @@ import * as api from '../../api/users';
 
 class UserRow extends Component {
   state = {
-    updatingUser: false,
     deletingUser: false,
     requestStates: {
       updateUser: INACTIVE,
@@ -22,12 +21,18 @@ class UserRow extends Component {
     }))
   )
 
-  startUpdatingUser = () => {
-    this.setState({ updatingUser: true });
-  }
+  updateUserRole = (e) => {
+    this.setRequestState({ updateUser: IS_LOADING });
 
-  cancelUserUpdates = () => {
-    this.setState({ updatingUser: false });
+    const { id } = this.props.user;
+    const { updateUser } = this.props;
+    api.updateUser(id, { role: e.currentTarget.value })
+      .then(async (updatedUser) => {
+        const user = new User(updatedUser);
+        await updateUser(user);
+        this.setRequestState({ updateUser: INACTIVE });
+      })
+      .catch(() => this.setRequestState({ updateUser: HAS_ERRORED }));
   }
 
   deleteUser = () => {
@@ -49,15 +54,27 @@ class UserRow extends Component {
   }
 
   render() {
-    const { requestStates, updatingUser, deletingUser } = this.state;
+    const { requestStates, deletingUser } = this.state;
     const { user } = this.props;
+
+    const userIsUpdating = requestStates.updateUser === IS_LOADING;
 
     return (
       <tr>
         <td>{user.email}</td>
-        <td>{user.role}</td>
         <td>
-          <Button icon="edit" minimal onClick={this.startUpdatingUser} />
+          <div className="bp3-select">
+            <select
+              defaultValue={user.role}
+              onChange={this.updateUserRole}
+              disabled={userIsUpdating}
+            >
+              <option value="user">User</option>
+              <option value="admin">Administrator</option>
+            </select>
+          </div>
+        </td>
+        <td>
           <Popover
             enforceFocus={false}
             isOpen={deletingUser}
@@ -65,7 +82,7 @@ class UserRow extends Component {
             position="bottom-right"
             popoverClassName="bp3-popover-content-sizing"
           >
-            <Button icon="trash" minimal onClick={this.startDeletingUser} />
+            <Button icon="trash" minimal onClick={this.startDeletingUser} disabled={userIsUpdating} />
             <ConfirmationContent
               message={(
                 <p>

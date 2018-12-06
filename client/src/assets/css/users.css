@@ -16,3 +16,7 @@
 .user-container__header__actions > button {
   margin-right: 1rem;
 }
+
+.users {
+  width: 100%;
+}
