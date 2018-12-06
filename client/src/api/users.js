@@ -17,6 +17,14 @@ export const login = (email, password) => (
   }).then(response => response.json())
 );
 
+export const requestPasswordReset = email => (
+  fetch(`${BASE_URL}/password`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ email })
+  }).then(response => response.json())
+);
+
 export const createUser = body => (
   fetch(BASE_URL, {
     method: 'POST',
