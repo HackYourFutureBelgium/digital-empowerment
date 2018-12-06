@@ -5,6 +5,8 @@ import { cookies } from './constants';
 import Paths from './components/Paths';
 import Modules from './components/Modules';
 import ManageUsers from './components/Admin/ManageUsers';
+import RequestPasswordReset from './components/Auth/RequestPasswordReset';
+import ConfirmPasswordReset from './components/Auth/RequestPasswordReset';
 import NotFound from './components/404';
 import User from './models/User';
 
@@ -38,11 +40,13 @@ class App extends Component {
       <BrowserRouter>
         <Switch>
           <Route exact path="/:path(|paths|path|index)" render={props => <Paths {...props} user={user} />} />
-          <Route path="/paths/:pathId" user={user} render={props => <Modules {...props} user={user} />} />
+          <Route path="/paths/:pathId" render={props => <Modules {...props} user={user} />} />
+          <Route exact path="/reset-password" component={RequestPasswordReset} />
+          <Route path="/reset-password/:token" component={ConfirmPasswordReset} />
           { user && user.isAdmin
             && <Route path="/manage-users" render={props => <ManageUsers {...props} user={user} />} />
           }
-          <Route component={NotFound} user={user} />
+          <Route component={NotFound} />
         </Switch>
       </BrowserRouter>
     );
