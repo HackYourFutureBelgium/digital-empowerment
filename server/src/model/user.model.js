@@ -10,6 +10,7 @@ const UserSchema = mongoose.Schema(
     password: {
       type: String
     },
+    passwordResetToken: String,
     role: String,
     isPending: Boolean
   },

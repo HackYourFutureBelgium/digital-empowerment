@@ -35,7 +35,7 @@ const requestPasswordReset = async (req, res) => {
   if (!user) return res.status(202).send();
   return crypto.randomBytes(64, async (err, buffer) => {
     const token = buffer.toString('hex');
-    user.token = token;
+    user.passwordResetToken = token;
     await user.save();
     sendPasswordResetEmail(user.email, token)
       .then(() => res.status(202).send())
@@ -50,6 +50,7 @@ const completePasswordReset = async (req, res) => {
   if (!user) return res.status(401).send({ message: 'Invalid token' });
 
   user.password = bcrypt.hashSync(password, 8);
+  user.passwordResetToken = null;
   await user.save();
   return res.status(204).send({ message: 'New password set successfully' });
 };
@@ -62,7 +63,9 @@ exports.resetPassword = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-  User.find().select('-password')
+  User.find()
+    .select('-password')
+    .select('-passwordResetToken')
     .then((users) => { res.send(users); })
     .catch((err) => {
       res.status(500).send({ message: err.message });
@@ -72,6 +75,8 @@ exports.findAll = (req, res) => {
 exports.update = (req, res) => {
   const { userId } = req.params;
   User.findOneAndUpdate({ _id: userId }, req.body, { new: true })
+    .select('-password')
+    .select('-passwordResetToken')
     .then(user => res.send(user))
     .catch(err => res.status(500).send({ message: err.message }));
 };
