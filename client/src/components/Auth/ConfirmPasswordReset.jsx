@@ -44,16 +44,22 @@ class ConfirmPasswordReset extends APIComponent {
 
     const { token } = this.props.match.params;
     return api.confirmPasswordReset(token, password)
-      .then(() => {
+      .then((r) => {
+        if (r.status !== 204) {
+          this.setRequestState({ confirmPasswordReset: INACTIVE });
+          return this.setState({
+            fatalError: 'This password reset request is either invalid or has expired'
+          });
+        }
         this.setState({ passwordHasBeenReset: true });
-        this.setRequestState({ confirmPasswordReset: INACTIVE });
+        return this.setRequestState({ confirmPasswordReset: INACTIVE });
       })
       .catch(() => this.setRequestState({ confirmPasswordReset: HAS_ERRORED }));
   }
 
   render() {
     const {
-      requestStates, password, confirmationPassword, error, passwordHasBeenReset
+      requestStates, password, confirmationPassword, error, passwordHasBeenReset, fatalError
     } = this.state;
 
     const resetLoading = requestStates.confirmPasswordReset === IS_LOADING;
@@ -69,10 +75,12 @@ class ConfirmPasswordReset extends APIComponent {
           <FormGroup label="Confirm new password" labelFor="confirm-password">
             <InputGroup type="password" id="confirm-password" name="confirmationPassword" value={confirmationPassword} onChange={this.setField} required />
           </FormGroup>
-          { error && <p className="danger">{error}</p>}
-          {passwordHasBeenReset
-            ? <p className="success"><Icon icon="tick-circle" />Your password was reset and you can now use it to login.</p>
-            : <Button type="submit" intent="primary" loading={resetLoading}>update password</Button>
+          { (error || fatalError) && <p className="danger">{error || fatalError}</p>}
+          { passwordHasBeenReset
+            && <p className="success"><Icon icon="tick-circle" />Your password was reset and you can now use it to login.</p>
+          }
+          { !fatalError && !passwordHasBeenReset
+            && <Button type="submit" intent="primary" loading={resetLoading}>update password</Button>
           }
         </form>
       </Card>
