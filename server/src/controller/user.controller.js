@@ -50,15 +50,13 @@ exports.delete = (req, res) => {
 };
 
 exports.create = (req, res) => {
-  const newUser = { ...req.body };
-  newUser.password = bcrypt.hashSync(newUser.password, 8);
-  newUser.role = 'user';
-  const user = new User(newUser);
+  const { email, role } = req.body;
+  // newUser.password = bcrypt.hashSync(newUser.password, 8);
+  const user = new User({ email, role });
+  user.isPending = true;
   user
     .save()
-    .then(({ _id, email, role }) => {
-      res.send({ _id, email, role });
-    })
+    .then(newUser => res.send(newUser))
     .catch((err) => {
       res.status(500).send({ message: err.message });
     });

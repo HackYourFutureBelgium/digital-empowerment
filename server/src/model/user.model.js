@@ -8,10 +8,10 @@ const UserSchema = mongoose.Schema(
       unique: true
     },
     password: {
-      type: String,
-      required: true
+      type: String
     },
-    role: String
+    role: String,
+    isPending: Boolean
   },
   {
     timestamps: true
