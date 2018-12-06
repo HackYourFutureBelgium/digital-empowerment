@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../model/user.model');
+const { sendPasswordResetEmail } = require('../email');
 
 exports.login = (req, res) => {
   const { email, password } = req.body;
@@ -25,20 +26,39 @@ exports.login = (req, res) => {
     });
 };
 
-exports.resetPassword = async (req, res) => {
+const requestPasswordReset = async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
 
   // "accept" the password reset request even if the email isn't tied to a registered user account
   // https://ux.stackexchange.com/questions/87079/reset-password-appropriate-response-if-email-doesnt-exist
   if (!user) return res.status(202).send();
-
   return crypto.randomBytes(64, async (err, buffer) => {
     const token = buffer.toString('hex');
     user.token = token;
     await user.save();
-    return res.status(202).send();
+    sendPasswordResetEmail(user.email, token)
+      .then(() => res.status(202).send())
+      .catch(mailError => console.log(mailError));
   });
+};
+
+const completePasswordReset = async (req, res) => {
+  const { token, password } = req.body;
+
+  const user = await User.findOne({ token });
+  if (!user) return res.status(401).send({ message: 'Invalid token' });
+
+  user.password = bcrypt.hashSync(password, 8);
+  await user.save();
+  return res.status(204).send({ message: 'New password set successfully' });
+};
+
+exports.resetPassword = (req, res) => {
+  const { token } = req.body;
+
+  if (!token) return requestPasswordReset(req, res);
+  return completePasswordReset(req, res);
 };
 
 exports.findAll = (req, res) => {
@@ -68,7 +88,6 @@ exports.delete = (req, res) => {
 
 exports.create = (req, res) => {
   const { email, role } = req.body;
-  // newUser.password = bcrypt.hashSync(newUser.password, 8);
   const user = new User({ email, role });
   user.isPending = true;
   user
