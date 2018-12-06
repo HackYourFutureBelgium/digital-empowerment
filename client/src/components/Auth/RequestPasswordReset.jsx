@@ -3,13 +3,14 @@ import {
   FormGroup, InputGroup, Button, Card
 } from '@blueprintjs/core';
 import NProgress from 'nprogress';
+import APIComponent from '../APIComponent';
 import { IS_LOADING, INACTIVE, HAS_ERRORED } from '../../constants';
 import Header from '../Header';
 import * as api from '../../api/users';
 
 import '../../assets/css/password-reset.css';
 
-class RequestPasswordReset extends React.Component {
+class RequestPasswordReset extends APIComponent {
   state = {
     email: '',
     emailSent: false,
@@ -31,7 +32,8 @@ class RequestPasswordReset extends React.Component {
     this.setState({ email: e.currentTarget.value });
   }
 
-  requestPasswordReset = () => {
+  requestPasswordReset = (e) => {
+    e.preventDefault();
     this.setRequestState({ requestPasswordReset: IS_LOADING });
 
     const { email } = this.state;
@@ -53,10 +55,17 @@ class RequestPasswordReset extends React.Component {
         <Header />
         {emailSent
           ? (
-            <p>Email sent</p>
+            <div>
+              <h4 className="password-reset__title">Email sent</h4>
+              <p>
+                An email containing further instructions will be sent to &quot;{email}&quot; if
+                it is tied to an existing user account.
+              </p>
+            </div>
           )
           : (
             <form onSubmit={this.requestPasswordReset}>
+              <h4 className="password-reset__title">Reset your password</h4>
               <FormGroup label="Registered email" labelFor="login-email">
                 <InputGroup type="email" id="login-email" value={email} onChange={this.setEmail} required />
               </FormGroup>

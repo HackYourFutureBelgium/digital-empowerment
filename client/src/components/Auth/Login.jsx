@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import {
   Dialog,
   FormGroup,
@@ -52,14 +53,17 @@ class Login extends APIComponent {
         className="dialog"
       >
         <div className="bp3-dialog-body">
-          <form onSubmit={this.login}>
+          <form onSubmit={this.login} className="login-form">
             <FormGroup label="Email" labelFor="login-email">
               <InputGroup type="email" id="login-email" name="email" value={email} onChange={this.setField} required />
             </FormGroup>
             <FormGroup label="Password" labelFor="login-password">
               <InputGroup type="password" id="login-password" name="password" value={password} onChange={this.setField} required />
             </FormGroup>
-            <Button type="submit" intent="primary" loading={loginLoading}>Log in</Button>
+            <div className="login-form__actions">
+              <Link to="/reset-password">Forgot your password?</Link>
+              <Button type="submit" intent="primary" loading={loginLoading}>Log in</Button>
+            </div>
           </form>
         </div>
       </Dialog>
