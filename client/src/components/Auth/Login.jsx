@@ -28,11 +28,13 @@ class Login extends APIComponent {
     const { completeLogin } = this.props;
     api.login(email, password)
       .then((res) => {
+        // TODO handle error client side
+        if (!res.token) return this.setState({ loginLoading: false });
         cookies.set('auth', res.token);
         delete res.token;
         cookies.set('user', res);
         this.setState({ loginLoading: false });
-        completeLogin();
+        return completeLogin();
       })
       .catch(error => console.error(error));
   };

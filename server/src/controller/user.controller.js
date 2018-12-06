@@ -48,10 +48,11 @@ const completePasswordReset = async (req, res) => {
 
   const user = await User.findOne({ passwordResetToken: token });
   if (!user) return res.status(401).send({ message: 'Invalid token' });
-
+  console.log(user);
   user.password = bcrypt.hashSync(password, 8);
   user.passwordResetToken = null;
   await user.save();
+  console.log(user);
   return res.status(204).send({ message: 'New password set successfully' });
 };
 
