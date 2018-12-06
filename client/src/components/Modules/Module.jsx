@@ -1,15 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Icon, Popover, Card, Collapse
 } from '@blueprintjs/core';
+import APIComponent from '../APIComponent';
 import { INACTIVE, IS_LOADING, CONTENT_TYPES } from '../../constants';
 import ModuleForm from './ModuleForm';
 import ModuleStages from './ModuleStages';
 import ConfirmationContent from '../ConfirmationContent';
 import * as api from '../../api/modules';
 
-class Module extends Component {
+class Module extends APIComponent {
   state = {
     confirmingDeletion: false,
     updatingModule: false,
@@ -19,12 +20,6 @@ class Module extends Component {
       deleteModule: INACTIVE
     }
   }
-
-  setRequestState = newStatus => (
-    this.setState(prevState => ({
-      requestStates: { ...prevState.requestStates, ...newStatus }
-    }))
-  )
 
   confirmDeletion = () => {
     this.setState({ confirmingDeletion: true });

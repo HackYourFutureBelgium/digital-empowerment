@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
   NonIdealState, InputGroup, Button, Tag
 } from '@blueprintjs/core';
 import NProgress from 'nprogress';
+import APIComponent from '../APIComponent';
 import Header from '../Header';
 import UserRow from './UserRow';
 import UserForm from './UserForm';
@@ -13,7 +14,7 @@ import User from '../../models/User';
 
 import '../../assets/css/users.css';
 
-class ManageUsers extends Component {
+class ManageUsers extends APIComponent {
   state = {
     users: [],
     searchQuery: '',
@@ -38,12 +39,6 @@ class ManageUsers extends Component {
       .catch(() => this.setRequestState({ fetchUsers: HAS_ERRORED }))
       .finally(() => NProgress.done());
   }
-
-  setRequestState = newStatus => (
-    this.setState(prevState => ({
-      requestStates: { ...prevState.requestStates, ...newStatus }
-    }))
-  )
 
   createUser = async (user) => {
     await this.setRequestState({ createUser: IS_LOADING });

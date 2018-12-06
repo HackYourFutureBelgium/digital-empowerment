@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
   NonIdealState, InputGroup, Button, Tag
 } from '@blueprintjs/core';
 import { withRouter } from 'react-router-dom';
 import NProgress from 'nprogress';
+import APIComponent from '../APIComponent';
 import Header from '../Header';
 import Path from './Path';
 import PathForm from './PathForm';
@@ -13,7 +14,7 @@ import * as api from '../../api/paths';
 
 import '../../assets/css/paths.css';
 
-class Paths extends Component {
+class Paths extends APIComponent {
   state = {
     paths: [],
     searchQuery: '',
@@ -38,12 +39,6 @@ class Paths extends Component {
       .catch(() => this.setRequestState({ fetchPaths: HAS_ERRORED }))
       .finally(() => NProgress.done());
   }
-
-  setRequestState = newStatus => (
-    this.setState(prevState => ({
-      requestStates: { ...prevState.requestStates, ...newStatus }
-    }))
-  )
 
   choosePath = (path) => {
     this.props.history.push(`/paths/${path._id}`);

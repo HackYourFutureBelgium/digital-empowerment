@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Dialog,
@@ -6,12 +6,13 @@ import {
   InputGroup,
   Button
 } from '@blueprintjs/core';
+import APIComponent from '../APIComponent';
 import { cookies } from '../../constants';
 import * as api from '../../api/users';
 
 import '../../assets/css/login.css';
 
-class Login extends Component {
+class Login extends APIComponent {
   state = {
     loginLoading: false,
     email: '',
@@ -29,6 +30,7 @@ class Login extends Component {
         cookies.set('auth', res.token);
         delete res.token;
         cookies.set('user', res);
+        this.setState({ loginLoading: false });
         completeLogin();
       })
       .catch(error => console.error(error));

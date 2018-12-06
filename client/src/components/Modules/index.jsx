@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { NonIdealState, Button } from '@blueprintjs/core';
 import PropTypes from 'prop-types';
 import NProgress from 'nprogress';
+import APIComponent from '../APIComponent';
 import Module from './Module';
 import ModuleForm from './ModuleForm';
 import Header from '../Header';
@@ -11,7 +12,7 @@ import { IS_LOADING, INACTIVE, HAS_ERRORED } from '../../constants';
 
 import '../../assets/css/modules.css';
 
-class Modules extends Component {
+class Modules extends APIComponent {
   state = {
     path: null,
     modules: [],
@@ -42,12 +43,6 @@ class Modules extends Component {
       .catch(() => this.setRequestState({ fetchPath: HAS_ERRORED }))
       .finally(() => NProgress.done());
   }
-
-  setRequestState = newStatus => (
-    this.setState(prevState => ({
-      requestStates: { ...prevState.requestStates, ...newStatus }
-    }))
-  )
 
   createModule = async (module) => {
     const pathId = this.state.path._id;

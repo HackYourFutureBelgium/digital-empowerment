@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon, Popover, Card } from '@blueprintjs/core';
+import APIComponent from '../APIComponent';
 import PathForm from './PathForm';
 import ConfirmationContent from '../ConfirmationContent';
 import * as api from '../../api/paths';
 import { IS_LOADING, INACTIVE, HAS_ERRORED } from '../../constants';
 
-class Path extends Component {
+class Path extends APIComponent {
   state = {
     confirmingDeletion: false,
     updatingPath: false,
@@ -17,12 +18,6 @@ class Path extends Component {
       duplicatePath: INACTIVE
     }
   };
-
-  setRequestState = newStatus => (
-    this.setState(prevState => ({
-      requestStates: { ...prevState.requestStates, ...newStatus }
-    }))
-  )
 
   promptConfirmDeletion = () => {
     this.setState({ confirmingDeletion: true });

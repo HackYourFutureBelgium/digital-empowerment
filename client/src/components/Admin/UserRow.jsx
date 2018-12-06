@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Popover } from '@blueprintjs/core';
+import APIComponent from '../APIComponent';
 import ConfirmationContent from '../ConfirmationContent';
 import { IS_LOADING, INACTIVE, HAS_ERRORED } from '../../constants';
 import User from '../../models/User';
 import * as api from '../../api/users';
 
-class UserRow extends Component {
+class UserRow extends APIComponent {
   state = {
     deletingUser: false,
     requestStates: {
@@ -14,12 +15,6 @@ class UserRow extends Component {
       deleteUser: INACTIVE
     }
   }
-
-  setRequestState = newStatus => (
-    this.setState(prevState => ({
-      requestStates: { ...prevState.requestStates, ...newStatus }
-    }))
-  )
 
   updateUserRole = (e) => {
     this.setRequestState({ updateUser: IS_LOADING });
