@@ -25,6 +25,14 @@ export const requestPasswordReset = email => (
   })
 );
 
+export const confirmPasswordReset = (token, password) => (
+  fetch(`${BASE_URL}/password`, {
+    method: 'PUT',
+    headers,
+    body: JSON.stringify({ token, password })
+  })
+);
+
 export const createUser = body => (
   fetch(BASE_URL, {
     method: 'POST',

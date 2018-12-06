@@ -46,7 +46,7 @@ const requestPasswordReset = async (req, res) => {
 const completePasswordReset = async (req, res) => {
   const { token, password } = req.body;
 
-  const user = await User.findOne({ token });
+  const user = await User.findOne({ passwordResetToken: token });
   if (!user) return res.status(401).send({ message: 'Invalid token' });
 
   user.password = bcrypt.hashSync(password, 8);
@@ -57,7 +57,6 @@ const completePasswordReset = async (req, res) => {
 
 exports.resetPassword = (req, res) => {
   const { token } = req.body;
-
   if (!token) return requestPasswordReset(req, res);
   return completePasswordReset(req, res);
 };

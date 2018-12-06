@@ -88,3 +88,11 @@ h3 {
 .confirmation-content__actions > button {
   margin-left: 1rem;
 }
+
+.danger {
+  color: #DB3737;
+}
+
+.success {
+  color: #0d8050;
+}

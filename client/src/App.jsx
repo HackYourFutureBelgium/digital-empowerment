@@ -6,7 +6,7 @@ import Paths from './components/Paths';
 import Modules from './components/Modules';
 import ManageUsers from './components/Admin/ManageUsers';
 import RequestPasswordReset from './components/Auth/RequestPasswordReset';
-import ConfirmPasswordReset from './components/Auth/RequestPasswordReset';
+import ConfirmPasswordReset from './components/Auth/ConfirmPasswordReset';
 import NotFound from './components/404';
 import User from './models/User';
 
