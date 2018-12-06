@@ -59,7 +59,7 @@ class RequestPasswordReset extends APIComponent {
               <h4 className="password-reset__title">Email sent</h4>
               <p>
                 An email containing further instructions will be sent to &quot;{email}&quot; if
-                it is tied to an existing user account.
+                it is connected to an existing user account.
               </p>
             </div>
           )

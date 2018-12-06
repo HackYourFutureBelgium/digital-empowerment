@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import {
   Navbar,
   NavbarDivider,
@@ -10,6 +10,7 @@ import {
 } from '@blueprintjs/core';
 import { cookies } from '../constants';
 import Login from './Auth/Login';
+import User from '../models/User';
 
 import '../assets/css/app-header.css';
 
@@ -26,6 +27,13 @@ class Header extends Component {
     this.setState({ isLoggingIn: false });
   }
 
+  completeLogin = () => {
+    this.setState({ isLoggingIn: false });
+    if (this.props.location.pathname.includes('reset-password')) {
+      this.props.history.push('/');
+    }
+  }
+
   doLogout = () => {
     cookies.remove('auth');
     cookies.remove('user');
@@ -38,7 +46,7 @@ class Header extends Component {
     return (
       <Navbar className="app-header" fixedToTop>
         { isLoggingIn
-          && <Login cancelLogin={this.cancelLogin} completeLogin={this.cancelLogin} />
+          && <Login cancelLogin={this.cancelLogin} completeLogin={this.completeLogin} />
         }
         <NavbarGroup align="left">
           <NavbarHeading>Digital Empowerment</NavbarHeading>
@@ -63,7 +71,11 @@ Header.defaultProps = {
 };
 
 Header.propTypes = {
-  user: PropTypes.shape({})
+  user: PropTypes.instanceOf(User),
+  // eslint-disable-next-line react/forbid-prop-types
+  location: PropTypes.object.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  history: PropTypes.object.isRequired
 };
 
-export default Header;
+export default withRouter(Header);
