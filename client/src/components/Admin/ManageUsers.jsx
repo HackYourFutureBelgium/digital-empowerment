@@ -6,6 +6,7 @@ import {
 import NProgress from 'nprogress';
 import Header from '../Header';
 import UserRow from './UserRow';
+import UserForm from './UserForm';
 import { IS_LOADING, INACTIVE, HAS_ERRORED } from '../../constants';
 import * as api from '../../api/users';
 import User from '../../models/User';
@@ -16,8 +17,10 @@ class ManageUsers extends Component {
   state = {
     users: [],
     searchQuery: '',
+    creatingUser: false,
     requestStates: {
-      fetchUsers: IS_LOADING
+      fetchUsers: IS_LOADING,
+      createUser: INACTIVE
     }
   };
 
@@ -41,6 +44,19 @@ class ManageUsers extends Component {
       requestStates: { ...prevState.requestStates, ...newStatus }
     }))
   )
+
+  createUser = async (user) => {
+    await this.setRequestState({ createUser: IS_LOADING });
+    return api.createUser(user).then(async (newUser) => {
+      await this.setState(previousState => ({
+        users: [...previousState.users, new User(newUser)],
+        creatingUser: false
+      }));
+      this.setRequestState({ createUser: INACTIVE });
+    }).catch(() => {
+      this.setRequestState({ createUser: HAS_ERRORED });
+    });
+  }
 
   updateUser = updatedUser => (
     this.setState((previousState) => {
@@ -68,7 +84,11 @@ class ManageUsers extends Component {
   }
 
   startUserCreation = () => {
+    this.setState({ creatingUser: true });
+  }
 
+  cancelUserCreation = () => {
+    this.setState({ creatingUser: false });
   }
 
   renderEmptyState = () => (
@@ -83,7 +103,7 @@ class ManageUsers extends Component {
     <NonIdealState
       title="No results"
       icon="search"
-      description={(<p>There are no user roles or emails that match your search.</p>)}
+      description={(<p>There are no emails or user roles that match your search.</p>)}
       action={<Button type="button" intent="primary" onClick={this.clearSearch}>clear search</Button>}
     />
   )
@@ -111,7 +131,9 @@ class ManageUsers extends Component {
   );
 
   render() {
-    const { users, searchQuery, requestStates } = this.state;
+    const {
+      users, creatingUser, searchQuery, requestStates
+    } = this.state;
     const { user: currentUser } = this.props;
 
     if (requestStates.fetchUsers === IS_LOADING) return <p />;
@@ -133,10 +155,16 @@ class ManageUsers extends Component {
     return (
       <div className="container user-container">
         <Header user={currentUser} />
+        <UserForm
+          requestStatus={requestStates.createUser}
+          isShown={creatingUser}
+          onClose={this.cancelUserCreation}
+          submit={this.createUser}
+        />
         <header className="user-container__header">
           <h2>Active users</h2>
           <div className="user-container__header__actions">
-            <Button type="button" icon="plus" intent="primary" onClick={this.startUserCreation}>new user</Button>
+            <Button type="button" icon="plus" intent="primary" onClick={this.startUserCreation}>invite user</Button>
             <InputGroup
               rightElement={(<Tag minimal round>{filteredUsers.length}</Tag>)}
               type="search"
@@ -147,18 +175,20 @@ class ManageUsers extends Component {
           </div>
         </header>
         {$nonIdealState}
-        <table className="bp3-interactive bp3-html-table-striped bp3-html-table users">
-          <thead>
-            <tr>
-              <th>Email</th>
-              <th>Role</th>
-              <th>&nbsp;</th>
-            </tr>
-          </thead>
-          <tbody>
-            {$users}
-          </tbody>
-        </table>
+        {!$nonIdealState && (
+          <table className="bp3-interactive bp3-html-table-striped bp3-html-table users">
+            <thead>
+              <tr>
+                <th>Email</th>
+                <th>Role</th>
+                <th>&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody>
+              {$users}
+            </tbody>
+          </table>
+        )}
       </div>
     );
   }

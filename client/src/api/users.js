@@ -17,6 +17,14 @@ export const login = (email, password) => (
   }).then(response => response.json())
 );
 
+export const createUser = body => (
+  fetch(BASE_URL, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(body)
+  }).then(response => response.json())
+);
+
 export const updateUser = (id, user) => (
   fetch(`${BASE_URL}/${id}`, {
     method: 'PATCH',
