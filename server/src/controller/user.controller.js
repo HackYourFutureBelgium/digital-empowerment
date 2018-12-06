@@ -35,7 +35,7 @@ exports.findAll = (req, res) => {
 exports.update = (req, res) => {
   const { userId } = req.params;
   User.findOneAndUpdate({ _id: userId }, req.body, { new: true })
-    .then(path => res.send(path))
+    .then(user => res.send(user))
     .catch(err => res.status(500).send({ message: err.message }));
 };
 
@@ -44,7 +44,7 @@ exports.delete = (req, res) => {
   if (userId === req.user._id) {
     return res.status(400).send({ message: 'You cannot delete your own account' });
   }
-  return userId.findOneAndDelete({ _id: userId })
+  return User.findOneAndDelete({ _id: userId })
     .then(() => res.status(204).send({ message: 'User deleted successfully!' }))
     .catch(err => res.status(500).send({ message: err.message }));
 };
