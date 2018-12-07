@@ -7,7 +7,6 @@ import Module from './Module';
 import ModuleForm from './ModuleForm';
 import Header from '../Header';
 import * as pathsAPI from '../../api/paths';
-import * as modulesAPI from '../../api/modules';
 import { IS_LOADING, INACTIVE, HAS_ERRORED } from '../../constants';
 
 import '../../assets/css/modules.css';
@@ -47,7 +46,7 @@ class Modules extends APIComponent {
   createModule = async (module) => {
     const pathId = this.state.path._id;
     this.setRequestState({ createModule: IS_LOADING });
-    modulesAPI.createModule(pathId, module)
+    this.api.modules.create(pathId, module)
       .then(async (newModule) => {
         await this.setState(previousState => ({
           modules: [...previousState.modules, newModule],

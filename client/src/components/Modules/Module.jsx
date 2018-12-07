@@ -8,7 +8,6 @@ import { INACTIVE, IS_LOADING, CONTENT_TYPES } from '../../constants';
 import ModuleForm from './ModuleForm';
 import ModuleStages from './ModuleStages';
 import ConfirmationContent from '../ConfirmationContent';
-import * as api from '../../api/modules';
 
 class Module extends APIComponent {
   state = {
@@ -44,7 +43,7 @@ class Module extends APIComponent {
 
   updateModule = async (id, body) => {
     this.setRequestState({ updateModule: IS_LOADING });
-    const updatedModule = await api.updateModule(id, body);
+    const updatedModule = await this.api.modules.update(id, body);
     await this.props.updateModule(updatedModule);
     this.hideModuleForm();
   }
@@ -52,7 +51,7 @@ class Module extends APIComponent {
   deleteModule = async () => {
     const { deleteModule, module } = this.props;
     this.setRequestState({ deleteModule: IS_LOADING });
-    await api.deleteModule(module._id);
+    await this.api.modules.delete(module._id);
     deleteModule(module._id);
   }
 

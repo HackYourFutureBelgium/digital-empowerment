@@ -3,14 +3,17 @@ import { API_URL, cookies } from '../constants';
 class API {
   constructor() {
     this.BASE_URL = API_URL;
-    this.headers = new Headers({
+    this.headers = {
       'Content-Type': 'application/json',
       Accept: 'application/json'
-    });
+    };
   }
 
   get authHeaders() {
-    return this.headers.append('Authorization', `Bearer ${cookies.get('auth')}`);
+    return {
+      ...this.headers,
+      Authorization: `Bearer ${cookies.get('auth')}`
+    };
   }
 
   getOptions(method, authRequired = false, body = null) {
