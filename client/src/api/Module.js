@@ -3,7 +3,7 @@ import API from './API';
 class ModuleAPI extends API {
   ENDPOINT = `${this.BASE_URL}/module`
 
-  get = () => fetch(this.ENDPOINT).then(response => response.json());
+  get = () => fetch(this.ENDPOINT, this.getOptions('get')).then(response => response.json());
 
   create = (pathId, body) => (
     fetch(`${this.BASE_URL}/path/${pathId}/module`, this.getOptions('post', true, body))

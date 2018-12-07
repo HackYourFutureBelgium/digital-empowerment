@@ -4,7 +4,6 @@ import { Icon, Popover, Card } from '@blueprintjs/core';
 import APIComponent from '../APIComponent';
 import PathForm from './PathForm';
 import ConfirmationContent from '../ConfirmationContent';
-import * as api from '../../api/paths';
 import { IS_LOADING, INACTIVE, HAS_ERRORED } from '../../constants';
 
 class Path extends APIComponent {
@@ -52,7 +51,7 @@ class Path extends APIComponent {
 
   updatePath = async (id, path) => {
     await this.setRequestState({ updatePath: IS_LOADING });
-    api.updatePath(id, path)
+    this.api.paths.update(id, path)
       .then(async (updatedPath) => {
         await this.props.update(updatedPath);
         await this.setRequestState({ updatePath: INACTIVE });
@@ -66,7 +65,7 @@ class Path extends APIComponent {
   deletePath = async () => {
     const { path } = this.props;
     await this.setRequestState({ deletePath: IS_LOADING });
-    await api.deletePath(path._id)
+    await this.api.paths.delete(path._id)
       .then(async () => {
         await this.setRequestState({ deletePath: INACTIVE });
         this.props.delete(path._id);

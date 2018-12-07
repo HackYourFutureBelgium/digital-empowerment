@@ -6,7 +6,6 @@ import APIComponent from '../APIComponent';
 import Module from './Module';
 import ModuleForm from './ModuleForm';
 import Header from '../Header';
-import * as pathsAPI from '../../api/paths';
 import { IS_LOADING, INACTIVE, HAS_ERRORED } from '../../constants';
 
 import '../../assets/css/modules.css';
@@ -30,7 +29,7 @@ class Modules extends APIComponent {
 
   componentDidMount() {
     const { pathId } = this.props.match.params;
-    pathsAPI.getPath(pathId)
+    this.api.paths.getOne(pathId)
       .then(async (path) => {
         await this.setState({
           path,

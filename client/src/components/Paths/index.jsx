@@ -10,7 +10,6 @@ import Header from '../Header';
 import Path from './Path';
 import PathForm from './PathForm';
 import { IS_LOADING, INACTIVE, HAS_ERRORED } from '../../constants';
-import * as api from '../../api/paths';
 
 import '../../assets/css/paths.css';
 
@@ -31,7 +30,7 @@ class Paths extends APIComponent {
   }
 
   componentDidMount() {
-    api.getPaths()
+    this.api.paths.get()
       .then(async (paths) => {
         await this.setState({ paths: paths || [] });
         await this.setRequestState({ fetchPaths: INACTIVE });
@@ -55,7 +54,7 @@ class Paths extends APIComponent {
 
   createPath = async (path) => {
     await this.setRequestState({ createPath: IS_LOADING });
-    return api.createPath(path).then((newPath) => {
+    return this.api.paths.create(path).then((newPath) => {
       this.setState(previousState => ({
         paths: [...previousState.paths, newPath],
         creatingPath: false

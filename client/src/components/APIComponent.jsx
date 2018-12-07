@@ -1,8 +1,10 @@
 import React from 'react';
 import ModuleAPI from '../api/Module';
+import PathAPI from '../api/Path';
 
 const api = {
-  modules: new ModuleAPI()
+  modules: new ModuleAPI(),
+  paths: new PathAPI()
 };
 
 class APIComponent extends React.Component {
