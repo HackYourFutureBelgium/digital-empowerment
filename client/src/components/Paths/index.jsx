@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
   NonIdealState, InputGroup, Button, Tag
 } from '@blueprintjs/core';
 import { withRouter } from 'react-router-dom';
 import NProgress from 'nprogress';
+import APIComponent from '../APIComponent';
 import Header from '../Header';
 import Path from './Path';
 import PathForm from './PathForm';
 import { IS_LOADING, INACTIVE, HAS_ERRORED } from '../../constants';
-import * as api from '../../api/paths';
 
 import '../../assets/css/paths.css';
 
-class Paths extends Component {
+class Paths extends APIComponent {
   state = {
     paths: [],
     searchQuery: '',
@@ -30,7 +30,7 @@ class Paths extends Component {
   }
 
   componentDidMount() {
-    api.getPaths()
+    this.api.paths.get()
       .then(async (paths) => {
         await this.setState({ paths: paths || [] });
         await this.setRequestState({ fetchPaths: INACTIVE });
@@ -38,12 +38,6 @@ class Paths extends Component {
       .catch(() => this.setRequestState({ fetchPaths: HAS_ERRORED }))
       .finally(() => NProgress.done());
   }
-
-  setRequestState = newStatus => (
-    this.setState(prevState => ({
-      requestStates: { ...prevState.requestStates, ...newStatus }
-    }))
-  )
 
   choosePath = (path) => {
     this.props.history.push(`/paths/${path._id}`);
@@ -60,7 +54,7 @@ class Paths extends Component {
 
   createPath = async (path) => {
     await this.setRequestState({ createPath: IS_LOADING });
-    return api.createPath(path).then((newPath) => {
+    return this.api.paths.create(path).then((newPath) => {
       this.setState(previousState => ({
         paths: [...previousState.paths, newPath],
         creatingPath: false
@@ -107,6 +101,7 @@ class Paths extends Component {
       update={this.updatePath}
       delete={this.deletePath}
       duplicate={this.duplicatePath}
+      user={this.props.user}
     />
   );
 
@@ -149,6 +144,7 @@ class Paths extends Component {
     const {
       paths, searchQuery, creatingPath, requestStates
     } = this.state;
+    const { user } = this.props;
 
     if (requestStates.fetchPaths === IS_LOADING) return <p />;
 
@@ -165,11 +161,13 @@ class Paths extends Component {
 
     return (
       <main className="container path-container">
-        <Header />
+        <Header user={user} />
         <header className="path-container__header">
           <h2>Learning paths</h2>
           <div className="path-container__header__actions">
-            <Button type="button" icon="plus" intent="primary" onClick={this.startPathCreation}>new path</Button>
+            { user && (
+              <Button type="button" icon="plus" intent="primary" onClick={this.startPathCreation}>new path</Button>
+            )}
             <InputGroup
               rightElement={(<Tag minimal round>{filteredPaths.length}</Tag>)}
               type="search"
@@ -194,9 +192,14 @@ class Paths extends Component {
   }
 }
 
+Paths.defaultProps = {
+  user: null
+};
+
 Paths.propTypes = {
   // eslint-disable-next-line
-  history: PropTypes.object.isRequired
+  history: PropTypes.object.isRequired,
+  user: PropTypes.shape({})
 };
 
 export default withRouter(Paths);

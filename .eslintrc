@@ -14,7 +14,8 @@
     "no-param-reassign": ["error", { "props": false }],
     "react/destructuring-assignment": 0,
     "import/named": 0,
-    "react/jsx-one-expression-per-line": 0
+    "react/jsx-one-expression-per-line": 0,
+    "react/no-this-in-sfc": 0
   },
   "settings": {
     "react": {

@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon, Popover, Card } from '@blueprintjs/core';
+import APIComponent from '../APIComponent';
 import PathForm from './PathForm';
 import ConfirmationContent from '../ConfirmationContent';
-import * as api from '../../api/paths';
 import { IS_LOADING, INACTIVE, HAS_ERRORED } from '../../constants';
 
-class Path extends Component {
+class Path extends APIComponent {
   state = {
     confirmingDeletion: false,
     updatingPath: false,
@@ -17,12 +17,6 @@ class Path extends Component {
       duplicatePath: INACTIVE
     }
   };
-
-  setRequestState = newStatus => (
-    this.setState(prevState => ({
-      requestStates: { ...prevState.requestStates, ...newStatus }
-    }))
-  )
 
   promptConfirmDeletion = () => {
     this.setState({ confirmingDeletion: true });
@@ -57,7 +51,7 @@ class Path extends Component {
 
   updatePath = async (id, path) => {
     await this.setRequestState({ updatePath: IS_LOADING });
-    api.updatePath(id, path)
+    this.api.paths.update(id, path)
       .then(async (updatedPath) => {
         await this.props.update(updatedPath);
         await this.setRequestState({ updatePath: INACTIVE });
@@ -71,7 +65,7 @@ class Path extends Component {
   deletePath = async () => {
     const { path } = this.props;
     await this.setRequestState({ deletePath: IS_LOADING });
-    await api.deletePath(path._id)
+    await this.api.paths.delete(path._id)
       .then(async () => {
         await this.setRequestState({ deletePath: INACTIVE });
         this.props.delete(path._id);
@@ -85,7 +79,7 @@ class Path extends Component {
     const {
       confirmingDeletion, updatingPath, duplicatingPath, requestStates
     } = this.state;
-    const { path, choose } = this.props;
+    const { path, choose, user } = this.props;
 
     return (
       <article className="path-wrapper">
@@ -105,35 +99,41 @@ class Path extends Component {
         <Card interactive onClick={() => choose(path)} elevation={2} className="path">
           <h5>{path.title}</h5>
         </Card>
-        <div className="paths__actions">
-          <i><Icon icon="duplicate" onClick={this.startDuplication} /></i>
-          <i><Icon icon="edit" onClick={this.startUpdates} /></i>
-          <Popover
-            enforceFocus={false}
-            isOpen={confirmingDeletion}
-            onClose={this.cancelDeletion}
-            position="bottom-right"
-            popoverClassName="bp3-popover-content-sizing"
-            className="pahts__actions__delete"
-          >
-            <i><Icon icon="trash" onClick={this.promptConfirmDeletion} /></i>
-            <ConfirmationContent
-              message={(
-                <p>
-                  Are you sure you want to delete this learning path and all of its modules?<br />
-                  This cannot be undone.
-                </p>
-              )}
-              cancel={this.cancelDeletion}
-              accept={this.deletePath}
-              isLoading={requestStates.deletePath === IS_LOADING}
-            />
-          </Popover>
-        </div>
+        { user && (
+          <div className="paths__actions">
+            <i><Icon icon="duplicate" onClick={this.startDuplication} /></i>
+            <i><Icon icon="edit" onClick={this.startUpdates} /></i>
+            <Popover
+              enforceFocus={false}
+              isOpen={confirmingDeletion}
+              onClose={this.cancelDeletion}
+              position="bottom-right"
+              popoverClassName="bp3-popover-content-sizing"
+              className="pahts__actions__delete"
+            >
+              <i><Icon icon="trash" onClick={this.promptConfirmDeletion} /></i>
+              <ConfirmationContent
+                message={(
+                  <p>
+                    Are you sure you want to delete this learning path and all of its modules?<br />
+                    This cannot be undone.
+                  </p>
+                )}
+                cancel={this.cancelDeletion}
+                accept={this.deletePath}
+                isLoading={requestStates.deletePath === IS_LOADING}
+              />
+            </Popover>
+          </div>
+        )}
       </article>
     );
   }
 }
+
+Path.defaultProps = {
+  user: null
+};
 
 Path.propTypes = {
   path: PropTypes.shape({
@@ -143,7 +143,8 @@ Path.propTypes = {
   choose: PropTypes.func.isRequired,
   update: PropTypes.func.isRequired,
   delete: PropTypes.func.isRequired,
-  duplicate: PropTypes.func.isRequired
+  duplicate: PropTypes.func.isRequired,
+  user: PropTypes.shape({})
 };
 
 export default Path;

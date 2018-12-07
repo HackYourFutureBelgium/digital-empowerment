@@ -7,6 +7,8 @@ const cors = require('cors');
 require('dotenv').config();
 
 mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+
 mongoose.Promise = global.Promise;
 mongoose
   .connect(process.env.MONGODB_URI, { useNewUrlParser: true })
@@ -23,10 +25,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 const router = express.Router();
-
 app.use('/api', router);
 require('./src/route/module.route')(router);
 require('./src/route/path.route')(router);
+require('./src/route/user.route')(router);
 
 if (process.env.NODE_ENV === 'production') {
   const buildPath = path.join(`${__dirname}`, '../client/build');

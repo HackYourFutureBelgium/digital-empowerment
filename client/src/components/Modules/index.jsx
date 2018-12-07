@@ -1,17 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { NonIdealState, Button } from '@blueprintjs/core';
 import PropTypes from 'prop-types';
 import NProgress from 'nprogress';
+import APIComponent from '../APIComponent';
 import Module from './Module';
 import ModuleForm from './ModuleForm';
 import Header from '../Header';
-import * as pathsAPI from '../../api/paths';
-import * as modulesAPI from '../../api/modules';
 import { IS_LOADING, INACTIVE, HAS_ERRORED } from '../../constants';
 
 import '../../assets/css/modules.css';
 
-class Modules extends Component {
+class Modules extends APIComponent {
   state = {
     path: null,
     modules: [],
@@ -30,7 +29,7 @@ class Modules extends Component {
 
   componentDidMount() {
     const { pathId } = this.props.match.params;
-    pathsAPI.getPath(pathId)
+    this.api.paths.getOne(pathId)
       .then(async (path) => {
         await this.setState({
           path,
@@ -43,16 +42,10 @@ class Modules extends Component {
       .finally(() => NProgress.done());
   }
 
-  setRequestState = newStatus => (
-    this.setState(prevState => ({
-      requestStates: { ...prevState.requestStates, ...newStatus }
-    }))
-  )
-
   createModule = async (module) => {
     const pathId = this.state.path._id;
     this.setRequestState({ createModule: IS_LOADING });
-    modulesAPI.createModule(pathId, module)
+    this.api.modules.create(pathId, module)
       .then(async (newModule) => {
         await this.setState(previousState => ({
           modules: [...previousState.modules, newModule],
@@ -106,9 +99,11 @@ class Modules extends Component {
 
   renderModule = (module) => {
     const { activeModuleId } = this.state;
+    const { user } = this.props;
     return (
       <Module
         key={module._id}
+        user={user}
         module={module}
         completeModule={this.completeModule}
         openModule={() => this.openModule(module._id)}
@@ -149,6 +144,7 @@ class Modules extends Component {
     const {
       requestStates, modules, moduleFormShown, path
     } = this.state;
+    const { user } = this.props;
 
     if (requestStates.fetchPath === IS_LOADING) return <p />;
 
@@ -162,16 +158,17 @@ class Modules extends Component {
 
     return (
       <div className="container module-container">
-        <Header />
+        <Header user={user} />
         <header className="module-container__header">
           <h2>{path ? path.title : null}</h2>
-          <Button type="button" icon="plus" intent="primary" onClick={this.showModuleFrom}>new module</Button>
+          { user && <Button type="button" icon="plus" intent="primary" onClick={this.showModuleFrom}>new module</Button>}
         </header>
         <ModuleForm
           isShown={moduleFormShown}
           onClose={this.hideModuleForm}
           requestStatus={requestStates.createModule}
           submit={this.createModule}
+          user={user}
         />
         {$nonIdealState}
         <div className="modules">
@@ -182,9 +179,14 @@ class Modules extends Component {
   }
 }
 
+Modules.defaultProps = {
+  user: null
+};
+
 Modules.propTypes = {
   // eslint-disable-next-line
-  match: PropTypes.object.isRequired
+  match: PropTypes.object.isRequired,
+  user: PropTypes.shape({})
 };
 
 export default Modules;
