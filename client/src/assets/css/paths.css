@@ -58,6 +58,7 @@
 
 .paths__actions i {
   transition: color ease .3s;
+  cursor: pointer;
 }
 
 .paths__actions i:hover {

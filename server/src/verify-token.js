@@ -14,7 +14,8 @@ const verifyToken = (req, res, next) => {
 
   return jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
     if (err) res.status(500).send({ message: 'Failed to authenticate' });
-    const user = await User.findOne({ _id: decoded.id });
+
+    const user = await User.findOne({ _id: decoded._id });
     if (!user) res.status(403).send({ message: 'User does not exist' });
     req.user = user;
     next();

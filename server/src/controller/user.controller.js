@@ -13,7 +13,7 @@ exports.login = (req, res) => {
       const passwordIsValid = bcrypt.compareSync(password, user.password);
       if (!passwordIsValid) return res.status(401).send({ token: null });
 
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
         expiresIn: 259200 // 3 days
       });
 
