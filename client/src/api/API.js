@@ -16,6 +16,12 @@ class API {
     };
   }
 
+  handleResponse = (response) => {
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.indexOf('application/json') !== -1) return response.json();
+    return response;
+  }
+
   getOptions(method, authRequired = false, body = null) {
     const options = {
       method: method.toUpperCase(),
