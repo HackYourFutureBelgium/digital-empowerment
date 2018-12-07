@@ -9,7 +9,6 @@ import {
 } from '@blueprintjs/core';
 import APIComponent from '../APIComponent';
 import { cookies } from '../../constants';
-import * as api from '../../api/users';
 
 import '../../assets/css/login.css';
 
@@ -26,7 +25,7 @@ class Login extends APIComponent {
 
     const { email, password } = this.state;
     const { completeLogin } = this.props;
-    api.login(email, password)
+    this.api.users.login(email, password)
       .then((res) => {
         // TODO handle error client side
         if (!res.token) return this.setState({ loginLoading: false });

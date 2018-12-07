@@ -5,7 +5,6 @@ import APIComponent from '../APIComponent';
 import ConfirmationContent from '../ConfirmationContent';
 import { IS_LOADING, INACTIVE, HAS_ERRORED } from '../../constants';
 import User from '../../models/User';
-import * as api from '../../api/users';
 
 class UserRow extends APIComponent {
   state = {
@@ -21,7 +20,7 @@ class UserRow extends APIComponent {
 
     const { id } = this.props.user;
     const { updateUser } = this.props;
-    api.updateUser(id, { role: e.currentTarget.value })
+    this.api.users.update(id, { role: e.currentTarget.value })
       .then(async (updatedUser) => {
         const user = new User(updatedUser);
         await updateUser(user);
@@ -35,7 +34,7 @@ class UserRow extends APIComponent {
 
     const { id } = this.props.user;
     const { deleteUser } = this.props;
-    api.deleteUser(id)
+    this.api.users.delete(id)
       .then(() => deleteUser(id))
       .catch(() => this.setRequestState({ deleteUser: HAS_ERRORED }));
   }

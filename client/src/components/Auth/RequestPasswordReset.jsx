@@ -6,7 +6,6 @@ import NProgress from 'nprogress';
 import APIComponent from '../APIComponent';
 import { IS_LOADING, INACTIVE, HAS_ERRORED } from '../../constants';
 import Header from '../Header';
-import * as api from '../../api/users';
 
 import '../../assets/css/password-reset.css';
 
@@ -37,7 +36,7 @@ class RequestPasswordReset extends APIComponent {
     this.setRequestState({ requestPasswordReset: IS_LOADING });
 
     const { email } = this.state;
-    api.requestPasswordReset(email)
+    this.api.users.requestPasswordReset(email)
       .then(() => {
         this.setState({ emailSent: true });
         this.setRequestState({ requestPasswordReset: INACTIVE });

@@ -9,7 +9,6 @@ import Header from '../Header';
 import UserRow from './UserRow';
 import UserForm from './UserForm';
 import { IS_LOADING, INACTIVE, HAS_ERRORED } from '../../constants';
-import * as api from '../../api/users';
 import User from '../../models/User';
 
 import '../../assets/css/users.css';
@@ -31,7 +30,7 @@ class ManageUsers extends APIComponent {
   }
 
   componentDidMount() {
-    api.getUsers()
+    this.api.users.get()
       .then(async (users) => {
         await this.setState({ users: users.map(u => new User(u)) || [] });
         this.setRequestState({ fetchUsers: INACTIVE });
@@ -42,7 +41,7 @@ class ManageUsers extends APIComponent {
 
   createUser = async (user) => {
     await this.setRequestState({ createUser: IS_LOADING });
-    return api.createUser(user).then(async (newUser) => {
+    return this.api.users.create(user).then(async (newUser) => {
       await this.setState(previousState => ({
         users: [...previousState.users, new User(newUser)],
         creatingUser: false
