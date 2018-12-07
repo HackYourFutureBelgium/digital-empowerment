@@ -80,7 +80,11 @@ exports.create = async (req, res) => {
       return sendInvitationEmail(email, token);
     })
     .then(() => user.save())
-    .then(newUser => res.send(newUser))
+    .then((result) => {
+      const newUser = result.toObject();
+      delete newUser.passwordResetToken;
+      res.send(newUser);
+    })
     .catch((err) => {
       res.status(500).send({ message: err.message });
     });
