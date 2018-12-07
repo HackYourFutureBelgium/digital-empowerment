@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
 const domain = process.env.FRONTEND_HOST || 'localhost:3000';
 exports.sendPasswordResetEmail = (toEmail, token) => {
   const mailOptions = {
-    from: 'Digital Empowerment <accounts@digital-empowerment.be',
+    from: 'Digital Empowerment <accounts@digital-empowerment.be>',
     to: toEmail,
     subject: 'Reset your password',
     text: `
@@ -25,5 +25,19 @@ exports.sendPasswordResetEmail = (toEmail, token) => {
     `
   };
 
+  return transporter.sendMail(mailOptions);
+};
+
+exports.sendInvitationEmail = (toEmail, token) => {
+  const mailOptions = {
+    from: 'Digital Empowerment <accounts@digital-empowerment.be>',
+    to: toEmail,
+    subject: 'You\ve been invited to manage Digital Empowerment',
+    text: `
+      You've been invited to manage the Digital Empowerment platform.
+
+      Accept the invitation by setting your account password via this link: http://${domain}/reset-password/${token}
+    `
+  };
   return transporter.sendMail(mailOptions);
 };

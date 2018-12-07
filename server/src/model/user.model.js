@@ -12,7 +12,11 @@ const UserSchema = mongoose.Schema(
     },
     passwordResetToken: {
       type: String,
-      unique: true
+      default: null,
+      index: {
+        unique: true,
+        partialFilterExpression: { passwordResetToken: { $type: 'string' } }
+      }
     },
     role: String,
     isPending: Boolean

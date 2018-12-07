@@ -2,7 +2,7 @@ const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../model/user.model');
-const { sendPasswordResetEmail } = require('../email');
+const { sendPasswordResetEmail, sendInvitationEmail } = require('../email');
 
 exports.login = (req, res) => {
   const { email, password } = req.body;
@@ -26,6 +26,14 @@ exports.login = (req, res) => {
     });
 };
 
+const generatePasswordResetToken = () => new Promise((fulfill, reject) => {
+  crypto.randomBytes(64, async (err, buffer) => {
+    if (err) reject(err);
+    const token = buffer.toString('hex');
+    fulfill(token);
+  });
+});
+
 const requestPasswordReset = async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
@@ -33,14 +41,13 @@ const requestPasswordReset = async (req, res) => {
   // "accept" the password reset request even if the email isn't tied to a registered user account
   // https://ux.stackexchange.com/questions/87079/reset-password-appropriate-response-if-email-doesnt-exist
   if (!user) return res.status(202).send();
-  return crypto.randomBytes(64, async (err, buffer) => {
-    const token = buffer.toString('hex');
-    user.passwordResetToken = token;
-    await user.save();
-    sendPasswordResetEmail(user.email, token)
-      .then(() => res.status(202).send())
-      .catch(mailError => console.log(mailError));
-  });
+
+  const token = await generatePasswordResetToken();
+  user.passwordResetToken = token;
+  await user.save();
+  return sendPasswordResetEmail(user.email, token)
+    .then(() => res.status(202).send())
+    .catch(mailError => console.log(mailError));
 };
 
 const completePasswordReset = async (req, res) => {
@@ -50,6 +57,7 @@ const completePasswordReset = async (req, res) => {
   if (!user) return res.status(401).send({ message: 'Invalid token' });
 
   user.password = bcrypt.hashSync(password, 8);
+  user.isPending = false;
   user.passwordResetToken = null;
   await user.save();
 
@@ -60,6 +68,22 @@ exports.resetPassword = (req, res) => {
   const { token } = req.body;
   if (!token) return requestPasswordReset(req, res);
   return completePasswordReset(req, res);
+};
+
+exports.create = async (req, res) => {
+  const { email, role } = req.body;
+  const user = new User({ email, role });
+  user.isPending = true;
+  generatePasswordResetToken()
+    .then((token) => {
+      user.passwordResetToken = token;
+      return sendInvitationEmail(email, token);
+    })
+    .then(() => user.save())
+    .then(newUser => res.send(newUser))
+    .catch((err) => {
+      res.status(500).send({ message: err.message });
+    });
 };
 
 exports.findAll = (req, res) => {
@@ -89,16 +113,4 @@ exports.delete = (req, res) => {
   return User.findOneAndDelete({ _id: userId })
     .then(() => res.status(204).send({ message: 'User deleted successfully!' }))
     .catch(err => res.status(500).send({ message: err.message }));
-};
-
-exports.create = (req, res) => {
-  const { email, role } = req.body;
-  const user = new User({ email, role });
-  user.isPending = true;
-  user
-    .save()
-    .then(newUser => res.send(newUser))
-    .catch((err) => {
-      res.status(500).send({ message: err.message });
-    });
 };
