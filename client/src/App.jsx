@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { FocusStyleManager } from '@blueprintjs/core';
-import { cookies } from './constants';
+import { cookies, checkJWTExpiry } from './constants';
 import Paths from './components/Paths';
 import Modules from './components/Modules';
 import ManageUsers from './components/Admin/ManageUsers';
@@ -15,7 +15,8 @@ FocusStyleManager.onlyShowFocusOnTabs();
 class App extends Component {
   constructor() {
     super();
-    const user = cookies.get('user');
+    const tokenExpired = checkJWTExpiry(cookies.get('auth'));
+    const user = tokenExpired ? null : cookies.get('user');
     this.state = {
       user: user ? new User(user) : null
     };

@@ -14,7 +14,7 @@ exports.login = (req, res) => {
       if (!passwordIsValid) return res.status(401).send({ token: null });
 
       const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: 259200 // 3 days
+        expiresIn: '120ms' // 3 days
       });
 
       return res.status(200).send({
