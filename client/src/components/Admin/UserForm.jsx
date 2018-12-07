@@ -37,7 +37,7 @@ class UserForm extends Component {
         <div className="bp3-dialog-body">
           <form onSubmit={this.onSubmit}>
             <FormGroup label="Email" labelFor="user-email" labelInfo="(required)">
-              <InputGroup id="user-email" name="email" value={email} onChange={this.setField} />
+              <InputGroup type="email" id="user-email" name="email" value={email} onChange={this.setField} />
             </FormGroup>
             <FormGroup label="Role" labelFor="user-role" labelInfo="(administrators have access to user management)">
               <div className="bp3-select">
