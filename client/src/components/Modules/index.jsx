@@ -116,7 +116,7 @@ class Modules extends APIComponent {
       });
   }
 
-  renderModule = (module, dragHandleProps) => {
+  renderModule = (module, dragHandleProps = null) => {
     const { activeModuleId, requestStates: { reorderModules } } = this.state;
     const { user } = this.props;
     return (
@@ -124,7 +124,7 @@ class Modules extends APIComponent {
         key={module._id}
         user={user}
         module={module}
-        dragHandleProps={dragHandleProps}
+        dragHandleProps={user ? dragHandleProps : undefined}
         disabled={reorderModules === IS_LOADING}
         completeModule={this.completeModule}
         openModule={() => this.openModule(module._id)}
