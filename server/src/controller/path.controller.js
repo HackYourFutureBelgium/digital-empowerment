@@ -43,7 +43,9 @@ exports.create = async (req, res) => {
 
 exports.update = (req, res) => {
   const { pathId } = req.params;
-  Path.findOneAndUpdate({ _id: pathId }, req.body, { new: true })
+  const action = Path.findOneAndUpdate({ _id: pathId }, req.body, { new: true });
+  if (req.body.modules && typeof req.body.modules[0] !== 'string') action.populate('modules');
+  action
     .then(path => res.send(path))
     .catch(err => res.status(500).send({ message: err.message }));
 };

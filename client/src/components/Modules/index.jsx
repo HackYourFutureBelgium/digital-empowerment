@@ -6,6 +6,8 @@ import APIComponent from '../APIComponent';
 import Module from './Module';
 import ModuleForm from './ModuleForm';
 import Header from '../Header';
+import StaticModules from './StaticModules';
+import DraggableModules from './DraggableModules';
 import { IS_LOADING, INACTIVE, HAS_ERRORED } from '../../constants';
 
 import '../../assets/css/modules.css';
@@ -18,7 +20,8 @@ class Modules extends APIComponent {
     activeModuleId: null,
     requestStates: {
       fetchPath: IS_LOADING,
-      createModule: INACTIVE
+      createModule: INACTIVE,
+      reorderModules: INACTIVE
     }
   };
 
@@ -97,14 +100,32 @@ class Modules extends APIComponent {
     this.setState({ moduleFormShown: false });
   }
 
-  renderModule = (module) => {
-    const { activeModuleId } = this.state;
+  reorder = (modules) => {
+    const { path, modules: prevModules } = this.state;
+    // optimistically render modules, revert if network request fails
+    this.setState({ modules });
+    this.setRequestState({ reorderModules: IS_LOADING });
+    this.api.paths.update(path._id, { modules })
+      .then(async (updatedPath) => {
+        await this.setState({ path: updatedPath, modules: updatedPath.modules });
+        this.setRequestState({ reorderModules: INACTIVE });
+      })
+      .catch(() => {
+        this.setState({ modules: prevModules });
+        this.setRequestState({ reorderModules: HAS_ERRORED });
+      });
+  }
+
+  renderModule = (module, dragHandleProps = null) => {
+    const { activeModuleId, requestStates: { reorderModules } } = this.state;
     const { user } = this.props;
     return (
       <Module
         key={module._id}
         user={user}
         module={module}
+        dragHandleProps={user ? dragHandleProps : undefined}
+        disabled={reorderModules === IS_LOADING}
         completeModule={this.completeModule}
         openModule={() => this.openModule(module._id)}
         isOpen={activeModuleId === module._id}
@@ -148,9 +169,14 @@ class Modules extends APIComponent {
 
     if (requestStates.fetchPath === IS_LOADING) return <p />;
 
-    const $modules = modules
-      .sort((m1, m2) => m2.createdAt - m1.createdAt)
-      .map(this.renderModule);
+    const $modules = (user)
+      ? (
+        <DraggableModules
+          modules={modules}
+          finishReorder={this.reorder}
+          renderModule={this.renderModule}
+        />
+      ) : <StaticModules modules={modules} renderModule={this.renderModule} />;
 
     let $nonIdealState;
     if (modules.length === 0) $nonIdealState = this.renderEmptyState();
@@ -171,9 +197,7 @@ class Modules extends APIComponent {
           user={user}
         />
         {$nonIdealState}
-        <div className="modules">
-          {$modules}
-        </div>
+        {$modules}
       </div>
     );
   }
