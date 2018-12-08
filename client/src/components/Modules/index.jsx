@@ -101,15 +101,19 @@ class Modules extends APIComponent {
   }
 
   reorder = (modules) => {
+    const { path, modules: prevModules } = this.state;
+    // optimistically render modules, revert if network request fails
+    this.setState({ modules });
     this.setRequestState({ reorderModules: IS_LOADING });
-
-    const { path } = this.state;
     this.api.paths.update(path._id, { modules })
       .then(async (updatedPath) => {
         await this.setState({ path: updatedPath, modules: updatedPath.modules });
         this.setRequestState({ reorderModules: INACTIVE });
       })
-      .catch(() => this.setRequestState({ reorderModules: IS_LOADING }));
+      .catch(() => {
+        this.setState({ modules: prevModules });
+        this.setRequestState({ reorderModules: HAS_ERRORED });
+      });
   }
 
   renderModule = (module) => {
