@@ -20,19 +20,15 @@ class DraggableModules extends Component {
     finishReorder(reordered);
   }
 
-  renderModule = (snapshot, provided, module, index) => {
+  renderModule = (provided, module, index) => {
     const { renderModule } = this.props;
     return (
       <Draggable key={module._id} draggableId={module._id} index={index}>
-        {(innerProvided, innerSnapshot) => (
+        {innerProvided => (
           <div
             ref={innerProvided.innerRef}
             {...innerProvided.draggableProps}
             {...innerProvided.dragHandleProps}
-            /* style={getItemStyle(
-              innerSnapshot.isDragging,
-              innerProvided.draggableProps.style
-            )} */
           >
             {renderModule(module)}
           </div>
@@ -48,13 +44,10 @@ class DraggableModules extends Component {
       <div className="modules">
         <DragDropContext onDragEnd={this.onDragEnd}>
           <Droppable droppableId="droppable">
-            {(provided, snapshot) => (
-              <div
-                ref={provided.innerRef}
-                // style={getListStyle(snapshot.isDraggingOver)}
-              >
+            {provided => (
+              <div ref={provided.innerRef}>
                 {modules.map((module, index) => (
-                  this.renderModule(snapshot, provided, module, index)
+                  this.renderModule(provided, module, index)
                 ))}
                 {provided.placeholder}
               </div>
