@@ -6,6 +6,8 @@ import APIComponent from '../APIComponent';
 import Module from './Module';
 import ModuleForm from './ModuleForm';
 import Header from '../Header';
+import StaticModules from './StaticModules';
+import DraggableModules from './DraggableModules';
 import { IS_LOADING, INACTIVE, HAS_ERRORED } from '../../constants';
 
 import '../../assets/css/modules.css';
@@ -148,9 +150,9 @@ class Modules extends APIComponent {
 
     if (requestStates.fetchPath === IS_LOADING) return <p />;
 
-    const $modules = modules
-      .sort((m1, m2) => m2.createdAt - m1.createdAt)
-      .map(this.renderModule);
+    const $modules = (user)
+      ? <DraggableModules />
+      : <StaticModules modules={modules} renderModule={this.renderModule} />;
 
     let $nonIdealState;
     if (modules.length === 0) $nonIdealState = this.renderEmptyState();
@@ -171,9 +173,7 @@ class Modules extends APIComponent {
           user={user}
         />
         {$nonIdealState}
-        <div className="modules">
-          {$modules}
-        </div>
+        {$modules}
       </div>
     );
   }
