@@ -151,7 +151,7 @@ class Modules extends APIComponent {
     if (requestStates.fetchPath === IS_LOADING) return <p />;
 
     const $modules = (user)
-      ? <DraggableModules />
+      ? <DraggableModules modules={modules} renderModule={this.renderModule} />
       : <StaticModules modules={modules} renderModule={this.renderModule} />;
 
     let $nonIdealState;
