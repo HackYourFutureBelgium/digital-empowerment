@@ -15,10 +15,9 @@ class DraggableModules extends Component {
       return;
     }
 
-    const { modules } = this.props;
+    const { modules, finishReorder } = this.props;
     const reordered = this.reorder(modules, result.source.index, result.destination.index);
-    console.log(reordered);
-    // this.setState({ items });
+    finishReorder(reordered);
   }
 
   renderModule = (snapshot, provided, module, index) => {
@@ -69,6 +68,7 @@ class DraggableModules extends Component {
 
 DraggableModules.propTypes = {
   modules: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  finishReorder: PropTypes.func.isRequired,
   renderModule: PropTypes.func.isRequired
 };
 

@@ -99,6 +99,10 @@ class Modules extends APIComponent {
     this.setState({ moduleFormShown: false });
   }
 
+  reorder = (modules) => {
+    this.setState({ modules });
+  }
+
   renderModule = (module) => {
     const { activeModuleId } = this.state;
     const { user } = this.props;
@@ -151,8 +155,13 @@ class Modules extends APIComponent {
     if (requestStates.fetchPath === IS_LOADING) return <p />;
 
     const $modules = (user)
-      ? <DraggableModules modules={modules} renderModule={this.renderModule} />
-      : <StaticModules modules={modules} renderModule={this.renderModule} />;
+      ? (
+        <DraggableModules
+          modules={modules}
+          finishReorder={this.reorder}
+          renderModule={this.renderModule}
+        />
+      ) : <StaticModules modules={modules} renderModule={this.renderModule} />;
 
     let $nonIdealState;
     if (modules.length === 0) $nonIdealState = this.renderEmptyState();
