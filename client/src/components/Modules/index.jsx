@@ -117,13 +117,14 @@ class Modules extends APIComponent {
   }
 
   renderModule = (module) => {
-    const { activeModuleId } = this.state;
+    const { activeModuleId, requestStates: { reorderModules } } = this.state;
     const { user } = this.props;
     return (
       <Module
         key={module._id}
         user={user}
         module={module}
+        disabled={reorderModules === IS_LOADING}
         completeModule={this.completeModule}
         openModule={() => this.openModule(module._id)}
         isOpen={activeModuleId === module._id}

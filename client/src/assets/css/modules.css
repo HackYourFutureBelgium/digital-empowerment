@@ -11,11 +11,17 @@
 .modules .module {
   padding: .5rem 3rem;
   margin-bottom: 3rem;
+  transition: background-color ease .3s;
 }
 
 .module .module__title {
   font-size: 1.7rem;
   font-weight: 600;
+}
+
+.module.module--disabled {
+  background-color: #D3D3D3;
+  cursor: default;
 }
 
 .module__wrapper__actions {

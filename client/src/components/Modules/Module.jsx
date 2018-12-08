@@ -60,7 +60,7 @@ class Module extends APIComponent {
       confirmingDeletion, updatingModule, requestStates, activeStage
     } = this.state;
     const {
-      module, isOpen, openModule, completeModule, user
+      module, isOpen, openModule, completeModule, user, disabled
     } = this.props;
 
     return (
@@ -72,7 +72,12 @@ class Module extends APIComponent {
           requestStatus={requestStates.updateModule}
           module={module}
         />
-        <Card interactive={!isOpen} onClick={() => openModule(module._id)} elevation={2} className="module">
+        <Card
+          interactive={!isOpen && !disabled}
+          onClick={() => openModule(module._id)}
+          elevation={(disabled) ? 0 : 2}
+          className={`module${disabled ? ' module--disabled' : ''}`}
+        >
           <h4 className="module__title">{module.title}</h4>
           <Collapse isOpen={isOpen} keepChildrenMounted>
             <ul className="module__stages">
@@ -124,6 +129,7 @@ Module.propTypes = {
     _id: PropTypes.string,
     title: PropTypes.string
   }).isRequired,
+  disabled: PropTypes.bool.isRequired,
   openModule: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
   deleteModule: PropTypes.func.isRequired,
