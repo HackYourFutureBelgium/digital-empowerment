@@ -20,7 +20,8 @@ class Modules extends APIComponent {
     activeModuleId: null,
     requestStates: {
       fetchPath: IS_LOADING,
-      createModule: INACTIVE
+      createModule: INACTIVE,
+      reorderModules: INACTIVE
     }
   };
 
@@ -100,7 +101,15 @@ class Modules extends APIComponent {
   }
 
   reorder = (modules) => {
-    this.setState({ modules });
+    this.setRequestState({ reorderModules: IS_LOADING });
+
+    const { path } = this.state;
+    this.api.paths.update(path._id, { modules })
+      .then(async (updatedPath) => {
+        await this.setState({ path: updatedPath, modules: updatedPath.modules });
+        this.setRequestState({ reorderModules: INACTIVE });
+      })
+      .catch(() => this.setRequestState({ reorderModules: IS_LOADING }));
   }
 
   renderModule = (module) => {
