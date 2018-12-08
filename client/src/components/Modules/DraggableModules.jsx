@@ -28,9 +28,8 @@ class DraggableModules extends Component {
           <div
             ref={innerProvided.innerRef}
             {...innerProvided.draggableProps}
-            {...innerProvided.dragHandleProps}
           >
-            {renderModule(module)}
+            {renderModule(module, innerProvided.dragHandleProps)}
           </div>
         )}
       </Draggable>

@@ -44,6 +44,10 @@
   cursor: pointer;
 }
 
+.module__wrapper__actions i.drag-icon {
+  cursor: grab;
+}
+
 .completion-indicator {
   color: #0D8050;
   font-size: 1.4rem;

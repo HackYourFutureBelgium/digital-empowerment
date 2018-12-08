@@ -60,7 +60,7 @@ class Module extends APIComponent {
       confirmingDeletion, updatingModule, requestStates, activeStage
     } = this.state;
     const {
-      module, isOpen, openModule, completeModule, user, disabled
+      module, isOpen, openModule, completeModule, user, disabled, dragHandleProps
     } = this.props;
 
     return (
@@ -96,6 +96,7 @@ class Module extends APIComponent {
               <Icon intent="success" icon="tick-circle" />Completed
             </span>
           )}
+          { user && <i {...dragHandleProps} className="drag-icon"><Icon icon="menu" /></i>}
           { user && <i><Icon icon="edit" onClick={this.showModuleForm} /></i>}
           { user && (
             <Popover
@@ -121,7 +122,8 @@ class Module extends APIComponent {
 }
 
 Module.defaultProps = {
-  user: null
+  user: null,
+  dragHandleProps: null
 };
 
 Module.propTypes = {
@@ -129,6 +131,7 @@ Module.propTypes = {
     _id: PropTypes.string,
     title: PropTypes.string
   }).isRequired,
+  dragHandleProps: PropTypes.shape({}),
   disabled: PropTypes.bool.isRequired,
   openModule: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
