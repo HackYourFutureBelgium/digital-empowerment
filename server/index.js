@@ -31,6 +31,7 @@ require('./src/route/path.route')(router);
 require('./src/route/user.route')(router);
 
 if (process.env.NODE_ENV === 'production') {
+  require('./src/route/deploy.route')(router);
   const buildPath = path.join(`${__dirname}`, '../client/build');
   app.use(express.static(buildPath));
   app.get('*', (req, res) => {
