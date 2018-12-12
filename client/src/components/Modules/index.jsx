@@ -147,7 +147,7 @@ class Modules extends APIComponent {
           }
         </p>
       )}
-      action={<Button type="button" intent="primary" onClick={this.showModuleFrom}>create one now</Button>}
+      action={this.props.user ? <Button type="button" intent="primary" onClick={this.showModuleFrom}>create one now</Button> : undefined}
     />
   )
 
