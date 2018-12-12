@@ -111,10 +111,13 @@ class Paths extends APIComponent {
       description={(
         <p>
           No learning paths have been added yet.<br />
-          As soon as you create one, it will displayed here.
+          { this.props.user
+            ? 'As soon as you create one, it will displayed here.'
+            : 'As soon as one is created, it will be displayed here.'
+          }
         </p>
       )}
-      action={<Button type="button" intent="primary" onClick={this.startPathCreation}>create one now</Button>}
+      action={this.props.user ? <Button type="button" intent="primary" onClick={this.startPathCreation}>create one now</Button> : undefined}
     />
   )
 

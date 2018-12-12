@@ -141,7 +141,10 @@ class Modules extends APIComponent {
       description={(
         <p>
           This learning path does not have any modules yet<br />
-          As soon as you create one, it will displayed here.
+          { this.props.user
+            ? 'As soon as you create one, it will displayed here.'
+            : 'As soon as one has been created, it will be displayed here.'
+          }
         </p>
       )}
       action={<Button type="button" intent="primary" onClick={this.showModuleFrom}>create one now</Button>}
