@@ -49,7 +49,7 @@ class Header extends Component {
           && <Login cancelLogin={this.cancelLogin} completeLogin={this.completeLogin} />
         }
         <NavbarGroup align="left">
-          <NavbarHeading>Digital Empowerment</NavbarHeading>
+          <NavbarHeading><Link to="/">Digital Empowerment</Link></NavbarHeading>
           <NavbarDivider />
           <Link to="/"><Button minimal icon="home" text="Home" /></Link>
           <Link to="/paths"><Button minimal icon="path-search" text="Paths" /></Link>
