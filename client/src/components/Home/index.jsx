@@ -1,11 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@blueprintjs/core';
 import Header from '../Header';
 import Content from './Content';
 import User from '../../models/User';
 
-import dbsfReport from '../../assets/dbsf-report.pdf';
 import '../../assets/css/home.css';
 
 class Home extends React.Component {
@@ -36,7 +34,6 @@ class Home extends React.Component {
           </div>
         </header>
         <Content lang={lang} />
-        <a href={dbsfReport} className="link--seamless" download><Button>download the DBSF report</Button></a>
       </div>
     );
   }
