@@ -1,0 +1,11 @@
+.home-header {
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
+
+.home-header__language-selector {
+  position: absolute;
+  right: 0;
+  top: calc(50% - 1.5rem);
+}

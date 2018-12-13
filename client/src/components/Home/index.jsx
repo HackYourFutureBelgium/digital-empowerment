@@ -2,18 +2,47 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from '@blueprintjs/core';
 import Header from '../Header';
+import DutchContent from './DutchContent';
+import FrenchContent from './FrenchContent';
 import User from '../../models/User';
 
 import dbsfReport from '../../assets/dbsf-report.pdf';
+import '../../assets/css/home.css';
 
-const Home = ({ user }) => (
-  <div>
-    <div className="container user-container">
-      <Header user={user} />
-      <a href={dbsfReport} className="link--seamless" download><Button>download the DBSF report</Button></a>
-    </div>
-  </div>
-);
+class Home extends React.Component {
+  state = {
+    lang: 'nl'
+  };
+
+  updateLanguage = (e) => {
+    this.setState({ lang: e.currentTarget.value });
+  }
+
+  render() {
+    const { user } = this.props;
+    const { lang } = this.state;
+
+    return (
+      <div className="container home-container">
+        <Header user={user} />
+        <header className="home-header">
+          <h2>Welcome to Digital Empowerment</h2>
+          <div className="home-header__language-selector">
+            <div className="bp3-select bp3-minimal">
+              <select defaultValue={lang} onChange={this.updateLanguage}>
+                <option value="nl">Nederlands</option>
+                <option value="fr">Français</option>
+              </select>
+            </div>
+          </div>
+        </header>
+        {lang === 'nl' && <DutchContent />}
+        {lang === 'fr' && <FrenchContent />}
+        <a href={dbsfReport} className="link--seamless" download><Button>download the DBSF report</Button></a>
+      </div>
+    );
+  }
+}
 
 Home.defaultProps = {
   user: null
