@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from '@blueprintjs/core';
 import Header from '../Header';
-import DutchContent from './DutchContent';
-import FrenchContent from './FrenchContent';
+import Content from './Content';
 import User from '../../models/User';
 
 import dbsfReport from '../../assets/dbsf-report.pdf';
@@ -36,8 +35,7 @@ class Home extends React.Component {
             </div>
           </div>
         </header>
-        {lang === 'nl' && <DutchContent />}
-        {lang === 'fr' && <FrenchContent />}
+        <Content lang={lang} />
         <a href={dbsfReport} className="link--seamless" download><Button>download the DBSF report</Button></a>
       </div>
     );
