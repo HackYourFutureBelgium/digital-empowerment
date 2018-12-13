@@ -46,9 +46,15 @@ class Home extends React.Component {
         <div className="home-content-wrapper">
           <Content lang={lang} />
           <div className="home-logos">
-            <img src={hoboLogo} alt="HOBO + CAW logo" />
-            <img src={okbeLogo} alt="Open Knowledge Belgium logo" />
-            <img src={dbsfLogo} alt="DBSF logo" />
+            <a href="http://hobosite.be" target="_blank" rel="noopener noreferrer">
+              <img src={hoboLogo} alt="HOBO + CAW logo" />
+            </a>
+            <a href="http://openknowledge.be" target="_blank" rel="noopener noreferrer">
+              <img src={okbeLogo} alt="Open Knowledge Belgium logo" />
+            </a>
+            <a href="http://dt.bosa.be" target="_blank" rel="noopener noreferrer">
+              <img src={dbsfLogo} alt="DBSF logo" />
+            </a>
           </div>
         </div>
       </div>
