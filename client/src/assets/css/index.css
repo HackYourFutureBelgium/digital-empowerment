@@ -73,6 +73,18 @@ h3 {
   cursor: pointer;
 }
 
+.link--seamless {
+  outline: 0;
+  background: inherit;
+  text-decoration: none;
+  border: 0;
+}
+
+.link--seamless:visited, .link--seamless:hover {
+  color: inherit;
+  text-decoration: none;
+}
+
 .link.active {
   color: purple;
 }
