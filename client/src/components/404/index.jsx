@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom';
 import '../../assets/css/404.css';
 
 const NotFound = () => {
+  document.title = 'Page not found | Digital Empowerment';
   NProgress.done(true);
-
   return (
     <NonIdealState
       icon="issue"

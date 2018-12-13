@@ -14,6 +14,10 @@ class Home extends React.Component {
     lang: 'fr'
   };
 
+  componentDidMount() {
+    document.title = 'Home | Digital Empowerment';
+  }
+
   updateLanguage = (e) => {
     this.setState({ lang: e.currentTarget.value });
   }

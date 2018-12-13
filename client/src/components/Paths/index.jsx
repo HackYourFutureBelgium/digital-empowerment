@@ -26,6 +26,7 @@ class Paths extends APIComponent {
 
   constructor(props) {
     super(props);
+    document.title = 'Learning paths | Digital Empowerment';
     NProgress.start();
   }
 

@@ -26,6 +26,7 @@ class ManageUsers extends APIComponent {
 
   constructor(props) {
     super(props);
+    document.title = 'Manage users | Digital Empowerment';
     NProgress.start();
   }
 

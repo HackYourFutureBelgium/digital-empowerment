@@ -22,6 +22,7 @@ class ConfirmPasswordReset extends APIComponent {
 
   constructor(props) {
     super(props);
+    document.title = 'Reset your password | Digital Empowerment';
     NProgress.start();
   }
 
