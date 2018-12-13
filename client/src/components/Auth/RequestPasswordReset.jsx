@@ -24,6 +24,7 @@ class RequestPasswordReset extends APIComponent {
   }
 
   componentDidMount() {
+    document.title = 'Reset your password | Digital Empowerment';
     NProgress.done();
   }
 

@@ -39,6 +39,7 @@ class Modules extends APIComponent {
           activeModuleId: (path.modules.length === 0) ? null : path.modules[0]._id,
           modules: path.modules || []
         });
+        document.title = `${path.title} | Digital Empowerment`;
         await this.setRequestState({ fetchPath: INACTIVE });
       })
       .catch(() => this.setRequestState({ fetchPath: HAS_ERRORED }))

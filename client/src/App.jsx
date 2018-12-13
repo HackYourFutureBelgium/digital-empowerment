@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { FocusStyleManager } from '@blueprintjs/core';
 import { cookies, checkJWTExpiry } from './constants';
+import Home from './components/Home';
 import Paths from './components/Paths';
 import Modules from './components/Modules';
 import ManageUsers from './components/Admin/ManageUsers';
@@ -40,7 +41,8 @@ class App extends Component {
     return (
       <BrowserRouter>
         <Switch>
-          <Route exact path="/:path(|paths|path|index)" render={props => <Paths {...props} user={user} />} />
+          <Route exact path="/:path(|index)" render={props => <Home {...props} user={user} />} />
+          <Route exact path="/:path(paths|path)" render={props => <Paths {...props} user={user} />} />
           <Route path="/paths/:pathId" render={props => <Modules {...props} user={user} />} />
           <Route exact path="/reset-password" component={RequestPasswordReset} />
           <Route path="/reset-password/:token" component={ConfirmPasswordReset} />
