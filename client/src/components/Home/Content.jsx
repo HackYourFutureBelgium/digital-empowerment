@@ -6,7 +6,7 @@ import dbsfReport from '../../assets/dbsf-report.pdf';
 
 /* eslint-disable react/no-danger */
 const Content = ({ lang }) => (
-  <div lang={lang} className="b3-running-text">
+  <div lang={lang} className="home-content b3-running-text">
     <h4>{copy.title[lang]}</h4>
 
     <p dangerouslySetInnerHTML={{ __html: copy.aboutHobo[lang] }} />

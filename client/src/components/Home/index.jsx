@@ -4,11 +4,14 @@ import Header from '../Header';
 import Content from './Content';
 import User from '../../models/User';
 
+import hoboLogo from '../../assets/images/logo-caw-hobo.png';
+import dbsfLogo from '../../assets/images/logo-dbsf.png';
+import okbeLogo from '../../assets/images/logo-okbe.png';
 import '../../assets/css/home.css';
 
 class Home extends React.Component {
   state = {
-    lang: 'nl'
+    lang: 'fr'
   };
 
   updateLanguage = (e) => {
@@ -23,7 +26,10 @@ class Home extends React.Component {
       <div className="container home-container">
         <Header user={user} />
         <header className="home-header">
-          <h2>Welcome to Digital Empowerment</h2>
+          <h2>
+            {lang === 'fr' && 'Bienvenue sur Digital Empowerment'}
+            {lang === 'nl' && 'Welkom op Digital Empowerment'}
+          </h2>
           <div className="home-header__language-selector">
             <div className="bp3-select bp3-minimal">
               <select defaultValue={lang} onChange={this.updateLanguage}>
@@ -33,7 +39,14 @@ class Home extends React.Component {
             </div>
           </div>
         </header>
-        <Content lang={lang} />
+        <div className="home-content-wrapper">
+          <Content lang={lang} />
+          <div className="home-logos">
+            <img src={hoboLogo} alt="HOBO + CAW logo" />
+            <img src={okbeLogo} alt="Open Knowledge Belgium logo" />
+            <img src={dbsfLogo} alt="DBSF logo" />
+          </div>
+        </div>
       </div>
     );
   }
