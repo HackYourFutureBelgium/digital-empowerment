@@ -36,6 +36,9 @@
 }
 
 @media screen and (max-width: 1000px) {
+  .home-header {
+    text-align: left;
+  }
   .home-content-wrapper {
     flex-direction: column;
   }
@@ -53,5 +56,16 @@
   }
   .home-logos a {
     max-width: 30%;
+  }
+}
+
+@media screen and (max-width: 760px) {
+  .home-header__language-selector {
+    position: absolute;
+    left: 0;
+    right: auto;
+    top: auto;
+    bottom: -3.5rem;
+    background: #f5f8fa;
   }
 }
