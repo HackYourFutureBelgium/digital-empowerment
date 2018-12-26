@@ -72,3 +72,14 @@ MONGODB_URI=mongodb://localhost:27017/digital-empowerment
 `server/src/model`  
 `server/src/route`  
 Each of these folders have one file per resource, [example here](https://github.com/HackYourFutureBelgium/class1-project-digital-empowerment/tree/master/server/src).
+
+
+### Contributing
+
+Pull requests welcome! Any functional changes will first be discussed with Hobo vzw.
+
+Create an issue -> fork the repository -> make magic -> submit PR <3
+
+### License
+
+MIT
