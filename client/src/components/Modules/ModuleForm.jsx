@@ -12,7 +12,7 @@ const editorOptions = {
   toolbar: [
     [{ header: '1' }, { header: '2' }],
     // [{ size: [] }],
-    ['bold', 'italic', 'underline', 'strike'],
+    ['bold', 'italic', 'underline'],
     [
       { list: 'ordered' }, { list: 'bullet' }
     ],
