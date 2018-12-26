@@ -88,7 +88,7 @@
 .module__stages .bp3-collapse-body:before {
   content:"";
   position: absolute;
-  left: -1.6rem; /* adjust manually */
+  left: -1.6rem;
   border-left: 1px solid black;
   height: 100%;
   width: 1px;
@@ -104,6 +104,14 @@
 
 .editor-output strong {
   font-weight: bold;
+}
+
+.editor-selector .bp3-tab-panel {
+  margin-bottom: 2rem;
+}
+
+.editor-selector .ql-container {
+  min-height: 15rem;
 }
 
 .editor-output em {
