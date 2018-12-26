@@ -28,6 +28,7 @@ class App extends Component {
     if (!cookie || cookie.name !== 'user') return;
     // user logged out
     if (!cookie.value) {
+      this.setState({ user: null });
       window.location.href = '/';
       return;
     }
