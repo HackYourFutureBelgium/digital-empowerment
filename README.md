@@ -1,6 +1,9 @@
 # Digital Empowerment
 
-We're developing a real-world application for Hobo. Hobo is a day center for homeless people in Brussels. They would like to create a learning tool that teaches basic computer skills and tasks for the people coming to the center.
+Hobo is a day center for homeless people in Brussels, Belgium. During the project module of the first class of HackYourFuture Belgium, we developed a learning tool that teaches basic digital literacy to the people coming to the center.
+
+There is minimal styling and branding - and all content is supplied via the WYSIWYG editor, so it's quite simple to reuse for other resource-collection purposes as well.
+
 
 ### Project goals
   - **Teach people without prior experience to use a computer for basic tasks**: this teaching will both be accompanied and unaccompanied. It’s important to have the least amount of text as possible present on the site, everything should be visual and interactive.
@@ -21,22 +24,13 @@ or
 yarn
 ```
 
-You can start both the client and server by running
+You can start both the client and server by running `npm start` in their respective folders. The client will run on port 3000, the server will run on port 4000.
+You can configure the ports by supplying a `REACT_APP_PORT` to the client or `PORT` to the server.
 
-```
-npm start
-```
-
-in their folders. They will run on port 3000 and 4000, respectively.
 
 ```
 MONGODB_URI=mongodb://localhost:27017/digital-empowerment
 ```
-
-`server/src/controller`  
-`server/src/model`  
-`server/src/route`  
-Each of these folders have one file per resource, [example here](https://github.com/HackYourFutureBelgium/class1-project-digital-empowerment/tree/master/server/src).
 
 
 ## Contributing
