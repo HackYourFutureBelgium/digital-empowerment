@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { MenuItem, FormGroup } from '@blueprintjs/core';
-import { ItemRenderer, MultiSelect } from '@blueprintjs/select';
+import { MultiSelect } from '@blueprintjs/select';
 
 class ModulePicker extends Component {
   state = {
@@ -32,7 +32,7 @@ class ModulePicker extends Component {
   }
 
   handleModuleSelect = (module) => {
-    if (this.isModuleSelected(module)) return this.selectModule(module);
+    if (!this.isModuleSelected(module)) return this.selectModule(module);
     return this.deselectModule(module);
   };
 
@@ -54,7 +54,7 @@ class ModulePicker extends Component {
 
   render() {
     const { allPaths, pathsLoading } = this.props;
-    const { selectedPath } = this.state;
+    const { selectedPath, selectedModules } = this.state;
 
     if (pathsLoading) return <p />;
 
@@ -62,7 +62,8 @@ class ModulePicker extends Component {
       .sort((p1, p2) => p1.title.localeCompare(p2.title))
       .map(p => <option key={p._id} value={p._id}>{p.title}</option>);
 
-    const modules = selectedPath.modules || [];
+    const allModules = selectedPath.modules || [];
+    const modules = allModules.filter(module => !selectedModules.find(m => m._id === module._id));
 
     return (
       <>
@@ -80,12 +81,13 @@ class ModulePicker extends Component {
         <FormGroup label="Choose module to copy to the new path" labelFor="module-list">
           <MultiSelect
             id="module-list"
-            noResults={<MenuItem disabled text="This path contains no modules." />}
+            noResults={<MenuItem disabled text="No modules to show." />}
             items={modules}
             onItemSelect={this.handleModuleSelect}
             itemRenderer={this.renderModuleItem}
             tagRenderer={this.renderModuleTag}
             name="selectedModules"
+            selectedItems={selectedModules}
           />
         </FormGroup>
       </>
