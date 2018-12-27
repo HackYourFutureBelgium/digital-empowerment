@@ -17,7 +17,7 @@ class ModulePicker extends Component {
     this.setState({ selectedPath: this.props.allPaths.find(p => p._id === e.currentTarget.value) });
   };
 
-  isModuleSelected = () => this.state.selectedModules.indexOf(module) !== -1;
+  isModuleSelected = m => this.state.selectedModules.find(mod => m._id === mod._id);
 
   selectModule = (module) => {
     this.setState(prevState => ({
@@ -31,7 +31,8 @@ class ModulePicker extends Component {
     }));
   }
 
-  handleModuleSelect = (module) => {
+  handleModuleSelect = (mod) => {
+    const module = (mod._id) ? mod : { _id: mod.props.id, title: mod.props.children };
     if (!this.isModuleSelected(module)) return this.selectModule(module);
     return this.deselectModule(module);
   };
@@ -41,7 +42,7 @@ class ModulePicker extends Component {
     return (
       <MenuItem
         active={modifiers.active}
-        icon={this.isModuleSelected(module) ? 'tick' : 'blank'}
+        icon={this.isModuleSelected(module) ? 'tick' : null}
         key={module._id}
         onClick={handleClick}
         text={module.title}
@@ -50,7 +51,7 @@ class ModulePicker extends Component {
     );
   }
 
-  renderModuleTag = module => module.title;
+  renderModuleTag = module => <span id={module._id}>{module.title}</span>;
 
   render() {
     const { allPaths, pathsLoading } = this.props;
@@ -90,9 +91,9 @@ class ModulePicker extends Component {
               onItemSelect={this.handleModuleSelect}
               itemRenderer={this.renderModuleItem}
               tagRenderer={this.renderModuleTag}
+              tagInputProps={{ onRemove: this.handleModuleSelect }}
               name="selectedModules"
               selectedItems={selectedModules}
-              popoverProps={{ position: 'bottom' }}
             />
           </FormGroup>
         )}
