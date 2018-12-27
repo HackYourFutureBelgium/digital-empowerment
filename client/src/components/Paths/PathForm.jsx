@@ -46,7 +46,11 @@ class PathForm extends APIComponent {
 
     const { title } = this.state;
     const { submit, path } = this.props;
-    path ? submit(path._id, { title }) : submit({ title });
+
+    if (this.modulePicker && this.modulePicker.selectedModules.length !== 0) {
+      return submit({ title, modules: this.modulePicker.selectedModules });
+    }
+    return path ? submit(path._id, { title }) : submit({ title });
   }
 
   render() {
@@ -69,7 +73,13 @@ class PathForm extends APIComponent {
             <FormGroup label="Title" labelFor="path-title" labelInfo="(required)">
               <InputGroup id="path-title" value={title} onChange={this.setTitle} />
             </FormGroup>
-            { withModulePicker && <ModulePicker allPaths={allPaths} pathsLoading={pathsLoading} />}
+            { withModulePicker && (
+              <ModulePicker
+                ref={(c) => { this.modulePicker = c; }}
+                allPaths={allPaths}
+                pathsLoading={pathsLoading}
+              />
+            )}
             <div className="path-form__actions">
               <Button type="submit" intent="primary" loading={requestStatus === IS_LOADING}>
                 {path ? 'update path' : 'create path'}
