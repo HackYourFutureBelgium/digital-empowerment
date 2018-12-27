@@ -41,6 +41,12 @@ exports.create = async (req, res) => {
     });
 };
 
+exports.index = async (req, res) => {
+  const moduleFields = req.query.fields ? req.query.fields.split(',') : [];
+  const paths = await Path.find().populate('modules', `_id ${moduleFields.join(' ')}`);
+  res.send(paths);
+};
+
 exports.update = (req, res) => {
   const { pathId } = req.params;
   const action = Path.findOneAndUpdate({ _id: pathId }, req.body, { new: true });
