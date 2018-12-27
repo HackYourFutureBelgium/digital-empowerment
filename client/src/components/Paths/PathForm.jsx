@@ -4,7 +4,7 @@ import {
   Button, Dialog, FormGroup, InputGroup
 } from '@blueprintjs/core';
 import APIComponent from '../APIComponent';
-import { IS_LOADING } from '../../constants';
+import { IS_LOADING, INACTIVE } from '../../constants';
 
 class PathForm extends APIComponent {
   constructor(props) {
@@ -12,14 +12,32 @@ class PathForm extends APIComponent {
     this.state = {
       title: props.path ? props.path.title : '',
       pathNames: [],
-      moduleNames: []
+      moduleNames: [],
+      requestStates: {
+        getPaths: INACTIVE
+      }
     };
   }
 
-  componentDidMount() {
+  componentDidUpdate(prevProps) {
+    if (prevProps.isShown === false && this.props.isShown && this.props.withModulePicker) {
+      this.fetchPathAndModuleNames();
+    }
+  }
+
+  fetchPathAndModuleNames = () => {
+    this.setRequestState({ getPaths: IS_LOADING });
     this.api.paths.getWithModules(['title'])
-      .then((paths) => {
-        console.log(paths);
+      .then(async (paths) => {
+        let moduleNames = [];
+        const pathNames = paths.reduce((acc, path) => {
+          moduleNames = moduleNames.concat(path.modules.map(m => m.title));
+          acc.push(path.title);
+          return acc;
+        }, []);
+        await this.setState({ pathNames, moduleNames });
+        console.log(pathNames, moduleNames);
+        this.setRequestState({ getPaths: INACTIVE });
       })
       .catch((err) => {
         console.log(err);
@@ -43,8 +61,10 @@ class PathForm extends APIComponent {
       isShown, onClose, path, requestStatus, withModulePicker
     } = this.props;
     const {
-      title, pathNames, moduleNames, selectedPath, selectedModule
+      title, pathNames, moduleNames, selectedPath, selectedModule, requestStates
     } = this.state;
+
+    const pathsLoading = requestStates.getPaths === IS_LOADING;
 
     return (
       <Dialog
