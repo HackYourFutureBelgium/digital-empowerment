@@ -16,6 +16,16 @@ class API {
     };
   }
 
+  toQueryString = (obj) => {
+    const string = Object.keys(obj)
+      .reduce((a, k) => {
+        a.push(`${k}=${encodeURIComponent(obj[k])}`);
+        return a;
+      }, [])
+      .join('&');
+    return `?${string}`;
+  };
+
   handleResponse = async (response) => {
     if (!response.ok) {
       throw Error(response.statusText);
