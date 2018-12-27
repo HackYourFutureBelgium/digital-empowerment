@@ -5,6 +5,7 @@
   "dependencies": {
     "@blueprintjs/core": "^3.9.0",
     "@blueprintjs/icons": "^3.3.0",
+    "@blueprintjs/select": "^3.4.0",
     "normalize.css": "^8.0.0",
     "nprogress": "^0.2.0",
     "prop-types": "^15.6.2",
