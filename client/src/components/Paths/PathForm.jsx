@@ -4,6 +4,7 @@ import {
   Button, Dialog, FormGroup, InputGroup
 } from '@blueprintjs/core';
 import APIComponent from '../APIComponent';
+import ModulePicker from './ModulePicker';
 import { IS_LOADING, INACTIVE } from '../../constants';
 
 class PathForm extends APIComponent {
@@ -11,7 +12,7 @@ class PathForm extends APIComponent {
     super(props);
     this.state = {
       title: props.path ? props.path.title : '',
-      pathNames: [],
+      allPaths: [],
       moduleNames: [],
       requestStates: {
         getPaths: INACTIVE
@@ -28,15 +29,8 @@ class PathForm extends APIComponent {
   fetchPathAndModuleNames = () => {
     this.setRequestState({ getPaths: IS_LOADING });
     this.api.paths.getWithModules(['title'])
-      .then(async (paths) => {
-        let moduleNames = [];
-        const pathNames = paths.reduce((acc, path) => {
-          moduleNames = moduleNames.concat(path.modules.map(m => m.title));
-          acc.push(path.title);
-          return acc;
-        }, []);
-        await this.setState({ pathNames, moduleNames });
-        console.log(pathNames, moduleNames);
+      .then((allPaths) => {
+        this.setState({ allPaths });
         this.setRequestState({ getPaths: INACTIVE });
       })
       .catch((err) => {
@@ -60,9 +54,7 @@ class PathForm extends APIComponent {
     const {
       isShown, onClose, path, requestStatus, withModulePicker
     } = this.props;
-    const {
-      title, pathNames, moduleNames, selectedPath, selectedModule, requestStates
-    } = this.state;
+    const { title, allPaths, requestStates } = this.state;
 
     const pathsLoading = requestStates.getPaths === IS_LOADING;
 
@@ -78,19 +70,7 @@ class PathForm extends APIComponent {
             <FormGroup label="Title" labelFor="path-title" labelInfo="(required)">
               <InputGroup id="path-title" value={title} onChange={this.setTitle} />
             </FormGroup>
-            { withModulePicker && (
-              <FormGroup label="Copy modules from learning path:" labelFor="path-list" labelInfo="">
-                <select
-                  id="path-list"
-                  value={pathNames}
-                  onChange={this.setField}
-                  name="pathList"
-                >
-                  <option value="">-- no path selected --</option>
-                </select>
-                <InputGroup id="path-list" value={title} onChange={this.addRemoveModule} />
-              </FormGroup>
-            )}
+            { withModulePicker && <ModulePicker allPaths={allPaths} />}
             <div className="path-form__actions">
               <Button type="submit" intent="primary" loading={requestStatus === IS_LOADING}>
                 {path ? 'update path' : 'create path'}
