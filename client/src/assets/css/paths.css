@@ -70,12 +70,7 @@
   justify-content: flex-end;
 }
 
-.path-form .input {
+.path-form span.bp3-popover-target {
   display: block;
   width: 100%;
-  margin-bottom: 1.5rem;
 }
-
-.path-form__field {
-  margin-bottom: 1.5rem;
-};

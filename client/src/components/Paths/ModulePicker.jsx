@@ -63,33 +63,39 @@ class ModulePicker extends Component {
       .map(p => <option key={p._id} value={p._id}>{p.title}</option>);
 
     const allModules = selectedPath.modules || [];
-    const modules = allModules.filter(module => !selectedModules.find(m => m._id === module._id));
+    const modules = allModules
+      .filter(module => !selectedModules.find(m => m._id === module._id))
+      .sort((m1, m2) => m1.title.localeCompare(m2.title));
 
     return (
       <>
         <FormGroup label="Copy modules from learning path:" labelFor="path-list">
           <select
             id="path-list"
-            value={selectedPath._id}
+            value={selectedPath._id || 'default'}
             onChange={this.setSelectedPath}
             name="selectedPath"
+            className="bp3-select bp3-fill"
           >
             <option value="default">-- no path selected --</option>
             { $pathOptions }
           </select>
         </FormGroup>
-        <FormGroup label="Choose module to copy to the new path" labelFor="module-list">
-          <MultiSelect
-            id="module-list"
-            noResults={<MenuItem disabled text="No modules to show." />}
-            items={modules}
-            onItemSelect={this.handleModuleSelect}
-            itemRenderer={this.renderModuleItem}
-            tagRenderer={this.renderModuleTag}
-            name="selectedModules"
-            selectedItems={selectedModules}
-          />
-        </FormGroup>
+        { selectedPath !== 'default' && (
+          <FormGroup label="Choose modules to copy to the new path" labelFor="module-list">
+            <MultiSelect
+              id="module-list"
+              noResults={<MenuItem disabled text="No modules to show." />}
+              items={modules}
+              onItemSelect={this.handleModuleSelect}
+              itemRenderer={this.renderModuleItem}
+              tagRenderer={this.renderModuleTag}
+              name="selectedModules"
+              selectedItems={selectedModules}
+              popoverProps={{ position: 'bottom' }}
+            />
+          </FormGroup>
+        )}
       </>
     );
   }

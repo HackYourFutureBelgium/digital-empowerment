@@ -61,10 +61,10 @@ class PathForm extends APIComponent {
       <Dialog
         isOpen={isShown}
         onClose={onClose}
-        className="dialog path-form"
+        className="dialog"
         title="New path name"
       >
-        <div className="bp3-dialog-body">
+        <div className="bp3-dialog-body path-form">
           <form onSubmit={this.onSubmit}>
             <FormGroup label="Title" labelFor="path-title" labelInfo="(required)">
               <InputGroup id="path-title" value={title} onChange={this.setTitle} />
