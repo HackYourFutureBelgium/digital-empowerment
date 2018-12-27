@@ -60,6 +60,7 @@ class Paths extends APIComponent {
         paths: [...previousState.paths, newPath],
         creatingPath: false
       }));
+      this.setRequestState({ createPath: INACTIVE });
     }).catch(() => {
       this.setRequestState({ createPath: HAS_ERRORED });
     });
