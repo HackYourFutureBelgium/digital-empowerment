@@ -13,7 +13,6 @@ class PathForm extends APIComponent {
     this.state = {
       title: props.path ? props.path.title : '',
       allPaths: [],
-      moduleNames: [],
       requestStates: {
         getPaths: INACTIVE
       }
@@ -70,7 +69,7 @@ class PathForm extends APIComponent {
             <FormGroup label="Title" labelFor="path-title" labelInfo="(required)">
               <InputGroup id="path-title" value={title} onChange={this.setTitle} />
             </FormGroup>
-            { withModulePicker && <ModulePicker allPaths={allPaths} />}
+            { withModulePicker && <ModulePicker allPaths={allPaths} pathsLoading={pathsLoading} />}
             <div className="path-form__actions">
               <Button type="submit" intent="primary" loading={requestStatus === IS_LOADING}>
                 {path ? 'update path' : 'create path'}
