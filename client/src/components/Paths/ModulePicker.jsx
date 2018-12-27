@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Button, Dialog, FormGroup, InputGroup
-} from '@blueprintjs/core';
+import { MenuItem, FormGroup } from '@blueprintjs/core';
+import { ItemRenderer, MultiSelect } from '@blueprintjs/select';
 
 class ModulePicker extends Component {
   state = {
@@ -10,13 +9,48 @@ class ModulePicker extends Component {
     selectedModules: []
   };
 
-  setSelected = (e) => {
-    this.setState({ [e.currentTarget.name]: e.currentTarget.value });
-  };
-
   get selectedModules() {
     return this.state.selectedModules.map(m => m._id);
   }
+
+  setSelectedPath = (e) => {
+    this.setState({ selectedPath: this.props.allPaths.find(p => p._id === e.currentTarget.value) });
+  };
+
+  isModuleSelected = () => this.state.selectedModules.indexOf(module) !== -1;
+
+  selectModule = (module) => {
+    this.setState(prevState => ({
+      selectedModules: [...prevState.selectedModules, module]
+    }));
+  }
+
+  deselectModule = (module) => {
+    this.setState(prevState => ({
+      selectedModules: prevState.selectedModules.filter(m => m._id !== module._id)
+    }));
+  }
+
+  handleModuleSelect = (module) => {
+    if (this.isModuleSelected(module)) return this.selectModule(module);
+    return this.deselectModule(module);
+  };
+
+  renderModuleItem = (module, { modifiers, handleClick }) => {
+    if (!modifiers.matchesPredicate) return null;
+    return (
+      <MenuItem
+        active={modifiers.active}
+        icon={this.isModuleSelected(module) ? 'tick' : 'blank'}
+        key={module._id}
+        onClick={handleClick}
+        text={module.title}
+        shouldDismissPopover={false}
+      />
+    );
+  }
+
+  renderModuleTag = module => module.title;
 
   render() {
     const { allPaths, pathsLoading } = this.props;
@@ -28,31 +62,32 @@ class ModulePicker extends Component {
       .sort((p1, p2) => p1.title.localeCompare(p2.title))
       .map(p => <option key={p._id} value={p._id}>{p.title}</option>);
 
+    const modules = selectedPath.modules || [];
+
     return (
       <>
-        <FormGroup label="Copy modules from learning path:" labelFor="path-list" labelInfo="">
+        <FormGroup label="Copy modules from learning path:" labelFor="path-list">
           <select
             id="path-list"
-            value={selectedPath}
-            onChange={this.setSelected}
+            value={selectedPath._id}
+            onChange={this.setSelectedPath}
             name="selectedPath"
           >
             <option value="default">-- no path selected --</option>
             { $pathOptions }
           </select>
         </FormGroup>
-        {/*
-        <FormGroup label="Choose a module to copy" labelFor="path-list" labelInfo="">
-          <select
-            id="path-list"
-            value={pathNames}
-            onChange={this.setSelected}
-            name="selectedPath"
-          >
-            <option value="">-- no module selected --</option>
-          </select>
+        <FormGroup label="Choose module to copy to the new path" labelFor="module-list">
+          <MultiSelect
+            id="module-list"
+            noResults={<MenuItem disabled text="This path contains no modules." />}
+            items={modules}
+            onItemSelect={this.handleModuleSelect}
+            itemRenderer={this.renderModuleItem}
+            tagRenderer={this.renderModuleTag}
+            name="selectedModules"
+          />
         </FormGroup>
-        */}
       </>
     );
   }
