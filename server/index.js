@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-require('dotenv').config();
+require('dotenv').config({ path: path.join(__dirname, '/.env') });
 
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
