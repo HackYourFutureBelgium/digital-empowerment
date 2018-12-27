@@ -60,6 +60,7 @@ class Paths extends APIComponent {
         paths: [...previousState.paths, newPath],
         creatingPath: false
       }));
+      this.setRequestState({ createPath: INACTIVE });
     }).catch(() => {
       this.setRequestState({ createPath: HAS_ERRORED });
     });
@@ -186,6 +187,7 @@ class Paths extends APIComponent {
           isShown={creatingPath}
           onClose={this.cancelPathCreation}
           submit={this.createPath}
+          withModulePicker
         />
         { $nonIdealState }
         <div className="paths">
