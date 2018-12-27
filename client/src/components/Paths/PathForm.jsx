@@ -1,16 +1,29 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Button, Dialog, FormGroup, InputGroup
 } from '@blueprintjs/core';
+import APIComponent from '../APIComponent';
 import { IS_LOADING } from '../../constants';
 
-class PathForm extends Component {
+class PathForm extends APIComponent {
   constructor(props) {
     super(props);
     this.state = {
-      title: props.path ? props.path.title : ''
+      title: props.path ? props.path.title : '',
+      pathNames: [],
+      moduleNames: []
     };
+  }
+
+  componentDidMount() {
+    this.api.paths.getWithModules(['title'])
+      .then((paths) => {
+        console.log(paths);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   setTitle = (e) => {
@@ -27,9 +40,11 @@ class PathForm extends Component {
 
   render() {
     const {
-      isShown, onClose, path, requestStatus
+      isShown, onClose, path, requestStatus, withModulePicker
     } = this.props;
-    const { title } = this.state;
+    const {
+      title, pathNames, moduleNames, selectedPath, selectedModule
+    } = this.state;
 
     return (
       <Dialog
@@ -43,6 +58,19 @@ class PathForm extends Component {
             <FormGroup label="Title" labelFor="path-title" labelInfo="(required)">
               <InputGroup id="path-title" value={title} onChange={this.setTitle} />
             </FormGroup>
+            { withModulePicker && (
+              <FormGroup label="Copy modules from learning path:" labelFor="path-list" labelInfo="">
+                <select
+                  id="path-list"
+                  value={pathNames}
+                  onChange={this.setField}
+                  name="pathList"
+                >
+                  <option value="">-- no path selected --</option>
+                </select>
+                <InputGroup id="path-list" value={title} onChange={this.addRemoveModule} />
+              </FormGroup>
+            )}
             <div className="path-form__actions">
               <Button type="submit" intent="primary" loading={requestStatus === IS_LOADING}>
                 {path ? 'update path' : 'create path'}
@@ -56,7 +84,8 @@ class PathForm extends Component {
 }
 
 PathForm.defaultProps = {
-  path: null
+  path: null,
+  withModulePicker: false
 };
 
 PathForm.propTypes = {
@@ -66,7 +95,8 @@ PathForm.propTypes = {
   path: PropTypes.shape({
     title: PropTypes.string
   }),
-  requestStatus: PropTypes.number.isRequired
+  requestStatus: PropTypes.number.isRequired,
+  withModulePicker: PropTypes.bool
 };
 
 export default PathForm;

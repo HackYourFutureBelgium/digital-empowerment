@@ -186,6 +186,7 @@ class Paths extends APIComponent {
           isShown={creatingPath}
           onClose={this.cancelPathCreation}
           submit={this.createPath}
+          withModulePicker
         />
         { $nonIdealState }
         <div className="paths">

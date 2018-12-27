@@ -6,6 +6,11 @@ class PathAPI extends API {
   get = () => fetch(this.ENDPOINT, this.getOptions('get'))
     .then(this.handleResponse);
 
+  getWithModules = (fields = null) => {
+    const queryString = this.toQueryString({ fields });
+    return fetch(`${this.ENDPOINT}/module${queryString}`, this.getOptions('get')).then(this.handleResponse);
+  }
+
   getOne = id => fetch(`${this.ENDPOINT}/${id}`, this.getOptions('get')).then(this.handleResponse);
 
   create = body => (
