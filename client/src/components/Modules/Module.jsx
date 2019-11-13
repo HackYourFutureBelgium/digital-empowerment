@@ -44,6 +44,7 @@ class Module extends APIComponent {
   updateModule = async (id, body) => {
     this.setRequestState({ updateModule: IS_LOADING });
     const updatedModule = await this.api.modules.update(id, body);
+    await this.setRequestState({ updateModule: INACTIVE });
     await this.props.updateModule(updatedModule);
     this.hideModuleForm();
   }
