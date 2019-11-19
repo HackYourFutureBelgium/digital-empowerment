@@ -11,7 +11,7 @@
 .modules .module {
   padding: .5rem 3rem;
   margin-bottom: 3rem;
-  transition: background-color ease .3s;
+  transition: box-shadow ease .3s;
 }
 
 .module .module__title {

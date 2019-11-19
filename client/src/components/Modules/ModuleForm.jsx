@@ -44,6 +44,7 @@ class ModuleForm extends Component {
   handleContentChange = (contents) => {
     const { currentlyEditing } = this.state;
     this.setState(prevState => ({
+      ...prevState,
       contents: {
         ...prevState.contents,
         [currentlyEditing]: contents
@@ -63,22 +64,11 @@ class ModuleForm extends Component {
     module ? submit(module._id, { title, ...contents }) : submit({ title, ...contents });
   }
 
-  ContentEditor = (currentlyEditing) => {
-    const { contents } = this.state;
-    return (
-      <ReactQuill
-        value={contents[currentlyEditing]}
-        onChange={this.handleContentChange}
-        modules={editorOptions}
-      />
-    );
-  }
-
   render() {
     const {
       isShown, onClose, module, requestStatus
     } = this.props;
-    const { title, currentlyEditing } = this.state;
+    const { title, currentlyEditing, contents } = this.state;
 
     return (
       <Dialog
@@ -98,7 +88,11 @@ class ModuleForm extends Component {
                   key={type}
                   id={type}
                   title={type}
-                  panel={this.ContentEditor(currentlyEditing)}
+                  panel={<ReactQuill
+                    value={contents[currentlyEditing]}
+                    onChange={this.handleContentChange}
+                    modules={editorOptions}
+                  />}
                 />
               ))}
               <Tabs.Expander />
